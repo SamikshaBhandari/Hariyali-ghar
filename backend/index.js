@@ -20,6 +20,6 @@ db.query("SELECT 1")
         console.log("Database Connection Failed.", err);
     });
 
-app.get('/', (req, res) => {
+app.get('/dbtest', (req, res) => {
     res.send("Backend server is running successfully.");
 });
