@@ -20,3 +20,35 @@ exports.signup = async (req, res) => {
         res.status(500).json({ error: "Server Error" });
     }
 };
+
+exports.login = async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+        const [users] = await db.query("SELECT * FROM users WHERE email = ?", [email]);
+
+        if (users.length === 0) {
+            return res.status(400).json({ error: "Email not found! Signup first." });
+        }
+
+        const user = users[0];
+        const isMatch = await bcrypt.compare(password, user.password);
+
+        if (!isMatch) {
+            return res.status(400).json({ error: " Wrong Password" });
+        }
+        res.status(200).json({
+            message: "Login Successful!",
+            user: {
+                id: user.id,
+                fullname: user.fullname,
+                email: user.email,
+                role: user.role 
+            }
+        });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Server Error" });
+    }
+};
