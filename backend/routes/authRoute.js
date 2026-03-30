@@ -13,7 +13,7 @@ router.post('/signup',async(req,res)=>{
     }
     const hashedPassword = await bcrypt.hash(password, 10);
     const sql="INSERT INTO users(fullname,address,mobile,email,password)VALUES(?,?,?,?,?)";
-    await db.query(sql,[fullname,address,mobile,email,password]);
+    await db.query(sql,[fullname,address,mobile,email,hashedPassword]);
     res.status(201).json({ message: "User successfully register" });
     }catch(err){
         console.error(err);
