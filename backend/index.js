@@ -2,15 +2,15 @@ const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
 const db = require('./db/db');
-const productRoute = require('./routes/productRoute');
-const authRoute=require('./routes/authRoute');
+const productController = require('./controllers/productController');
+const authController=require('./controllers/authController');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 app.use('/images', express.static('image'));
-app.use('/api/products', productRoute);
-app.use('/api/auth',authRoute);
+app.use('/api/products', productController);
+app.use('/api/auth',authController);
 
 const PORT = process.env.PORT || 5000;
 
