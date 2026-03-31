@@ -16,15 +16,15 @@ const PORT = process.env.PORT || 5000;
 
 db.query("SELECT 1")
     .then(() => {
-        console.log("Database Connected Successfully.");
+        console.log("Database Connected Successfully");
                 app.listen(PORT, () => {
             console.log(`Server is running on port ${PORT}`);
         });
     })
     .catch((err) => {
-        console.log("Database Connection Failed.", err);
+        console.log("Database Connection Failed", err);
     });
 
 app.get('/dbtest', (req, res) => {
-    res.send("Backend server is running successfully.");
+    res.send("Backend server is running successfully");
 });
