@@ -25,7 +25,6 @@ exports.signup = async (req, res) => {
 
 exports.login = async (req, res) => {
     const { email, password } = req.body;
-
     try {
         const [users] = await db.query("SELECT * FROM users WHERE email = ?", [email]);
 
@@ -43,12 +42,12 @@ exports.login = async (req, res) => {
         if (!secretKey) {
         console.error("JWT_SECRET is missing in .env file!");
         return res.status(500).json({ error: "Internal Server Error: Security Key missing" });
-}
+        }
             const token = jwt.sign(
             { id: user.id, role: user.role },
             secretKey, 
             { expiresIn: '1d' }
-);
+            );
 
         res.status(200).json({
             message: "Login Successful!",
