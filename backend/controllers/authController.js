@@ -1,5 +1,7 @@
 const db = require('../db/db');
 const bcrypt = require('bcryptjs');
+const jwt=require('jsonwebtoken');
+require('dotenv').config();
 
 exports.signup = async (req, res) => {
     const { fullname, address, mobile, email, password } = req.body;
@@ -37,8 +39,20 @@ exports.login = async (req, res) => {
         if (!isMatch) {
             return res.status(400).json({ error: " Wrong Password" });
         }
+        const secretKey = process.env.JWT_SECRET;
+        if (!secretKey) {
+        console.error("JWT_SECRET is missing in .env file!");
+        return res.status(500).json({ error: "Internal Server Error: Security Key missing" });
+}
+            const token = jwt.sign(
+            { id: user.id, role: user.role },
+            secretKey, 
+            { expiresIn: '1d' }
+);
+
         res.status(200).json({
             message: "Login Successful!",
+            token: token,
             user: {
                 id: user.id,
                 fullname: user.fullname,
