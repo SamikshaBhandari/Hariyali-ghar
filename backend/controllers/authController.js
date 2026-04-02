@@ -38,6 +38,7 @@ exports.login = async (req, res) => {
         if (!isMatch) {
             return res.status(400).json({ error: " Wrong Password" });
         }
+        //create jwt token
         const secretKey = process.env.JWT_SECRET;
         if (!secretKey) {
         console.error("JWT_SECRET is missing in .env file!");
