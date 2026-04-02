@@ -1,6 +1,6 @@
 const db = require('../db/db');
 const bcrypt = require('bcryptjs');
-const jwt=require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 exports.signup = async (req, res) => {
@@ -12,17 +12,16 @@ exports.signup = async (req, res) => {
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
-        
+
         const sql = "INSERT INTO users (fullname, address, mobile, email, password) VALUES (?, ?, ?, ?, ?)";
         await db.query(sql, [fullname, address, mobile, email, hashedPassword]);
-        
+
         res.status(201).json({ message: "User successfully register" });
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: "Server Error" });
     }
 };
-
 exports.login = async (req, res) => {
     const { email, password } = req.body;
     try {
@@ -41,14 +40,14 @@ exports.login = async (req, res) => {
         //create jwt token
         const secretKey = process.env.JWT_SECRET;
         if (!secretKey) {
-        console.error("JWT_SECRET is missing in .env file!");
-        return res.status(500).json({ error: "Internal Server Error: Security Key missing" });
+            console.error("JWT_SECRET is missing in .env file!");
+            return res.status(500).json({ error: "Internal Server Error: Security Key missing" });
         }
-            const token = jwt.sign(
+        const token = jwt.sign(
             { id: user.id, role: user.role },
-            secretKey, 
+            secretKey,
             { expiresIn: '1d' }
-            );
+        );
 
         res.status(200).json({
             message: "Login Successful!",
@@ -57,7 +56,7 @@ exports.login = async (req, res) => {
                 id: user.id,
                 fullname: user.fullname,
                 email: user.email,
-                role: user.role 
+                role: user.role
             }
         });
 
