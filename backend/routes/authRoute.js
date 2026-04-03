@@ -13,4 +13,7 @@ router.get('/tokenverification', authMiddleware, (req, res) => {
         message: "token validate successfull"
     })
 });
+
+router.post('/emailverification', authController.verifyEmail);
+
 module.exports = router;
