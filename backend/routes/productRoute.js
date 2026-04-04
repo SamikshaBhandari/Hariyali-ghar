@@ -13,8 +13,13 @@ const isAdmin = (req, res, next) => {
         });
     }
 };
+
+//all product
 router.get('/all', productController.getAllProducts);
 //admin ley matra product add garna milney banako.
 router.post('/add', authMiddleware, isAdmin, productController.addProduct);
+
+//update product
+router.put('/update/:id', authMiddleware, productController.updateProduct);
 
 module.exports = router;
