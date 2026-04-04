@@ -26,3 +26,21 @@ exports.addProduct = async (req, res) => {
         res.status(500).json({ error: "Failed to add product: " + err.message });
     }
 };
+//product update
+exports.updateProduct = async (req, res) => {
+    const { id } = req.params;
+    const { name, price, description, category, image_url, stock_quantity, sunlight, watering, care_tips } = req.body;
+    try {
+        const sql = `UPDATE products SET name=?, price=?,description=?,category=?,image_url=?,stock_quantity=?,sunlight=?,
+        watering=?,care_tips=?WHERE id=?`;
+        const [result] = await db.query(sql, [name, price, description, category, image_url, stock_quantity, sunlight, watering, care_tips, id]);
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: 'product not found' });
+        }
+        res.status(200).json({ message: 'Product successfully updated.' });
+    }
+    catch (err) {
+        res.status(500).json({ error: 'Update failed:' + err.message });
+    }
+}
