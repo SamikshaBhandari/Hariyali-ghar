@@ -20,6 +20,8 @@ router.get('/all', productController.getAllProducts);
 router.post('/add', authMiddleware, isAdmin, productController.addProduct);
 
 //update product
-router.put('/update/:id', authMiddleware, productController.updateProduct);
+router.put('/update/:id', authMiddleware, isAdmin, productController.updateProduct);
 
+//delete product
+router.delete('/delete/:id', authMiddleware, isAdmin, productController.deleteProduct);
 module.exports = router;
