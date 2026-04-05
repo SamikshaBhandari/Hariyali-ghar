@@ -44,3 +44,20 @@ exports.updateProduct = async (req, res) => {
         res.status(500).json({ error: 'Update failed:' + err.message });
     }
 }
+
+//product delete 
+exports.deleteProduct = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const [result] = await db.query("DELETE FROM products WHERE id=?", [id]);
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: "product already removed." });
+
+        }
+        res.status(200).json({ error: "Product deleted from list ." });
+    }
+    catch (err) {
+        res.status(500).json({ error: "Deleted failed!:" + err.message });
+    }
+}
