@@ -33,6 +33,15 @@ exports.signup = async (req, res) => {
 
         res.status(201).json({ message: "User registered. Please check your email for OTP." });
     } catch (err) {
+        try {
+            // Email register huna khojeko user lai matra delete garne
+
+            const deleteSql = "DELETE FROM users WHERE email = ? AND is_verified = 0";
+            await db.query(deleteSql, [email]);
+            console.log(`Email failed. User ${email} deleted from database to allow retry.`);
+        } catch (deleteErr) {
+            console.error("Error while rolling back user:", deleteErr);
+        }
         console.error(err);
         res.status(500).json({ error: "Server Error" });
     }
