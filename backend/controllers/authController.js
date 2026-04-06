@@ -35,7 +35,7 @@ exports.signup = async (req, res) => {
     } catch (err) {
         try {
             // Email register huna khojeko user lai matra delete garne
-
+            
             const deleteSql = "DELETE FROM users WHERE email = ? AND is_verified = 0";
             await db.query(deleteSql, [email]);
             console.log(`Email failed. User ${email} deleted from database to allow retry.`);
