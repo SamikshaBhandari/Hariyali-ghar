@@ -4,6 +4,7 @@ require('dotenv').config();
 const db = require('./db/db');
 const productRoute = require('./routes/productRoute');
 const authRoute = require('./routes/authRoute');
+const cartRoute = require('./routes/cartRoute');
 
 const app = express();
 app.use(cors());
@@ -29,3 +30,4 @@ app.get('/dbtest', (req, res) => {
     res.send("Backend server is running successfully");
 });
 
+app.use('/api/cart', cartRoute);
