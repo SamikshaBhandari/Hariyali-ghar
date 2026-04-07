@@ -34,8 +34,8 @@ exports.placeOrder = async (req, res) => {
         const totalAmount = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
 
         const [orderResult] = await db.query(
-            "INSERT INTO orders (user_id, total_amount, address, status) VALUES (?, ?, ?, 'Pending')",
-            [user_id, totalAmount, address]
+            "INSERT INTO orders (user_id, total_amount, address, phone_number, payment_method, status) VALUES (?, ?, ?, ?, ?, 'Pending')",
+            [user_id, totalAmount, address, phone_number, payment_method || 'COD']
         );
 
         const orderId = orderResult.insertId;
@@ -58,7 +58,7 @@ exports.placeOrder = async (req, res) => {
         await db.query("DELETE FROM cart WHERE user_id = ?", [user_id]);
         res.status(201).json({
             success: true,
-            message: "Order placed successfully",
+            message: "Order placed successfully " + (payment_method || 'COD'),
             orderId: orderId,
             totalBill: totalAmount
         });
@@ -117,7 +117,7 @@ exports.cancelOrder = async (req, res) => {
     const user_id = req.user.id;
 
     try {
-        //Only cancel if order is Pending and belongs to user
+        //cancel order(user)
         const [order] = await db.query("SELECT * FROM orders WHERE id = ? AND user_id = ?", [id, user_id]);
 
         if (order.length === 0) {
