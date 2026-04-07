@@ -2,9 +2,10 @@ const db = require('../db/db');
 
 exports.placeOrder = async (req, res) => {
     const user_id = req.user.id;
-    const { address } = req.body;
-    if (!address) {
-        return res.status(400).json({ success: false, message: "Please provide a delivery address." });
+    const { address, phone_number, payment_method } = req.body;
+
+    if (!address || !phone_number) {
+        return res.status(400).json({ success: false, message: "Address and Phone Number are required." });
     }
 
     try {
