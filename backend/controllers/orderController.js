@@ -150,10 +150,28 @@ exports.getAllOrdersForAdmin = async (req, res) => {
         res.status(500).json({ success: false, message: "Error fetching admin orders." });
     }
 };
+
+//admin order update and payment status
+exports.updateOrderStatus = async (req, res) => {
+    const { id } = req.params;
+    const { status, payment_status } = req.body;
+
+    try {
+        await db.query(
+            "UPDATE orders SET status = ?, payment_status = ? WHERE id = ?",
+            [status, payment_status, id]
+        );
+        res.status(200).json({ success: true, message: "Order updated successfully." });
+    } catch (err) {
+        res.status(500).json({ success: false, message: "Failed to update status." });
+    }
+};
+
 module.exports = {
     placeOrder: exports.placeOrder,
     getMyOrders: exports.getMyOrders,
     getOrderDetails: exports.getOrderDetails,
     cancelOrder: exports.cancelOrder,
-    getAllOrdersForAdmin: exports.getAllOrdersForAdmin
+    getAllOrdersForAdmin: exports.getAllOrdersForAdmin,
+    updateOrderStatus: exports.updateOrderStatus
 };
