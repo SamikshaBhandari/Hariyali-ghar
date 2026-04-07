@@ -5,6 +5,7 @@ const db = require('./db/db');
 const productRoute = require('./routes/productRoute');
 const authRoute = require('./routes/authRoute');
 const cartRoute = require('./routes/cartRoute');
+const orderRoute = require('./routes/orderRoute');
 
 const app = express();
 app.use(cors());
@@ -12,6 +13,8 @@ app.use(express.json());
 app.use('/images', express.static('image'));
 app.use('/api/products', productRoute);
 app.use('/api/auth', authRoute);
+app.use('/api/cart', cartRoute);
+app.use('/api/orders', orderRoute);
 
 const PORT = process.env.PORT || 5000;
 
@@ -30,4 +33,3 @@ app.get('/dbtest', (req, res) => {
     res.send("Backend server is running successfully");
 });
 
-app.use('/api/cart', cartRoute);
