@@ -8,5 +8,5 @@ router.post('/place', authMiddleware, orderController.placeOrder);
 router.get('/myorders', authMiddleware, orderController.getMyOrders);
 router.get('/details/:id', authMiddleware, orderController.getOrderDetails);
 router.put('/cancel/:id', authMiddleware, orderController.cancelOrder);
-
+router.get('/admin/all', authMiddleware, orderController.getAllOrdersForAdmin);
 module.exports = router;

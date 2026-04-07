@@ -135,9 +135,25 @@ exports.cancelOrder = async (req, res) => {
         res.status(500).json({ success: false, message: "Could not cancel order." });
     }
 };
+
+//admin view all orders
+exports.getAllOrdersForAdmin = async (req, res) => {
+    try {
+        const [allOrders] = await db.query(
+            `SELECT o.*, u.fullname
+             FROM orders o 
+             JOIN users u ON o.user_id = u.id 
+             ORDER BY o.created_at DESC`
+        );
+        res.status(200).json({ success: true, data: allOrders });
+    } catch (err) {
+        res.status(500).json({ success: false, message: "Error fetching admin orders." });
+    }
+};
 module.exports = {
     placeOrder: exports.placeOrder,
     getMyOrders: exports.getMyOrders,
     getOrderDetails: exports.getOrderDetails,
-    cancelOrder: exports.cancelOrder
+    cancelOrder: exports.cancelOrder,
+    getAllOrdersForAdmin: exports.getAllOrdersForAdmin
 };
