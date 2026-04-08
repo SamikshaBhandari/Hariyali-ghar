@@ -7,7 +7,7 @@ exports.addToCart = async (req, res) => {
     const requestedQty = parseInt(quantity) || 1;
 
     try {
-        // At first check stock product
+        //At first check stock product
         const [product] = await db.query("SELECT name, stock_quantity FROM products WHERE id = ?", [product_id]);
 
         if (product.length === 0) {
@@ -17,11 +17,11 @@ exports.addToCart = async (req, res) => {
         if (product[0].stock_quantity < requestedQty) {
             return res.status(400).json({
                 success: false,
-                message: "Not enough stock available."
+                message: `Only ${product[0].stock_quantity} items left in stock.`
             });
         }
 
-        //check if product is already in the user cart
+        //Check if product is already in the user cart
         const [existing] = await db.query(
             "SELECT id, quantity FROM cart WHERE user_id = ? AND product_id = ?",
             [user_id, product_id]
@@ -30,16 +30,19 @@ exports.addToCart = async (req, res) => {
         if (existing.length > 0) {
             const newTotalQty = existing[0].quantity + requestedQty;
 
-            // Recheck stock for total quantity
+            //Recheck stock for total quantity
             if (product[0].stock_quantity < newTotalQty) {
-                return res.status(400).json({ success: false, message: "Total quantity exceeds available stock." });
+                return res.status(400).json({
+                    success: false,
+                    message: `Cannot add more. Only ${product[0].stock_quantity} available in total.`
+                });
             }
 
             await db.query("UPDATE cart SET quantity = ? WHERE id = ?", [newTotalQty, existing[0].id]);
-            return res.status(200).json({ success: true, message: "Cart updated ." });
+            return res.status(200).json({ success: true, message: "Cart updated." });
         }
 
-        //insert new product
+        //Insert new product
         await db.query(
             "INSERT INTO cart (user_id, product_id, quantity) VALUES (?, ?, ?)",
             [user_id, product_id, requestedQty]
@@ -57,27 +60,37 @@ exports.getCart = async (req, res) => {
     const user_id = req.user.id;
     try {
         const sql = `
-            SELECT cart.id, products.name, products.price, products.image_url, cart.quantity, (products.price * cart.quantity) AS subtotal 
+            SELECT cart.id, products.name, products.price, products.image_url, 
+                   products.stock_quantity, cart.quantity, 
+                   (products.price * cart.quantity) AS subtotal 
             FROM cart 
             JOIN products ON cart.product_id = products.id 
             WHERE cart.user_id = ?`;
 
         const [items] = await db.query(sql, [user_id]);
 
-        //Grand Total nikalne logic 
+        const updatedItems = items.map(item => ({
+            ...item,
+            //If stock is 5 or less, show "Limited Stock"
+            stockStatus: item.stock_quantity <= 5 ? "Limited Stock" : "In Stock",
+            isOutOfStock: item.stock_quantity < item.quantity
+        }));
+
+        //Grand Total calculation
         const grandTotal = items.reduce((total, item) => total + parseFloat(item.subtotal), 0);
+
         res.status(200).json({
             success: true,
             totalItems: items.length,
             grandTotal: grandTotal.toFixed(2),
-            data: items
+            data: updatedItems
         });
     } catch (err) {
         res.status(500).json({ success: false, error: err.message });
     }
 };
 
-// 3. Update Cart Quantity 
+//Update Cart Quantity 
 exports.updateCartQuantity = async (req, res) => {
     const { id, quantity } = req.body;
     const user_id = req.user.id;
@@ -93,7 +106,10 @@ exports.updateCartQuantity = async (req, res) => {
         if (check.length === 0) return res.status(404).json({ success: false, message: "Cart item not found." });
 
         if (check[0].stock_quantity < quantity) {
-            return res.status(400).json({ success: false, message: "Stock limit reached." });
+            return res.status(400).json({
+                success: false,
+                message: `Only ${check[0].stock_quantity} items available in stock.`
+            });
         }
 
         await db.query("UPDATE cart SET quantity = ? WHERE id = ? AND user_id = ?", [quantity, id, user_id]);
@@ -103,7 +119,7 @@ exports.updateCartQuantity = async (req, res) => {
     }
 };
 
-// 4. Delete item from cart
+//Delete item from cart
 exports.removeFromCart = async (req, res) => {
     const { id } = req.params;
     const user_id = req.user.id;
