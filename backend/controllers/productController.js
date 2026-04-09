@@ -3,7 +3,11 @@ const db = require('../db/db');
 //Read all product
 exports.getAllProducts = async (req, res) => {
     try {
-        const [rows] = await db.query("SELECT * FROM products");
+        const sql = `
+            SELECT products.*, categories.category_name 
+            FROM products 
+            LEFT JOIN categories ON products.category_id = categories.id`;
+        const [rows] = await db.query(sql);
         res.json(rows);
     } catch (err) {
         res.status(500).json({ error: "Server Error: " + err.message });
@@ -12,14 +16,14 @@ exports.getAllProducts = async (req, res) => {
 
 //Product add logic
 exports.addProduct = async (req, res) => {
-    const { name, price, description, category, image_url, stock_quantity, sunlight, watering, care_tips } = req.body;
+    const { name, price, description, category_id, image_url, stock_quantity, sunlight, watering, care_tips } = req.body;
 
     try {
         //care guide sahit ko sql
         const sql = `INSERT INTO products 
-            (name, price, description, category, image_url, stock_quantity, sunlight, watering, care_tips) 
+            (name, price, description, category_id, image_url, stock_quantity, sunlight, watering, care_tips) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-        await db.query(sql, [name, price, description, category, image_url, stock_quantity,
+        await db.query(sql, [name, price, description, category_id, image_url, stock_quantity,
             sunlight, watering, care_tips]);
         res.status(201).json({ message: "Product successfully added with care instructions" });
     } catch (err) {
@@ -29,11 +33,11 @@ exports.addProduct = async (req, res) => {
 //product update
 exports.updateProduct = async (req, res) => {
     const { id } = req.params;
-    const { name, price, description, category, image_url, stock_quantity, sunlight, watering, care_tips } = req.body;
+    const { name, price, description, category_id, image_url, stock_quantity, sunlight, watering, care_tips } = req.body;
     try {
-        const sql = `UPDATE products SET name=?, price=?,description=?,category=?,image_url=?,stock_quantity=?,sunlight=?,
+        const sql = `UPDATE products SET name=?, price=?,description=?,category_id=?,image_url=?,stock_quantity=?,sunlight=?,
         watering=?,care_tips=?WHERE id=?`;
-        const [result] = await db.query(sql, [name, price, description, category, image_url, stock_quantity, sunlight, watering, care_tips, id]);
+        const [result] = await db.query(sql, [name, price, description, category_id, image_url, stock_quantity, sunlight, watering, care_tips, id]);
 
         if (result.affectedRows === 0) {
             return res.status(404).json({ error: 'product not found' });
