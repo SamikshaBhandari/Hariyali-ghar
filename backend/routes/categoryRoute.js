@@ -13,6 +13,8 @@ const isAdmin = (req, res, next) => {
         });
     }
 };
-//category add
+//category add for admin
 router.post('/add', authMiddleware, isAdmin, categoryController.createCategory);
+
+router.get('/all', categoryController.getCategories);
 module.exports = router;
