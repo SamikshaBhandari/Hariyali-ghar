@@ -96,6 +96,17 @@ exports.login = async (req, res) => {
             process.env.JWT_SECRET,
             { expiresIn: '365d' }
         );
+
+        try {
+            await sendEmail({
+                email: user.email,
+                subject: 'Security Alert: New Login to your Hariyali-Ghar Account',
+                message: `Namaste ${user.fullname},\n\nYou just logged in to Hariyali-Ghar successfully.\n\nDate: ${new Date().toLocaleString()}\n\nIf this was not you, please secure your account immediately.\n\nHappy Planting,\nHariyali-Ghar`
+            });
+        } catch (emailErr) {
+            console.error("Login notification email failed:", emailErr);
+        }
+
         res.status(200).json({
             message: "Login Successful!",
             token: token,
