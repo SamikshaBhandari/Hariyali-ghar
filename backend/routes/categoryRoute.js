@@ -17,4 +17,7 @@ const isAdmin = (req, res, next) => {
 router.post('/add', authMiddleware, isAdmin, categoryController.createCategory);
 
 router.get('/all', categoryController.getCategories);
+
+router.put('/update/:id', authMiddleware, isAdmin, categoryController.updateCategory);
+
 module.exports = router;
