@@ -10,3 +10,11 @@ exports.createCategory = async (req, res) => {
         res.status(500).json({ error: "Failed to create category: " + err.message });
     }
 };
+exports.getCategories = async (req, res) => {
+    try {
+        const [rows] = await db.query("SELECT * FROM categories");
+        res.status(200).json(rows);
+    } catch (err) {
+        res.status(500).json({ error: "Server Error: " + err.message });
+    }
+};
