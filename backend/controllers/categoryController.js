@@ -14,9 +14,9 @@ exports.createCategory = async (req, res) => {
 exports.getCategories = async (req, res) => {
     try {
         const [rows] = await db.query("SELECT * FROM categories");
-        res.status(200).json(rows);
+        res.status(200).json({ success: true, data: rows });
     } catch (err) {
-        res.status(500).json({ error: "Server Error: " + err.message });
+        res.status(500).json({ success: false, error: err.message });
     }
 };
 //update category for admin
