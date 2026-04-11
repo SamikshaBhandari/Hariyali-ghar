@@ -6,6 +6,9 @@ exports.addToCart = async (req, res) => {
     const user_id = req.user.id;
     const requestedQty = parseInt(quantity) || 1;
 
+    if (!product_id || requestedQty <= 0) {
+        return res.status(400).json({ success: false, message: "Invalid product or quantity." });
+    }
     try {
         //At first check stock product
         const [product] = await db.query("SELECT name, stock_quantity FROM products WHERE id = ?", [product_id]);
