@@ -8,7 +8,7 @@ exports.getAllProducts = async (req, res) => {
             FROM products 
             LEFT JOIN categories ON products.category_id = categories.id`;
         const [rows] = await db.query(sql);
-        res.json(rows);
+        res.status(200).json({ success: true, data: rows });
     } catch (err) {
         res.status(500).json({ error: "Server Error: " + err.message });
     }
@@ -59,7 +59,7 @@ exports.deleteProduct = async (req, res) => {
             return res.status(404).json({ error: "product already removed." });
 
         }
-        res.status(200).json({ error: "Product deleted from list ." });
+        res.status(200).json({ message: "Product deleted from list." });
     }
     catch (err) {
         res.status(500).json({ error: "Deleted failed!:" + err.message });
