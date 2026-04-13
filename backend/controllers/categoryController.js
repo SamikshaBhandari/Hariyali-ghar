@@ -27,7 +27,7 @@ exports.updateCategory = async (req, res) => {
     try {
         const sql = "UPDATE categories SET category_name = ?, description = ? WHERE id = ?";
         await db.query(sql, [category_name, description, id]);
-        res.status(200).json({ success: true, message: "Category updated successfully!" });
+        res.status(200).json({ success: true, message: "Category updated successfully" });
     } catch (err) {
         res.status(500).json({ error: "Update failed: " + err.message });
     }
