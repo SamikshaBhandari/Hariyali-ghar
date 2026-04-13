@@ -25,7 +25,7 @@ exports.addProduct = async (req, res) => {
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
         await db.query(sql, [name, price, description, category_id, image_url, stock_quantity,
             sunlight, watering, care_tips]);
-        res.status(201).json({ message: "Product successfully added with care instructions" });
+        res.status(201).json({ message: "Product successfully added with care instructions." });
     } catch (err) {
         res.status(500).json({ error: "Failed to add product: " + err.message });
     }
@@ -40,7 +40,7 @@ exports.updateProduct = async (req, res) => {
         const [result] = await db.query(sql, [name, price, description, category_id, image_url, stock_quantity, sunlight, watering, care_tips, id]);
 
         if (result.affectedRows === 0) {
-            return res.status(404).json({ error: 'product not found' });
+            return res.status(404).json({ error: 'product not found.' });
         }
         res.status(200).json({ message: 'Product successfully updated.' });
     }
