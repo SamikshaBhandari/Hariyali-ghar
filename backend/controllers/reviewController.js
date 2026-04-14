@@ -1,6 +1,6 @@
 const db = require('../db/db');
 
-//Review Add garne logic
+//Add review section
 exports.addReview = async (req, res) => {
     const user_id = req.user.id;
     const { product_id, rating, comment } = req.body;
