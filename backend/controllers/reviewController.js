@@ -24,6 +24,8 @@ exports.addReview = async (req, res) => {
         res.status(500).json({ success: false, message: err.message });
     }
 };
+
+//get review section
 exports.getProductReviews = async (req, res) => {
     const { product_id } = req.params;
     try {
