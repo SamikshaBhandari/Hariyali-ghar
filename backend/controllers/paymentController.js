@@ -9,6 +9,13 @@ exports.initiateEsewaPayment = async (req, res) => {
         const transaction_uuid = `${orderId}-${Date.now()}`;
 
         const data = `total_amount=${amount},transaction_uuid=${transaction_uuid},product_code=${product_code}`;
+
+        const hash = crypto
+            .createHmac('sha256', secretKey)
+            .update(data)
+            .digest('base64');
+
+
     }
     catch (err) {
         res.status(500).json({ success: false, message: err.message });
