@@ -38,3 +38,28 @@ exports.initiateEsewaPayment = async (req, res) => {
     }
 };
 
+exports.verifyEsewaPayment = async (req, res) => {
+    try {
+        const { data } = req.body; //data send to encoded format
+
+        //eSewa ko encoded data lai decode garne
+        const decodedString = Buffer.from(data, 'base64').toString('utf-8');
+        const decodedData = JSON.parse(decodedString);
+
+        if (decodedData.status === "COMPLETE") {
+            const payment_id = decodedData.transaction_uuid.split('-')[0];
+
+            //Database update
+            await db.query(
+                "UPDATE payments SET status = ?, transaction_id = ?, payment_date = NOW() WHERE id = ?",
+                ['paid', decodedData.transaction_code, payment_id]
+            );
+
+            res.json({ success: true, message: "Payment Verified and Database Updated!" });
+        } else {
+            res.status(400).json({ success: false, message: "Payment not completed" });
+        }
+    } catch (err) {
+        res.status(500).json({ success: false, message: err.message });
+    }
+};
