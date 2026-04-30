@@ -24,7 +24,7 @@ const Home = () => {
                         <Leaf size={14} className="text-green-400 fill-green-400/20 flex-shrink-0" />
                         <span className="leading-none">Nepal's Favourite Plant Store</span>
                     </span>
-                    <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
+                    <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
                         Bring Nature <br />
                         <span className="text-green-400">Into Your Home</span>
                     </h1>
@@ -73,7 +73,7 @@ const Home = () => {
                                 <div className="absolute bottom-8 left-8 text-white">
 
                                     {/*icon box*/}
-                                    <div className="bg-green-500 w-7 h-7 rounded- flex items-center justify-center mb-4 shadow-lg">
+                                    <div className="bg-green-500 w-7 h-7 rounded-md flex items-center justify-center mb-4 shadow-lg">
                                         <div className="text-white">
                                             {cat.icon}
                                         </div>
