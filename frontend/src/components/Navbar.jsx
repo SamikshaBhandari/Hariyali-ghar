@@ -26,7 +26,7 @@ const Navbar = () => {
             {/* logo area*/}
             <div className="flex items-center gap-2 cursor-pointer">
                 <div className="bg-[#10b981] p-1.5 rounded-lg">
-                    <Sprout className="text-white" size={26} />
+                    <Sprout className="text-white" size={20} />
                 </div>
                 <span className={`font-bold text-2xl tracking-tight transition-colors ${isScrolled ? "text-[#065f46]" : "text-white"
                     }`}>
