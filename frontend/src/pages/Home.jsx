@@ -20,8 +20,9 @@ const Home = () => {
                 </div>
 
                 <div className="relative z-10">
-                    <span className="bg-white/20 backdrop-blur-md border border-white/30 text-white px-4 py-1 rounded-full text-sm mb-6 inline-block">
-                        Nepal's Favourite Plant Store
+                    <span className="bg-white/20 backdrop-blur-md border border-white/30 text-white px-4 py-1.5 rounded-full text-sm mb-6 inline-flex items-center gap-2">
+                        <Leaf size={14} className="text-green-400 fill-green-400/20 flex-shrink-0" />
+                        <span className="leading-none">Nepal's Favourite Plant Store</span>
                     </span>
                     <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
                         Bring Nature <br />
