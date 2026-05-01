@@ -9,7 +9,7 @@ const Home = () => {
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    const IMG_URL = "http://localhost:5000/images";
+    const IMG_URL = "http://localhost:5000";
 
     useEffect(() => {
         const fetchData = async () => {
@@ -69,7 +69,7 @@ const Home = () => {
                 </div>
             </div>
 
-            {/* Plant Categories Section*/}
+            {/* Plant Categories Section */}
             <div className="bg-white py-16 px-6">
                 <div className="max-w-7xl mx-auto">
 
@@ -82,8 +82,7 @@ const Home = () => {
                     {/* Categories Grid */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                         {categories.map((cat, index) => {
-                            // Image URL Logic
-                            const imagePath = `${IMG_URL}/${cat.category_image}`.replace(/([^:]\/)\/+/g, "$1");
+                            const imagePath = `${IMG_URL}/images/${cat.category_image}`;
 
                             return (
                                 <div
@@ -95,8 +94,7 @@ const Home = () => {
                                         className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                                         alt={cat.category_name}
                                         onError={(e) => {
-                                            // if image is not found than view placeholder
-                                            e.target.src = "https://via.placeholder.com/400x600?text=Plant+Image+Not+Found";
+                                            console.error("Link mistake:", imagePath);
                                         }}
                                     />
 
@@ -108,7 +106,7 @@ const Home = () => {
                                         <ArrowRight size={14} className="text-green-600" />
                                     </div>
 
-                                    {/*Content Area: Icon, Name,and Description */}
+                                    {/*Content Area: Icon, Name, and Description */}
                                     <div className="absolute bottom-6 left-6 right-6 text-white text-left">
                                         {/* Green Icon Box */}
                                         <div className="bg-[#22c55e] w-7 h-7 rounded-lg flex items-center justify-center mb-4 shadow-lg">
@@ -133,6 +131,7 @@ const Home = () => {
                     </div>
                 </div>
             </div>
+
 
         </div>
     );
