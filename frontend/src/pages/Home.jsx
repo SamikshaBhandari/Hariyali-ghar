@@ -141,10 +141,10 @@ const Home = () => {
                     <div className="flex justify-between items-end mb-10">
                         <div>
                             <span className="text-green-600 font-bold tracking-widest text-xs uppercase">Handpicked</span>
-                            <h2 className="text-4xl font-serif font-bold text-slate-800 mt-2">Featured Plants</h2>
+                            <h2 className="text-3xl font-serif font-bold text-slate-800 mt-2">Featured Plants</h2>
                         </div>
                         <button className="flex items-center gap-1 text-green-700 font-bold hover:underline transition-all">
-                            View All <ArrowRight size={16} />
+                            View All <ArrowRight size={14} />
                         </button>
                     </div>
 
