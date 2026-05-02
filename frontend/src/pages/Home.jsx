@@ -134,20 +134,68 @@ const Home = () => {
 
 
             {/* Featured Plants Section */}
-            <div className="bg-[#f9fbf9] py-16 px-6">
+            <div className="bg-[#f9fbf9] py-16 px-8">
                 <div className="max-w-7xl mx-auto">
 
                     {/* Header Part */}
                     <div className="flex justify-between items-end mb-10">
                         <div>
-                            <span className="text-green-600 font-bold tracking-widest text-xs uppercase">Handpicked</span>
-                            <h2 className="text-3xl font-serif font-bold text-slate-800 mt-2">Featured Plants</h2>
+                            <span className="text-green-600 font-bold tracking-widest text-[10px] uppercase">Handpicked</span>
+                            <h2 className="text-3xl font-serif font-bold text-slate-800 mt-1">Featured Plants</h2>
                         </div>
-                        <button className="flex items-center gap-1 text-green-700 font-bold hover:underline transition-all">
+                        <button className="flex items-center gap-1 text-green-700 font-bold text-sm hover:underline">
                             View All <ArrowRight size={14} />
                         </button>
                     </div>
 
+                    {/* Plants Grid */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        {products.slice(0, 4).map((plant) => (
+                            <div key={plant.id} className="bg-white rounded-[25px] overflow-hidden shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+
+                                {/* Image Container*/}
+                                <div className="relative h-56 w-full bg-[#f3f4f3]">
+                                    <img
+                                        src={`http://localhost:5000/images/${plant.image_url}`}
+                                        alt={plant.name}
+                                        className="w-full h-full object-cover"
+                                    />
+                                    {/* Category Tag*/}
+                                    <span className="absolute top-4 right-4 bg-white/90 px-3 py-1 rounded-full text-[10px] font-bold uppercase text-green-800 shadow-sm">
+                                        {plant.category_name}
+                                    </span>
+                                </div>
+
+                                {/* Content Area */}
+                                <div className="p-6">
+                                    <h3 className="text-lg font-bold text-slate-800 mb-1 leading-tight">
+                                        {plant.name}
+                                    </h3>
+
+                                    <p className="text-gray-400 text-xs mb-5 line-clamp-2 leading-relaxed h-8">
+                                        {plant.description}
+                                    </p>
+
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-green-700 font-bold text-lg">
+                                            NPR {plant.price}
+                                        </span>
+
+                                        {/* Rating Logic */}
+                                        <div className="flex items-center gap-1">
+                                            <Star
+                                                size={14}
+                                                className={plant.average_rating > 0 ? "fill-yellow-400 text-yellow-400" : "text-gray-300"}
+                                            />
+                                            <span className="text-gray-500 text-sm font-semibold">
+                                                {plant.average_rating > 0 ? Number(plant.average_rating).toFixed(1) : "New"}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
 
