@@ -1,19 +1,24 @@
 const db = require('../db/db');
 
-//Read all product
+// Read all product with Category Name and Average Rating
 exports.getAllProducts = async (req, res) => {
     try {
         const sql = `
-            SELECT products.*, categories.category_name 
+            SELECT 
+                products.*, 
+                categories.category_name,
+                IFNULL(AVG(reviews.rating), 0) as average_rating
             FROM products 
-            LEFT JOIN categories ON products.category_id = categories.id`;
+            LEFT JOIN categories ON products.category_id = categories.id
+            LEFT JOIN reviews ON products.id = reviews.product_id
+            GROUP BY products.id`;
+
         const [rows] = await db.query(sql);
         res.status(200).json({ success: true, data: rows });
     } catch (err) {
         res.status(500).json({ error: "Server Error: " + err.message });
     }
 };
-
 //Product add logic
 exports.addProduct = async (req, res) => {
     const { name, price, description, category_id, image_url, stock_quantity, sunlight, watering, care_tips } = req.body;
