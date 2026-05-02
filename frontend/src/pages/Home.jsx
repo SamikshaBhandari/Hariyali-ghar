@@ -177,7 +177,7 @@ const Home = () => {
                                     </p>
 
                                     <div className="flex justify-between items-center">
-                                        <span className="text-green-700 font-bold text-lg">
+                                        <span className="text-green-700 font-bold text-md">
                                             NPR {plant.price}
                                         </span>
 
