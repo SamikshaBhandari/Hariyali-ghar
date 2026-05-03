@@ -135,7 +135,7 @@ const Home = () => {
 
 
             {/* Featured Plants Section */}
-            <div className="bg-[#f9fbf9] py-16 px-8">
+            <div className="bg-green-50/30 py-16 px-8">
                 <div className="max-w-7xl mx-auto">
 
                     {/* Header Part */}
@@ -152,10 +152,12 @@ const Home = () => {
                     {/* Plants Grid */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                         {products.slice(0, 4).map((plant) => (
-                            <div key={plant.id} className="bg-white rounded-[25px] overflow-hidden shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-
+                            <div
+                                key={plant.id}
+                                className="bg-white rounded-[25px] overflow-hidden shadow-sm border border-gray-100 cursor-pointer transition-all duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-3"
+                            >
                                 {/* Image Container*/}
-                                <div className="relative h-56 w-full bg-[#f3f4f3]">
+                                <div className="relative h-56 w-full bg-slate-50">
                                     <img
                                         src={`http://localhost:5000/images/${plant.image_url}`}
                                         alt={plant.name}
