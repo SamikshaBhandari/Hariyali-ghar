@@ -182,7 +182,7 @@ const Home = () => {
                                                     <button
                                                         type="button"
                                                         onClick={() => setExpandedId(expandedId === plant.id ? null : plant.id)}
-                                                        className="text-green-700 font-bold ml-1 hover:underline cursor-pointer"
+                                                        className="text-green-600 font-bold ml-1 hover:underline cursor-pointer"
                                                     >
                                                         {expandedId === plant.id ? "Show Less" : "Read More"}
                                                     </button>
