@@ -8,6 +8,7 @@ const Home = () => {
     const [products, setProducts] = useState([]);
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [expandedId, setExpandedId] = useState(null);
 
     const IMG_URL = "http://localhost:5000";
 
@@ -172,11 +173,27 @@ const Home = () => {
                                         {plant.name}
                                     </h3>
 
-                                    <p className="text-gray-400 text-xs mb-5 line-clamp-2 leading-relaxed h-8">
-                                        {plant.description}
-                                    </p>
+                                    {/* Description */}
+                                    <div className="mb-5 min-h-[40px]">
+                                        <p className="text-gray-400 text-[11px] leading-relaxed">
+                                            {plant.description && plant.description.length > 60 ? (
+                                                <>
+                                                    {expandedId === plant.id ? plant.description : `${plant.description.substring(0, 60)}...`}
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => setExpandedId(expandedId === plant.id ? null : plant.id)}
+                                                        className="text-green-700 font-bold ml-1 hover:underline cursor-pointer"
+                                                    >
+                                                        {expandedId === plant.id ? "Show Less" : "Read More"}
+                                                    </button>
+                                                </>
+                                            ) : (
+                                                plant.description
+                                            )}
+                                        </p>
+                                    </div>
 
-                                    <div className="flex justify-between items-center">
+                                    <div className="flex justify-between items-center mt-2">
                                         <span className="text-green-700 font-bold text-md">
                                             NPR {plant.price}
                                         </span>
@@ -198,6 +215,8 @@ const Home = () => {
                     </div>
                 </div>
             </div>
+
+
 
         </div>
     );
