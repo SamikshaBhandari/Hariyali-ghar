@@ -216,7 +216,17 @@ const Home = () => {
                 </div>
             </div>
 
-
+            <div className='bg-green-700 py-20 px-6 text-center'>
+                <div className='max-w-3xl mx-auto'>
+                    <h2 className='text-white text-3xl md:text-4xl font-serif font bold mb-4'>Ready to Green Your Space?</h2>
+                    <p className="text-green-100 text-sm md:text-base mb-10 opacity-90">
+                        Shop from 50+ plant varieties. Free delivery on orders above NPR 1000.
+                    </p>
+                    <button className="bg-white text-green-800 hover:bg-gray-100 px-10 py-3 rounded-full font-bold transition-all shadow-md active:scale-95">
+                        Shop Now
+                    </button>
+                </div>
+            </div>
 
         </div>
     );
