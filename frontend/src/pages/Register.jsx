@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { useNavigate, UseNavigate } from 'react-router-dom';
+import { UseNavigate, Link } from 'react-router-dom';
 import api from '../api/api';
 
 const Register = () => {
-    const nagivate = useNavigate();
+    const navigate = UseNavigate();
+    const [showPassword, setShowPassword] = useState(false);
     const [formData, setFormData] = useState({
         fullname: '',
         email: '',
@@ -26,7 +27,7 @@ const Register = () => {
         }
 
         try {
-            const res = await API.post('/users/signup', {
+            const res = await api.post('/users/signup', {
                 fullname: formData.fullname,
                 email: formData.email,
                 mobile: formData.mobile,
@@ -43,6 +44,9 @@ const Register = () => {
     };
 
     return (
+        <div>
+
+        </div>
     );
 };
 
