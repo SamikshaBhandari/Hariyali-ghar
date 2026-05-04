@@ -80,7 +80,6 @@ const Home = () => {
                         <p className="text-gray-500 mt-2">Find the perfect plant for every space and lifestyle</p>
                     </div>
 
-                    {/* Categories Grid */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                         {categories.map((cat, index) => {
                             const imagePath = `${IMG_URL}/images/${cat.category_image}`;
