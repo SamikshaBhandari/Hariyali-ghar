@@ -6,6 +6,7 @@ import api from '../api/api';
 const Register = () => {
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         fullname: '',
         email: '',
@@ -26,6 +27,8 @@ const Register = () => {
         if (formData.password !== formData.confirmPassword) {
             return alert("Passwords do not match!");
         }
+        if (loading) return;
+        setLoading(true);
 
         try {
             const res = await api.post('/auth/signup', {
@@ -36,11 +39,12 @@ const Register = () => {
                 password: formData.password
             });
 
-            alert(res.data.message);
-
+            alert(res.data.message || "Signup successful! Please check your email.");
             navigate('/verify-otp', { state: { email: formData.email } });
         } catch (err) {
-            alert(err.response?.data?.error || "Signup failed");
+            alert(err.response?.data?.error || "Signup failed.Please try again.");
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -150,9 +154,10 @@ const Register = () => {
                     {/* Create Account*/}
                     <button
                         type="submit"
-                        className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2.5 rounded-xl mt-4 flex items-center justify-center gap-2 transition-all shadow-md active:scale-[0.98]"
+                        disabled={loading}
+                        className={`w-full ${loading ? 'bg-green-400' : 'bg-green-600 hover:bg-green-700'} text-white font-bold py-2.5 rounded-xl mt-4 flex items-center justify-center gap-2 transition-all shadow-md active:scale-[0.98]`}
                     >
-                        <UserPlus size={18} /> Create Account
+                        {loading ? "Please wait..." : <><UserPlus size={18} /> Create Account</>}
                     </button>
                 </form>
 
