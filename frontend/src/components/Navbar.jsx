@@ -34,10 +34,9 @@ const Navbar = () => {
             </Link>
 
             {/* Nav Links */}
-            <div className={`hidden md:flex items-center gap-10 font-medium transition-colors ${shouldShowBg ? "text-gray-700" : "text-white"
-                }`}>
-                <Link to="/" className="hover:text-green-500 transition">Home</Link>
-                <Link to="/plants" className="hover:text-green-500 transition">Plants</Link>
+            <div className={`flex items-center gap-4 md:gap-10 font-medium transition-colors ${shouldShowBg ? "text-gray-700" : "text-white"}`}>
+                <Link to="/" className="hover:text-green-500 transition text-sm md:text-base">Home</Link>
+                <Link to="/plants" className="hover:text-green-500 transition text-sm md:text-base">Plants</Link>
             </div>
 
             {/* Action Buttons */}
