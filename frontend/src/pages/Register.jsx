@@ -28,7 +28,7 @@ const Register = () => {
         }
 
         try {
-            const res = await api.post('/users/signup', {
+            const res = await api.post('/auth/signup', {
                 fullname: formData.fullname,
                 email: formData.email,
                 mobile: formData.mobile,
