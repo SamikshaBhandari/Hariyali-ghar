@@ -29,9 +29,9 @@ const VerifyOTP = () => {
 
     return (
         <div className="min-h-screen bg-gray-50 flex items-center justify-center p-2">
-            <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
+            <div className="max-w-[380px] py-10 w-full bg-white rounded-2xl shadow-2xl p-6 border border-gray-100">
                 <div className="text-center mb-6">
-                    <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <div className="bg-green-100 w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4">
                         <ShieldCheck className="text-green-600" size={30} />
                     </div>
                     <h2 className="text-2xl font-bold text-gray-800">Verify Your Email</h2>
@@ -43,7 +43,7 @@ const VerifyOTP = () => {
                         type="text"
                         maxLength="6"
                         placeholder="0 0 0 0 0 0"
-                        className="w-full text-center text-1xl tracking-[0.5rem] font-bold py-2 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none"
+                        className="w-full text-center text-1xl tracking-[0.3rem] font-bold py-2 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none"
                         value={otp}
                         onChange={(e) => setOtp(e.target.value)}
                         required
