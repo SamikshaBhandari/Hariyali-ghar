@@ -6,6 +6,7 @@ import Footer from './components/Footer';
 import Register from './pages/Register';
 import VerifyOTP from './pages/VerifyOTP';
 import Login from './pages/Login';
+import AdminDashboard from './pages/AdminDashboard';
 
 function App() {
     return (
@@ -18,6 +19,7 @@ function App() {
                     <Route path="/register" element={<Register />} />
                     <Route path="/verify-otp" element={<VerifyOTP />} />
                     <Route path="/login" element={<Login />} />
+                    <Route path="/admin/dashboard" element={<AdminDashboard />} />
                 </Routes>
             </main>
 
