@@ -40,7 +40,7 @@ const Login = () => {
             } else {
                 navigate('/');
             }
-
+            window.location.reload();
         } catch (err) {
             alert(err.response?.data?.error || "Login failed.");
         } finally {
@@ -79,7 +79,6 @@ const Login = () => {
                 </div>
 
                 <form onSubmit={handleLogin} className="space-y-5">
-                    {/* Email */}
                     <div>
                         <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1 ml-1">
                             {role === 'admin' ? 'Admin Email' : 'User Email Address'}
