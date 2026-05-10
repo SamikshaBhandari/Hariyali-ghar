@@ -66,7 +66,7 @@ const Navbar = () => {
                 {user ? (
                     /* Profile Dropdown Logic */
                     <div className="relative group">
-                        <button className={`flex items-center gap-2 pl-1 pr-3 py-1 rounded-full border transition-all ${shouldShowBg ? "bg-slate-50 border-slate-200" : "bg-white/10 border-white/20"
+                        <button className={`flex items-center gap-2 pl-1 pr-2 py-0 rounded-full border transition-all ${shouldShowBg ? "bg-slate-50 border-slate-200" : "bg-white/10 border-white/20"
                             }`}>
                             <img
                                 src={`https://ui-avatars.com/api/?name=${user.fullname}&background=random`}
@@ -79,11 +79,11 @@ const Navbar = () => {
                         </button>
 
                         {/* Dropdown Menu Layout */}
-                        <div className="absolute right-0 mt-2 w-64 bg-white rounded-3xl shadow-2xl border border-slate-50 py-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0 z-50">
-                            <div className="px-6 pb-3 border-b border-slate-50 mb-2 text-left">
+                        <div className="absolute right-0 mt-2 w-55 bg-white rounded-3xl shadow-3xl border border-slate-50 py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0 z-50">
+                            <div className="px-6 pb-2 border-b border-slate-50 mb-2 text-left">
                                 <p className="font-bold text-slate-800 text-sm">{user.fullname}</p>
-                                <p className="text-[10px] text-slate-400">{user.email}</p>
-                                <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full mt-1.5 inline-block ${user.role === 'admin' ? "bg-green-100 text-green-700" : "bg-green-100 text-green-700"
+                                <p className="text-[12px] text-slate-400">{user.email}</p>
+                                <span className={`text-[12px] font-bold px-2 py-0.5 rounded-full mt-1.5 inline-block ${user.role === 'admin' ? "bg-green-100 text-green-700" : "bg-green-100 text-green-700"
                                     }`}>
                                     {user.role === 'admin' ? 'Administrator' : 'User'}
                                 </span>
@@ -93,13 +93,13 @@ const Navbar = () => {
                                 {user.role === 'admin' ? (
                                     /* Admin Specific Menu */
                                     <>
-                                        <Link to="/admin/dashboard" className="flex items-center gap-3 px-6 py-2.5 text-sm hover:bg-green-50 text-slate-600 transition-colors">
+                                        <Link to="/admin/dashboard" className="flex items-center gap-2 px-6 py-2.5 text-sm hover:bg-green-50 text-slate-600 transition-colors">
                                             <LayoutDashboard size={18} className="text-slate-500" /> My Dashboard
                                         </Link>
-                                        <Link to="/profile" className="flex items-center gap-3 px-6 py-2.5 text-sm hover:bg-green-50 text-slate-600 transition-colors">
+                                        <Link to="/profile" className="flex items-center gap-2 px-6 py-2.5 text-sm hover:bg-green-50 text-slate-600 transition-colors">
                                             <User size={18} className="text-slate-500" /> My Profile
                                         </Link>
-                                        <Link to="/admin/dashboard" className="flex items-center gap-3 px-6 py-2.5 text-sm hover:bg-green-50 text-slate-600 transition-colors">
+                                        <Link to="/admin/dashboard" className="flex items-center gap-2 px-6 py-2.5 text-sm hover:bg-green-50 text-slate-600 transition-colors">
                                             <div className="p-0.5 border border-slate-300 rounded-md">
                                                 <Settings size={14} className="text-slate-500" />
                                             </div>
@@ -109,13 +109,13 @@ const Navbar = () => {
                                 ) : (
                                     /* User Specific Menu */
                                     <>
-                                        <Link to="/user/dashboard" className="flex items-center gap-3 px-6 py-2.5 text-sm hover:bg-green-50 text-slate-600 transition-colors">
+                                        <Link to="/user/dashboard" className="flex items-center gap-2 px-6 py-2.5 text-sm hover:bg-green-50 text-slate-600 transition-colors">
                                             <LayoutDashboard size={18} className="text-slate-500" /> My Dashboard
                                         </Link>
-                                        <Link to="/profile" className="flex items-center gap-3 px-6 py-2.5 text-sm hover:bg-green-50 text-slate-600 transition-colors">
+                                        <Link to="/profile" className="flex items-center gap-2 px-6 py-2.5 text-sm hover:bg-green-50 text-slate-600 transition-colors">
                                             <User size={18} className="text-slate-500" /> My Profile
                                         </Link>
-                                        <Link to="/orders" className="flex items-center gap-3 px-6 py-2.5 text-sm hover:bg-green-50 text-slate-600 transition-colors">
+                                        <Link to="/orders" className="flex items-center gap-2 px-6 py-2.5 text-sm hover:bg-green-50 text-slate-600 transition-colors">
                                             <ShoppingBag size={18} className="text-slate-500" /> My Orders
                                         </Link>
                                     </>
@@ -123,7 +123,7 @@ const Navbar = () => {
 
                                 <button
                                     onClick={handleLogout}
-                                    className="w-full flex items-center gap-3 px-6 py-3 text-sm text-red-500 hover:bg-red-50 mt-2 font-bold border-t border-slate-50 transition-all"
+                                    className="w-full flex items-center gap-2 px-6 py-3 text-sm text-red-500 hover:bg-red-50 mt-2 font-bold border-t border-slate-50 transition-all"
                                 >
                                     <LogOut size={18} /> Sign Out
                                 </button>
