@@ -70,3 +70,19 @@ exports.deleteProduct = async (req, res) => {
         res.status(500).json({ error: "Deleted failed!:" + err.message });
     }
 }
+
+//to add search and filter category logic
+exports.getFilteredProduct = async (req, res) => {
+    const { search, category } = req.query;
+    let sql = `
+        SELECT products.*, categories.category_name 
+        FROM products 
+        LEFT JOIN categories ON products.category_id = categories.id 
+        WHERE 1=1`;
+
+    let params = [];
+    if (search) {
+        sql += " AND products.name LIKE ?";
+        params.push(`%${search}%`);
+    }
+}
