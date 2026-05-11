@@ -81,8 +81,30 @@ exports.getFilteredProduct = async (req, res) => {
         WHERE 1=1`;
 
     let params = [];
+
+    //Search logic
     if (search) {
         sql += " AND products.name LIKE ?";
         params.push(`%${search}%`);
     }
-}
+
+    //category logic
+    if (category && category !== 'All') {
+        sql += " AND categories.category_name = ?";
+        params.push(category);
+    }
+
+    try {
+        const [rows] = await db.query(sql, params);
+        res.status(200).json({
+            success: true,
+            count: rows.length,
+            data: rows
+        });
+    } catch (err) {
+        res.status(500).json({
+            success: false,
+            error: "Filtering Error: " + err.message
+        });
+    }
+};
