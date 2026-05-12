@@ -7,6 +7,7 @@ import Register from './pages/Register';
 import VerifyOTP from './pages/VerifyOTP';
 import Login from './pages/Login';
 import AdminDashboard from './pages/AdminDashboard';
+import Plants from './pages/Plants';
 
 function App() {
     return (
@@ -20,6 +21,7 @@ function App() {
                     <Route path="/verify-otp" element={<VerifyOTP />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/admin/dashboard" element={<AdminDashboard />} />
+                    <Route path="/plants" element={<Plants />} />
                 </Routes>
             </main>
 
