@@ -24,4 +24,15 @@ const Plants = () => {
         }
     }
 };
+
+useEffect(() => {
+    fetchFilteredPlants();
+}, [searchQuery, activeCategory]);
+
+
+return (
+    <>
+
+    </>
+)
 export default Plants;
