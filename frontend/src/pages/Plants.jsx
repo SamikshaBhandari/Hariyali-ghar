@@ -6,6 +6,7 @@ const Plants = () => {
     const [plants, setPlants] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
     const [activeCategory, setActiveCategory] = useState("All");
-    const categories = ["All", "Indoor Plants", "Outdoor Plants", "Seeds", "Succulents"];
+    const categories = ["All", "Indoor Plants", "Outdoor Plants", "Seed Plants", "Succulents Plants"];
+
 }
 export default Plants;
