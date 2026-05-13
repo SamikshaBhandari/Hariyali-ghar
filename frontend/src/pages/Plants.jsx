@@ -37,13 +37,15 @@ const Plants = () => {
                 <p className="text-gray-100 opacity-90">Find the perfect green companion for your space</p>
             </div>
 
-            {/*sidebar container */}
+            {/*main container */}
             <div className="max-w-7xl mx-auto px-6 py-10 flex flex-col md:flex-row gap-8">
+
+                {/*sidebar container */}
                 <div className="w-full md:w-64 bg-white p-6 rounded-2xl shadow-sm h-fit border border-gray-100">
                     <h2 className="text-xs font-bold uppercase tracking-widest text-gray-800 mb-6">Filters</h2>
 
-                    {/*search container */}
-                    <div className="mb-6">
+                    {/*Search container */}
+                    <div className="mb-8">
                         <label className="text-xs font-bold text-gray-500 block mb-2 ">Search Plants</label>
                         <div className="relative">
                             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
@@ -56,7 +58,28 @@ const Plants = () => {
                             />
                         </div>
                     </div>
+
+                    {/* Category container */}
+                    <div>
+                        <label className="text-xs font-bold text-gray-500 block mb-4">Category</label>
+                        <div className="flex flex-col gap-2">
+                            {categories.map((cat) => (
+                                <button
+                                    key={cat}
+                                    onClick={() => setActiveCategory(cat)}
+                                    className={`text-left px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${activeCategory === cat
+                                        ? "bg-green-800 text-white shadow-lg"
+                                        : "text-gray-500 hover:bg-gray-50 hover:text-green-600"
+                                        }`}
+                                >
+                                    {cat}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
                 </div>
+
+
 
             </div>
 
