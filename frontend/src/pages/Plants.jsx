@@ -6,7 +6,7 @@ const Plants = () => {
     const [plants, setPlants] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
     const [activeCategory, setActiveCategory] = useState("All");
-    const categories = ["All", "Indoor Plants", "Outdoor Plants", "Seed Plant", "Succulents Plant"];
+    const categories = ["All", "Indoor Plants", "Outdoor Plants", "Seed Plant", "Succulents Plants"];
 
     const fetchFilteredPlants = async () => {
         try {
@@ -79,7 +79,15 @@ const Plants = () => {
                     </div>
                 </div>
 
+                {/*product grid */}
+                <div className="flex-1">
+                    <div className="mb-8">
+                        <p className="text-sm text-gray-400 font-medium">
+                            Showing <span className="text-gray-900 font-bold">{plants.length}</span> plants
+                        </p>
+                    </div>
 
+                </div>
 
             </div>
 
