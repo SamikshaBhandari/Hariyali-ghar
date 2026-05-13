@@ -32,11 +32,33 @@ const Plants = () => {
         <div className="min-h-screen bg-gray-50 pt-20">
 
             {/* header section */}
-            <div className="bg-green-700 py-10 px-8 text-white text-start">
+            <div className="bg-green-700 py-12 px-14 text-white text-start">
                 <h1 className="text-3xl font-bold mb-2 tracking-tight">Hariyali Ghar Collection</h1>
                 <p className="text-gray-100 opacity-90">Find the perfect green companion for your space</p>
             </div>
 
+            {/*sidebar container */}
+            <div className="max-w-7xl mx-auto px-6 py-10 flex flex-col md:flex-row gap-8">
+                <div className="w-full md:w-64 bg-white p-6 rounded-2xl shadow-sm h-fit border border-gray-100">
+                    <h2 className="text-xs font-bold uppercase tracking-widest text-gray-800 mb-6">Filters</h2>
+
+                    {/*search container */}
+                    <div className="mb-6">
+                        <label className="text-xs font-bold text-gray-500 block mb-2 ">Search Plants</label>
+                        <div className="relative">
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
+                            <input
+                                type="text"
+                                placeholder="eg: money plant"
+                                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500/20 text-sm"
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                            />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
 
         </div>
     );
