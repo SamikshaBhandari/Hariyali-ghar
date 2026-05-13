@@ -86,7 +86,6 @@ const Plants = () => {
                             Showing <span className="text-gray-900 font-bold">{plants.length}</span> plants
                         </p>
                     </div>
-
                 </div>
 
             </div>
