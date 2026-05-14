@@ -79,13 +79,72 @@ const Plants = () => {
                     </div>
                 </div>
 
-                {/*product grid */}
+                {/*product section */}
                 <div className="flex-1">
-                    <div className="mb-8">
-                        <p className="text-sm text-gray-400 font-medium">
+                    <div className="mb-6">
+                        <p className="text-gray-500 text-sm font-medium">
                             Showing <span className="text-gray-900 font-bold">{plants.length}</span> plants
                         </p>
                     </div>
+
+                    {/* Grid Container */}
+                    {plants.length > 0 ? (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                            {plants.map((plant) => (
+                                <div key={plant.id} className="bg-white rounded-[2rem] overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border border-gray-50 flex flex-col group">
+
+                                    <div className="relative aspect-[4/3] overflow-hidden">
+                                        <img
+                                            src={`http://localhost:5000/images/${plant.image_url}`}
+                                            alt={plant.name}
+                                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                        />
+
+                                        <div className="absolute top-4 right-4">
+                                            <span className="text-[9px] font-bold text-green-700 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full shadow-sm uppercase tracking-wider">
+                                                {plant.category_name}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div className="p-6 flex flex-col flex-1">
+                                        <div className="flex justify-between items-start mb-2">
+                                            <h3 className="text-lg font-bold text-gray-800 tracking-tight leading-tight">
+                                                {plant.name}
+                                            </h3>
+                                            <div className="flex items-center gap-1.5 bg-gray-50 px-2 py-0.5 rounded-md">
+                                                <Star
+                                                    size={12}
+                                                    className={plant.average_rating > 0 ? "fill-yellow-400 text-yellow-400" : "text-gray-300"}
+                                                />
+                                                <span className="text-gray-500 text-[11px] font-bold">
+                                                    {plant.average_rating > 0 ? Number(plant.average_rating).toFixed(1) : "New"}
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <p className="text-gray-400 text-[11px] mb-6 line-clamp-2 leading-relaxed">
+                                            {plant.description}
+                                        </p>
+
+                                        <div className="mt-auto flex items-center justify-between">
+                                            <span className="text-sm font-black text-green-700">
+                                                NPR {plant.price}
+                                            </span>
+
+                                            <button className="p-2.5 bg-green-50 text-green-700 rounded-xl hover:bg-green-700 hover:text-white transition-all duration-300 active:scale-90 shadow-sm border border-green-100">
+                                                <ShoppingCart size={18} />
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="text-center py-24 bg-gray-50 rounded-[2rem] border-2 border-dashed border-gray-100">
+                            <p className="text-gray-400 font-medium">No plants available.</p>
+                        </div>
+                    )}
                 </div>
 
             </div>
