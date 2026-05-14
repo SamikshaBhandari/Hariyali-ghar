@@ -17,6 +17,7 @@ const isAdmin = (req, res, next) => {
 //all product
 router.get('/all', productController.getAllProducts);
 
+
 //filter product
 router.get('/filter', productController.getFilteredProduct);
 
@@ -28,5 +29,8 @@ router.put('/update/:id', authMiddleware, isAdmin, productController.updateProdu
 
 //delete product
 router.delete('/delete/:id', authMiddleware, isAdmin, productController.deleteProduct);
+
+//product id
+router.get('/:id', productController.getProductById);
 
 module.exports = router;
