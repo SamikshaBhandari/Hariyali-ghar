@@ -108,3 +108,30 @@ exports.getFilteredProduct = async (req, res) => {
         });
     }
 };
+
+// Get Single Product details by ID
+exports.getProductById = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const sql = `
+            SELECT 
+                products.*, 
+                categories.category_name,
+                IFNULL(AVG(reviews.rating), 0) as average_rating
+            FROM products 
+            LEFT JOIN categories ON products.category_id = categories.id
+            LEFT JOIN reviews ON products.id = reviews.product_id
+            WHERE products.id = ?
+            GROUP BY products.id`;
+
+        const [rows] = await db.execute(sql, [id]);
+
+        if (rows.length === 0) {
+            return res.status(404).json({ success: false, message: "Product not found" });
+        }
+
+        res.status(200).json({ success: true, data: rows[0] });
+    } catch (err) {
+        res.status(500).json({ success: false, error: "Server Error: " + err.message });
+    }
+};
