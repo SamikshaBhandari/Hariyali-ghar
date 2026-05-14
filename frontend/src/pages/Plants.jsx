@@ -7,6 +7,8 @@ const Plants = () => {
     const [searchQuery, setSearchQuery] = useState("");
     const [activeCategory, setActiveCategory] = useState("All");
     const categories = ["All", "Indoor Plants", "Outdoor Plants", "Seed Plant", "Succulents Plants"];
+    const [expandedId, setExpandedId] = useState(null);
+
 
     const fetchFilteredPlants = async () => {
         try {
@@ -38,7 +40,7 @@ const Plants = () => {
             </div>
 
             {/*main container */}
-            <div className="max-w-7xl mx-auto px-6 py-10 flex flex-col md:flex-row gap-8">
+            <div className="max-w-7xl mx-auto px-6 py-10 flex flex-col md:flex-row gap-12">
 
                 {/*sidebar container */}
                 <div className="w-full md:w-64 bg-white p-6 rounded-2xl shadow-sm h-fit border border-gray-100">
@@ -100,7 +102,7 @@ const Plants = () => {
                                             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                                         />
 
-                                        <div className="absolute top-4 right-4">
+                                        <div className="absolute top-1 right-4">
                                             <span className="text-[9px] font-bold text-green-700 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full shadow-sm uppercase tracking-wider">
                                                 {plant.category_name}
                                             </span>
@@ -123,8 +125,21 @@ const Plants = () => {
                                             </div>
                                         </div>
 
-                                        <p className="text-gray-400 text-[11px] mb-6 line-clamp-2 leading-relaxed">
-                                            {plant.description}
+                                        <p className="text-gray-400 text-[11px] leading-relaxed">
+                                            {plant.description && plant.description.length > 60 ? (
+                                                <>
+                                                    {expandedId === plant.id ? plant.description : `${plant.description.substring(0, 60)}...`}
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => setExpandedId(expandedId === plant.id ? null : plant.id)}
+                                                        className="text-green-600 font-bold ml-1 hover:underline cursor-pointer"
+                                                    >
+                                                        {expandedId === plant.id ? "Show Less" : "Read More"}
+                                                    </button>
+                                                </>
+                                            ) : (
+                                                plant.description
+                                            )}
                                         </p>
 
                                         <div className="mt-auto flex items-center justify-between">
