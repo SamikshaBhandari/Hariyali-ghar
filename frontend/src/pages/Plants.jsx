@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Search, ShoppingCart, Star } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 const Plants = () => {
+    const location = useLocation();
     const [plants, setPlants] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
-    const [activeCategory, setActiveCategory] = useState("All");
-    const categories = ["All", "Indoor Plants", "Outdoor Plants", "Seed Plant", "Succulents Plants"];
+    const [activeCategory, setActiveCategory] = useState(location.state?.filterCategory || "All");
+    const categories = ["All", "Indoor Plants", "Outdoor Plants", "Seed Plants", "Succulents Plants"];
     const [expandedId, setExpandedId] = useState(null);
 
 
