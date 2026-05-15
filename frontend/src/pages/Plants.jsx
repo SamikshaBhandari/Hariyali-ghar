@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Search, ShoppingCart, Star } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Plants = () => {
     const [plants, setPlants] = useState([]);
@@ -95,25 +96,25 @@ const Plants = () => {
                             {plants.map((plant) => (
                                 <div key={plant.id} className="bg-white rounded-[2rem] overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border border-gray-50 flex flex-col group">
 
-                                    <div className="relative aspect-[4/3] overflow-hidden">
+                                    <Link to={`/plants/${plant.id}`} className="relative aspect-[4/3] overflow-hidden cursor-pointer block">
                                         <img
                                             src={`http://localhost:5000/images/${plant.image_url}`}
                                             alt={plant.name}
                                             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                                         />
-
                                         <div className="absolute top-1 right-4">
                                             <span className="text-[9px] font-bold text-green-700 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full shadow-sm uppercase tracking-wider">
                                                 {plant.category_name}
                                             </span>
                                         </div>
-                                    </div>
-
+                                    </Link>
                                     <div className="p-6 flex flex-col flex-1">
                                         <div className="flex justify-between items-start mb-2">
-                                            <h3 className="text-lg font-bold text-gray-800 tracking-tight leading-tight">
-                                                {plant.name}
-                                            </h3>
+                                            <Link to={`/plants/${plant.id}`} className="hover:text-green-700 transition-colors">
+                                                <h3 className="text-lg font-bold text-gray-800 tracking-tight leading-tight cursor-pointer">
+                                                    {plant.name}
+                                                </h3>
+                                            </Link>
                                             <div className="flex items-center gap-1.5 bg-gray-50 px-2 py-0.5 rounded-md">
                                                 <Star
                                                     size={12}
