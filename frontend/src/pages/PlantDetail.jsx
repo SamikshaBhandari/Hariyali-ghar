@@ -77,7 +77,7 @@ const PlantDetail = () => {
                     <div className="flex justify-between items-start">
                         <div>
                             <span className="text-green-600 font-bold text-[10px] uppercase tracking-[1px]">{plant.category_name}</span>
-                            <h1 className="text-3xl font-extrabold text-gray-900 leading-tight mt-1">{plant.name}</h1>
+                            <h1 className="text-2xl font-extrabold text-gray-900 leading-tight mt-1">{plant.name}</h1>
                             <div className="flex items-center gap-2 mt-1">
                                 <div className="flex text-yellow-400"><Star size={12} fill="currentColor" /></div>
                                 <span className="text-gray-400 text-[10px] font-medium">
@@ -94,7 +94,7 @@ const PlantDetail = () => {
                         </div>
                     </div>
 
-                    <h2 className="text-2xl font-bold text-green-700">NPR {plant.price}</h2>
+                    <h2 className="text-1xl font-bold text-green-700">NPR {plant.price}</h2>
 
                     {/* care information*/}
                     <div className="flex gap-2">
@@ -118,21 +118,21 @@ const PlantDetail = () => {
                     {/* Action Section */}
                     <div className="pt-2 space-y-3">
                         <div className="flex items-center gap-3">
-                            <div className="flex items-center border border-gray-200 rounded-lg h-12 px-3 bg-white">
+                            <div className="flex items-center border border-gray-200 rounded-lg h-9 px-3 bg-white">
                                 <button onClick={() => setQuantity(q => Math.max(1, q - 1))} className="p-1 text-gray-400 hover:text-green-700 transition"><Minus size={14} /></button>
                                 <span className="w-8 text-center font-bold text-md">{quantity}</span>
-                                <button onClick={() => setQuantity(q => q + 1)} className="p-1 text-gray-400 hover:text-green-700 transition"><Plus size={14} /></button>
+                                <button onClick={() => setQuantity(q => q + 1)} className="p-1 text-gray-400 hover:text-green-700 transition"><Plus size={12} /></button>
                             </div>
                             <button
                                 onClick={handleAddToCart}
-                                className="flex-1 bg-green-700 text-white h-12 rounded-lg font-bold flex items-center justify-center gap-2 hover:bg-green-700 transition shadow-sm text-sm"
+                                className="flex-1 bg-green-700 text-white h-9 rounded-lg font-bold flex items-center justify-center gap-2 hover:bg-green-700 transition shadow-sm text-sm"
                             >
                                 <ShoppingCart size={18} /> Add to Cart
                             </button>
                         </div>
                         <button
                             onClick={() => isUser ? navigate('/cart') : alert("Please login first!")}
-                            className="w-full border border-green-700 text-green-700 h-10 rounded-lg font-bold text-xs hover:bg-green-50 transition"
+                            className="w-full border border-green-700 text-green-700 h-9 rounded-lg font-bold text-xs hover:bg-green-50 transition"
                         >
                             View Cart
                         </button>
@@ -140,7 +140,41 @@ const PlantDetail = () => {
                 </div>
             </div>
 
+            {/* Bottom Section */}
+            <div className="mt-12 border border-gray-100 rounded-[24px] p-8 shadow-sm">
+                <div className="flex gap-10 border-b border-gray-100 mb-6">
+                    {['Description', 'Care Instructions', 'Reviews'].map((tab) => (
+                        <button
+                            key={tab}
+                            onClick={() => setActiveTab(tab)}
+                            className={`pb-4 text-xs font-bold relative transition-all ${activeTab === tab ? 'text-green-700' : 'text-gray-400'}`}
+                        >
+                            {tab} {tab === 'Reviews' && `(${reviews.length})`}
+                            {activeTab === tab && (
+                                <div className="absolute bottom-0 left-0 w-full h-[2px] bg-green-700 rounded-full"></div>
+                            )}
+                        </button>
+                    ))}
+                </div>
 
+                <div className="text-gray-600 leading-relaxed text-[11px]">
+                    {activeTab === 'Description' && <p>{plant.description}</p>}
+                    {activeTab === 'Care Instructions' && <p>{plant.care_tips}</p>}
+                    {activeTab === 'Reviews' && (
+                        <div className="space-y-4">
+                            {reviews.length > 0 ? reviews.map((r, i) => (
+                                <div key={i} className="border-b border-gray-50 pb-3">
+                                    <div className="flex text-yellow-400 mb-1">
+                                        {[...Array(Number(r.rating) || 5)].map((_, index) => <Star key={index} size={10} fill="currentColor" />)}
+                                    </div>
+                                    <p className="font-bold text-gray-800 text-[11px]">{r.user_name || "User"}</p>
+                                    <p className="text-gray-500 italic mt-1 font-medium text-[10px]">"{r.comment}"</p>
+                                </div>
+                            )) : <p className="text-gray-400 italic">No real reviews found for this plant yet.</p>}
+                        </div>
+                    )}
+                </div>
+            </div>
         </div>
     );
 };
