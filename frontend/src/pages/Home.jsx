@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ArrowRight, Home as HomeIcon, Sun, Sprout, Leaf, Star, ChevronRight } from 'lucide-react';
 import API from '../api/axiosInstance';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import coverImage from '../assets/images/cover.png';
 
@@ -10,6 +11,7 @@ const Home = () => {
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
     const [expandedId, setExpandedId] = useState(null);
+    const navigate = useNavigate();
 
     const IMG_URL = "http://localhost:5000";
 
@@ -61,10 +63,16 @@ const Home = () => {
                         Delivered fresh to your doorstep across Nepal.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <button className="bg-green-600 hover:bg-green-700 px-10 py-3.5 rounded-full font-bold shadow-lg transition-all min-w-[180px]">
+                        <button
+                            onClick={() => navigate('/plants')}
+                            className="bg-green-600 hover:bg-green-700 px-10 py-3.5 rounded-full font-bold shadow-lg transition-all min-w-[180px]"
+                        >
                             Shop Plants
                         </button>
-                        <button className="bg-white/10 backdrop-blur-md border border-white/40 hover:bg-white/20 px-10 py-3.5 rounded-full font-bold transition-all min-w-[180px]">
+                        <button
+                            onClick={() => navigate('/plants', { state: { filterCategory: "Seed Plant" } })}
+                            className="bg-white/10 backdrop-blur-md border border-white/40 hover:bg-white/20 px-10 py-3.5 rounded-full font-bold transition-all min-w-[180px]"
+                        >
                             Browse Seeds
                         </button>
                     </div>
@@ -88,6 +96,7 @@ const Home = () => {
                             return (
                                 <div
                                     key={index}
+                                    onClick={() => navigate('/plants', { state: { filterCategory: cat.category_name } })}
                                     className="relative group overflow-hidden rounded-[1.5rem] h-[300px] cursor-pointer shadow-md hover:shadow-2xl transition-all duration-500"
                                 >
                                     <img
@@ -227,7 +236,10 @@ const Home = () => {
                     <p className="text-green-100 text-sm md:text-base mb-10 opacity-90">
                         Shop from 50+ plant varieties. Free delivery on orders above NPR 1000.
                     </p>
-                    <button className="bg-white text-green-800 hover:bg-gray-100 px-10 py-3 rounded-full font-bold transition-all shadow-md active:scale-95">
+                    <button
+                        onClick={() => navigate('/plants')}
+                        className="bg-white text-green-800 hover:bg-gray-100 px-10 py-3 rounded-full font-bold transition-all shadow-md active:scale-95"
+                    >
                         Shop Now
                     </button>
                 </div>
