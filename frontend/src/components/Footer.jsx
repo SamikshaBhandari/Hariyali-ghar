@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Mail, Phone, MapPin, Leaf, Sprout, Copyright } from 'lucide-react';
 
 const Footer = () => {
@@ -23,7 +24,7 @@ const Footer = () => {
                         <h3 className="font-bold text-sm mb-6 uppercase tracking-widest text-green-400">Quick Links</h3>
                         <ul className="space-y-3 text-sm text-green-100/70">
                             <li><a href="/" className="hover:text-white transition-colors">Home</a></li>
-                            <li><a href="/all-plants" className="hover:text-white transition-colors">All Plants</a></li>
+                            <li><a href="/plants" className="hover:text-white transition-colors">All Plants</a></li>
                             <li><a href="/cart" className="hover:text-white transition-colors">Shopping Cart</a></li>
                         </ul>
                     </div>
@@ -31,10 +32,26 @@ const Footer = () => {
                     <div>
                         <h3 className="font-bold text-sm mb-6 uppercase tracking-widest text-green-400">Categories</h3>
                         <ul className="space-y-3 text-sm text-green-100/70">
-                            <li><a href="#" className="hover:text-white transition-colors">Indoor Plants</a></li>
-                            <li><a href="#" className="hover:text-white transition-colors">Outdoor Plants</a></li>
-                            <li><a href="#" className="hover:text-white transition-colors">Seeds</a></li>
-                            <li><a href="#" className="hover:text-white transition-colors">Succulents</a></li>
+                            <li>
+                                <Link to="/plants" state={{ filterCategory: "Indoor Plants" }} className="hover:text-white transition-colors">
+                                    Indoor Plants
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to="/plants" state={{ filterCategory: "Outdoor Plants" }} className="hover:text-white transition-colors">
+                                    Outdoor Plants
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to="/plants" state={{ filterCategory: "Seed Plants" }} className="hover:text-white transition-colors">
+                                    Seeds
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to="/plants" state={{ filterCategory: "Succulents Plants" }} className="hover:text-white transition-colors">
+                                    Succulents
+                                </Link>
+                            </li>
                         </ul>
                     </div>
 
