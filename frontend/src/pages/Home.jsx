@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowRight, Home as HomeIcon, Sun, Sprout, Leaf, Star, ChevronRight } from 'lucide-react';
 import API from '../api/axiosInstance';
+import { Link } from 'react-router-dom';
 
 import coverImage from '../assets/images/cover.png';
 
@@ -156,23 +157,26 @@ const Home = () => {
                                 className="bg-white rounded-[25px] overflow-hidden shadow-sm border border-gray-100 cursor-pointer transition-all duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-3"
                             >
                                 {/* Image Container*/}
-                                <div className="relative h-56 w-full bg-slate-50">
-                                    <img
-                                        src={`http://localhost:5000/images/${plant.image_url}`}
-                                        alt={plant.name}
-                                        className="w-full h-full object-cover"
-                                    />
-                                    {/* Category Tag*/}
-                                    <span className="absolute top-4 right-4 bg-white/90 px-3 py-1 rounded-full text-[10px] font-bold uppercase text-green-800 shadow-sm">
-                                        {plant.category_name}
-                                    </span>
-                                </div>
+                                <Link to={`/plants/${plant.id}`}>
+                                    <div className="relative h-56 w-full bg-slate-50">
+                                        <img
+                                            src={`http://localhost:5000/images/${plant.image_url}`}
+                                            alt={plant.name}
+                                            className="w-full h-full object-cover"
+                                        />
+                                        <span className="absolute top-4 right-4 bg-white/90 px-3 py-1 rounded-full text-[10px] font-bold uppercase text-green-800 shadow-sm">
+                                            {plant.category_name}
+                                        </span>
+                                    </div>
+                                </Link>
 
                                 {/* Content Area */}
                                 <div className="p-6">
-                                    <h3 className="text-lg font-bold text-slate-800 mb-1 leading-tight">
-                                        {plant.name}
-                                    </h3>
+                                    <Link to={`/plants/${plant.id}`}>
+                                        <h3 className="text-lg font-bold text-slate-800 mb-1 leading-tight hover:text-green-600 transition-colors">
+                                            {plant.name}
+                                        </h3>
+                                    </Link>
 
                                     {/* Description */}
                                     <div className="mb-5 min-h-[40px]">
