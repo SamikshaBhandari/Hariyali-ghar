@@ -49,7 +49,100 @@ const PlantDetail = () => {
 
     if (!plant) return <div className="p-20 text-center font-bold text-green-800">Hariyali Loading...</div>;
 
+    return (
+        <div className="max-w-6xl mx-auto px-6 pt-28 pb-10 font-sans bg-white">
 
+            {/* Back to Home Navigation */}
+            <div className="mb-6">
+                <Link to="/" className="inline-flex items-center text-green-700 font-bold hover:text-green-900 transition gap-1 text-xs">
+                    <ChevronLeft size={16} /> Back to Home
+                </Link>
+            </div>
+
+            <div className="flex flex-col lg:flex-row gap-10 items-start justify-center">
+
+                {/*  left side image container  */}
+                <div className="w-full lg:w-[420px] bg-gray-50 rounded-[28px] overflow-hidden shadow-sm border border-gray-100">
+                    <div className="aspect-square flex items-center justify-center p-2">
+                        <img
+                            src={`http://localhost:5000/images/${plant.image_url}`}
+                            alt={plant.name}
+                            className="w-full h-full object-cover rounded-2xl"
+                        />
+                    </div>
+                </div>
+
+                {/* right side container */}
+                <div className="w-full max-w-md space-y-5">
+                    <div className="flex justify-between items-start">
+                        <div>
+                            <span className="text-green-600 font-bold text-[10px] uppercase tracking-[1px]">{plant.category_name}</span>
+                            <h1 className="text-3xl font-extrabold text-gray-900 leading-tight mt-1">{plant.name}</h1>
+                            <div className="flex items-center gap-2 mt-1">
+                                <div className="flex text-yellow-400"><Star size={12} fill="currentColor" /></div>
+                                <span className="text-gray-400 text-[10px] font-medium">
+                                    {Number(plant.average_rating || 0).toFixed(1)} ({reviews.length} reviews)
+                                </span>
+                            </div>
+                        </div>
+
+                        {/* real stock  */}
+                        <div className="bg-green-50 border border-green-100 px-3 py-1 rounded-full">
+                            <span className="text-green-700 text-[10px] font-bold">
+                                In Stock ({plant.stock_quantity})
+                            </span>
+                        </div>
+                    </div>
+
+                    <h2 className="text-2xl font-bold text-green-700">NPR {plant.price}</h2>
+
+                    {/* care information*/}
+                    <div className="flex gap-2">
+                        <div className="bg-[#F8FBF8] p-3 rounded-xl flex-1 text-center border border-green-50">
+                            <Sun className="mx-auto text-green-600 mb-1" size={16} />
+                            <p className="text-[8px] text-gray-400 font-bold uppercase">Sunlight</p>
+                            <p className="text-[9px] font-extrabold text-gray-700 leading-tight">{plant.sunlight}</p>
+                        </div>
+                        <div className="bg-[#F8FBF8] p-3 rounded-xl flex-1 text-center border border-green-50">
+                            <Droplets className="mx-auto text-green-600 mb-1" size={16} />
+                            <p className="text-[8px] text-gray-400 font-bold uppercase">Watering</p>
+                            <p className="text-[9px] font-extrabold text-gray-700 leading-tight">{plant.watering}</p>
+                        </div>
+                        <div className="bg-[#F8FBF8] p-3 rounded-xl flex-1 text-center border border-green-50">
+                            <Heart className="mx-auto text-green-600 mb-1" size={16} />
+                            <p className="text-[8px] text-gray-400 font-bold uppercase">Difficulty</p>
+                            <p className="text-[9px] font-extrabold text-gray-700">Easy</p>
+                        </div>
+                    </div>
+
+                    {/* Action Section */}
+                    <div className="pt-2 space-y-3">
+                        <div className="flex items-center gap-3">
+                            <div className="flex items-center border border-gray-200 rounded-lg h-12 px-3 bg-white">
+                                <button onClick={() => setQuantity(q => Math.max(1, q - 1))} className="p-1 text-gray-400 hover:text-green-700 transition"><Minus size={14} /></button>
+                                <span className="w-8 text-center font-bold text-md">{quantity}</span>
+                                <button onClick={() => setQuantity(q => q + 1)} className="p-1 text-gray-400 hover:text-green-700 transition"><Plus size={14} /></button>
+                            </div>
+                            <button
+                                onClick={handleAddToCart}
+                                className="flex-1 bg-green-700 text-white h-12 rounded-lg font-bold flex items-center justify-center gap-2 hover:bg-green-700 transition shadow-sm text-sm"
+                            >
+                                <ShoppingCart size={18} /> Add to Cart
+                            </button>
+                        </div>
+                        <button
+                            onClick={() => isUser ? navigate('/cart') : alert("Please login first!")}
+                            className="w-full border border-green-700 text-green-700 h-10 rounded-lg font-bold text-xs hover:bg-green-50 transition"
+                        >
+                            View Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    );
 };
 
 export default PlantDetail;
