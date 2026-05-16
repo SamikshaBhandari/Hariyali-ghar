@@ -1,12 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { Sprout, ShoppingCart, User, LogOut, LayoutDashboard, ShoppingBag, ChevronDown, Settings } from 'lucide-react';
 import { useLocation, Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Navbar = () => {
     const [isScrolled, setIsScrolled] = useState(false);
     const [user, setUser] = useState(null);
+    const [cartCount, setCartCount] = useState(0);
     const location = useLocation();
     const navigate = useNavigate();
+
+    const token = localStorage.getItem('token');
+
+    const fetchNavbarCartCount = async () => {
+        if (!token) return;
+        try {
+            const res = await axios.get('http://localhost:5000/api/cart/all', {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            if (res.data && res.data.success) {
+                setCartCount(res.data.totalItems || 0);
+            }
+        } catch (err) {
+            console.error("Error fetching navbar cart count:", err);
+        }
+    };
 
     useEffect(() => {
         const handleScroll = () => {
@@ -18,7 +36,7 @@ const Navbar = () => {
         if (storedUser) {
             setUser(JSON.parse(storedUser));
         }
-
+        fetchNavbarCartCount();
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
@@ -58,10 +76,17 @@ const Navbar = () => {
 
             {/* Action Buttons */}
             <div className="flex items-center gap-6">
-                <div className={`relative cursor-pointer transition-colors ${shouldShowBg ? "text-gray-700" : "text-white"}`}>
+                <Link
+                    to="/cart"
+                    className={`relative cursor-pointer transition-colors ${shouldShowBg ? "text-gray-700" : "text-white"}`}
+                >
                     <ShoppingCart size={22} />
-                    <span className="absolute -top-2 -right-2 bg-green-500 text-[10px] rounded-full px-1.5 py-0.5 text-white font-bold">0</span>
-                </div>
+                    {cartCount > 0 && (
+                        <span className="absolute -top-2 -right-2 bg-green-500 text-[10px] rounded-full px-1.5 py-0.5 text-white font-bold">
+                            {cartCount}
+                        </span>
+                    )}
+                </Link>
 
                 {user ? (
                     /* Profile Dropdown Logic */
