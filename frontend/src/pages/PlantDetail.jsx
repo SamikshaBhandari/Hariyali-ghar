@@ -10,6 +10,7 @@ const PlantDetail = () => {
     const [quantity, setQuantity] = useState(1);
     const [activeTab, setActiveTab] = useState('Description');
     const [reviews, setReviews] = useState([]);
+    const [showNotification, setShowNotification] = useState(false);
 
     const user = JSON.parse(localStorage.getItem('user'));
     const token = localStorage.getItem('token');
@@ -33,7 +34,7 @@ const PlantDetail = () => {
 
     const handleAddToCart = async () => {
         if (!isUser) {
-            alert("Please login as a user to add items to cart!");
+            alert("Please login first!");
             return navigate('/login');
         }
         try {
@@ -41,7 +42,10 @@ const PlantDetail = () => {
                 { product_id: plant.id, quantity },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
-            alert("Plant added to cart!");
+            setShowNotification(true);
+            setTimeout(() => {
+                setShowNotification(false);
+            }, 3000);
         } catch (err) {
             alert("Failed to add to cart.");
         }
@@ -50,7 +54,19 @@ const PlantDetail = () => {
     if (!plant) return <div className="p-20 text-center font-bold text-green-800">Hariyali Loading...</div>;
 
     return (
-        <div className="max-w-6xl mx-auto px-6 pt-28 pb-10 font-sans bg-white">
+        <div className="max-w-6xl mx-auto px-6 pt-28 pb-10 font-sans bg-white relative">
+
+            {/*alert notification */}
+            {showNotification && (
+                <div className="fixed bottom-5 right-5 z-50 flex items-center gap-3 bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-xl shadow-lg transition-all duration-300 animate-bounce">
+                    <div className="bg-green-600 p-1 rounded-full text-white">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                        </svg>
+                    </div>
+                    <span className="text-xs font-semibold">{plant.name} added to cart!</span>
+                </div>
+            )}
 
             {/* Back to Home Navigation */}
             <div className="mb-6">
@@ -61,7 +77,7 @@ const PlantDetail = () => {
 
             <div className="flex flex-col lg:flex-row gap-10 items-start justify-center">
 
-                {/*  left side image container  */}
+                {/* left side image container  */}
                 <div className="w-full lg:w-[420px] bg-gray-50 rounded-[28px] overflow-hidden shadow-sm border border-gray-100">
                     <div className="aspect-square flex items-center justify-center p-2">
                         <img
