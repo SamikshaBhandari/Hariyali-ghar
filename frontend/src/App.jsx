@@ -9,6 +9,7 @@ import Login from './pages/Login';
 import AdminDashboard from './pages/AdminDashboard';
 import Plants from './pages/Plants';
 import PlantDetail from './pages/PlantDetail';
+import Cart from './pages/Cart';
 
 function App() {
     return (
@@ -24,6 +25,7 @@ function App() {
                     <Route path="/admin/dashboard" element={<AdminDashboard />} />
                     <Route path="/plants" element={<Plants />} />
                     <Route path="/plants/:id" element={<PlantDetail />} />
+                    <Route path="/cart" element={<Cart />} />
                 </Routes>
             </main>
 
