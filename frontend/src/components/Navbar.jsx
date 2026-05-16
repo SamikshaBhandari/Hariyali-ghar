@@ -37,7 +37,15 @@ const Navbar = () => {
             setUser(JSON.parse(storedUser));
         }
         fetchNavbarCartCount();
-        return () => window.removeEventListener('scroll', handleScroll);
+        const handleCartUpdate = () => {
+            fetchNavbarCartCount();
+        };
+        window.addEventListener('cartUpdated', handleCartUpdate);
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+            window.removeEventListener('cartUpdated', handleCartUpdate);
+        };
     }, []);
 
     const handleLogout = () => {
