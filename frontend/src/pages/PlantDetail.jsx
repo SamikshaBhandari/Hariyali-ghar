@@ -114,17 +114,17 @@ const PlantDetail = () => {
 
                     {/* care information*/}
                     <div className="flex gap-2">
-                        <div className="bg-[#F8FBF8] p-3 rounded-xl flex-1 text-center border border-green-50">
+                        <div className="bg-gray-50 p-3 rounded-xl flex-1 text-center border border-green-50">
                             <Sun className="mx-auto text-green-600 mb-1" size={16} />
                             <p className="text-[8px] text-gray-400 font-bold uppercase">Sunlight</p>
                             <p className="text-[9px] font-extrabold text-gray-700 leading-tight">{plant.sunlight}</p>
                         </div>
-                        <div className="bg-[#F8FBF8] p-3 rounded-xl flex-1 text-center border border-green-50">
+                        <div className="bg-gray-50 p-3 rounded-xl flex-1 text-center border border-green-50">
                             <Droplets className="mx-auto text-green-600 mb-1" size={16} />
                             <p className="text-[8px] text-gray-400 font-bold uppercase">Watering</p>
                             <p className="text-[9px] font-extrabold text-gray-700 leading-tight">{plant.watering}</p>
                         </div>
-                        <div className="bg-[#F8FBF8] p-3 rounded-xl flex-1 text-center border border-green-50">
+                        <div className="bg-gray-50 p-3 rounded-xl flex-1 text-center border border-green-50">
                             <Heart className="mx-auto text-green-600 mb-1" size={16} />
                             <p className="text-[8px] text-gray-400 font-bold uppercase">Difficulty</p>
                             <p className="text-[9px] font-extrabold text-gray-700">Easy</p>
@@ -186,7 +186,7 @@ const PlantDetail = () => {
                                     <p className="font-bold text-gray-800 text-[11px]">{r.user_name || "User"}</p>
                                     <p className="text-gray-500 italic mt-1 font-medium text-[10px]">"{r.comment}"</p>
                                 </div>
-                            )) : <p className="text-gray-400 italic">No real reviews found for this plant yet.</p>}
+                            )) : <p className="text-gray-400 ">No real reviews found for this plant yet.</p>}
                         </div>
                     )}
                 </div>
