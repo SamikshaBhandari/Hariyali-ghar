@@ -148,7 +148,145 @@ const Checkout = () => {
         );
     }
 
+    return (
+        <div className="max-w-4xl mx-auto px-6 pt-24 pb-10 font-sans bg-slate-20 min-h-screen">
+            <h1 className="text-2xl font-extrabold text-slate-800 mb-8">Checkout</h1>
 
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+
+                <div className="lg:col-span-2 space-y-6">
+
+                    {/* Shipping Segment */}
+                    <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
+                        <div className="flex items-center gap-2 mb-6">
+                            <span className="w-5 h-5 rounded-full bg-green-600 text-white text-xs flex items-center justify-center font-bold">1</span>
+                            <h2 className="text-sm font-black text-slate-800">Shipping Details</h2>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-[11px] font-bold text-slate-500 mb-1">Full Name</label>
+                                <input type="text" name="fullName" value={shippingDetails.fullName} onChange={handleInputChange} className="w-full text-xs px-3 py-2 border border-slate-200 rounded-lg text-slate-400 cursor-not-allowed" disabled />
+                            </div>
+                            <div>
+                                <label className="block text-[11px] font-bold text-slate-500 mb-1">Phone Number *</label>
+                                <input type="text" name="phoneNumber" value={shippingDetails.phoneNumber} onChange={handleInputChange} placeholder="Enter your number" className="w-full text-xs px-3 py-2 border border-slate-200 rounded-lg focus:outline-green-600" />
+                            </div>
+                            <div>
+                                <label className="block text-[11px] font-bold text-slate-500 mb-1">Email Address</label>
+                                <input type="email" name="emailAddress" value={shippingDetails.emailAddress} onChange={handleInputChange} className="w-full text-xs px-3 py-2 border border-slate-200 rounded-lg text-slate-400 cursor-not-allowed" disabled />
+                            </div>
+                            <div>
+                                <label className="block text-[11px] font-bold text-slate-500 mb-1">City</label>
+                                <input type="text" name="city" value={shippingDetails.city} onChange={handleInputChange} className="w-full text-xs px-3 py-2 border border-slate-200 rounded-lg focus:outline-green-600" placeholder='Enter your city' />
+                            </div>
+                            <div className="md:col-span-2">
+                                <label className="block text-[11px] font-bold text-slate-500 mb-1">Shipping Address *</label>
+                                <input type="text" name="address" value={shippingDetails.address} onChange={handleInputChange} placeholder="Enter your shipping address" className="w-full text-xs px-3 py-2 border border-slate-200 rounded-lg focus:outline-green-600" />
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Payment Segment */}
+                    <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
+                        <div className="flex items-center gap-2 mb-6">
+                            <span className="w-5 h-5 rounded-full bg-green-600 text-white text-xs flex items-center justify-center font-bold">2</span>
+                            <h2 className="text-sm font-black text-slate-800">Payment Method</h2>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div
+                                onClick={() => setPaymentMethod('COD')}
+                                className={`flex items-center justify-between p-4 rounded-xl border cursor-pointer transition-all ${paymentMethod === 'COD' ? 'border-green-500 bg-green-50/30' : 'border-slate-100 hover:border-slate-200'}`}
+                            >
+                                <div className="flex items-center gap-3">
+                                    <div className="p-2 rounded-lg bg-green-100 text-green-700">
+                                        <Truck size={18} />
+                                    </div>
+                                    <div>
+                                        <p className="text-xs font-bold text-slate-800">Cash on Delivery</p>
+                                        <p className="text-[10px] text-slate-400">Pay when you receive your order</p>
+                                    </div>
+                                </div>
+                                <input type="radio" checked={paymentMethod === 'COD'} readOnly className="accent-green-600" />
+                            </div>
+
+                            <div
+                                onClick={() => setPaymentMethod('eSewa')}
+                                className={`flex items-center justify-between p-4 rounded-xl border cursor-pointer transition-all ${paymentMethod === 'eSewa' ? 'border-green-500 bg-green-50/30' : 'border-slate-100 hover:border-slate-200'}`}
+                            >
+                                <div className="flex items-center gap-3">
+                                    <div className="p-2 rounded-lg bg-purple-100 text-purple-700">
+                                        <Wallet size={18} />
+                                    </div>
+                                    <div>
+                                        <p className="text-xs font-bold text-slate-800">eSewa</p>
+                                        <p className="text-[10px] text-slate-400">Pay securely via eSewa wallet</p>
+                                    </div>
+                                </div>
+                                <input type="radio" checked={paymentMethod === 'eSewa'} readOnly className="accent-green-600" />
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                {/*Pipeline Area*/}
+                <div className="bg-white border border-slate-100 rounded-2xl p-6 space-y-4 shadow-sm">
+                    <h2 className="text-sm font-black text-slate-800 border-b border-slate-50 pb-3">Order Summary</h2>
+
+                    <div className="max-h-25 overflow-y-auto space-y-3 pr-1">
+                        {cartItems.map((item) => (
+                            <div key={item.id} className="flex items-center justify-between text-xs">
+                                <div className="flex items-center gap-2">
+                                    <img src={`http://localhost:5000/images/${item.image_url}`} alt={item.name} className="w-8 h-8 rounded-lg object-cover border border-slate-100" onError={(e) => { e.target.src = 'https://via.placeholder.com/50'; }} />
+                                    <div>
+                                        <p className="font-bold text-slate-700 text-[11px] truncate max-w-[120px]">{item.name}</p>
+                                        <p className="text-slate-400 text-[10px]">x{item.quantity}</p>
+                                    </div>
+                                </div>
+                                <span className="font-bold text-slate-600">NPR {item.price * item.quantity}</span>
+                            </div>
+                        ))}
+                    </div>
+
+                    <div className="space-y-2 text-xs border-t border-slate-50 pt-3">
+                        <div className="flex justify-between text-slate-400 font-medium">
+                            <span>Subtotal ({totalItems} items)</span>
+                            <span className="text-slate-700 font-bold">NPR {subtotal}</span>
+                        </div>
+                        <div className="flex justify-between text-slate-400 font-medium">
+                            <span>Delivery</span>
+                            <span className={deliveryFee === 0 ? "text-green-600 font-bold" : "text-slate-700 font-bold"}>
+                                {deliveryFee === 0 ? "Free" : `NPR ${deliveryFee}`}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div className="border-t border-slate-100 pt-4 flex justify-between items-center">
+                        <span className="font-black text-slate-800 text-sm">Total</span>
+                        <span className="text-lg font-black text-green-700">NPR {total}</span>
+                    </div>
+
+                    {remainingForFreeDelivery > 0 && (
+                        <div className="bg-orange-50 border border-orange-100 text-center py-2 px-3 rounded-xl">
+                            <p className="text-[10px] text-orange-700 font-bold">
+                                Add NPR {remainingForFreeDelivery} more for free delivery!
+                            </p>
+                        </div>
+                    )}
+
+                    <button
+                        onClick={handlePlaceOrder}
+                        className="w-full bg-green-600 hover:bg-green-700 text-white py-2.5 rounded-xl font-bold text-xs transition shadow-sm"
+                    >
+                        Place Order ({paymentMethod})
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    );
 };
 
 export default Checkout;
