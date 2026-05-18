@@ -64,6 +64,49 @@ const Checkout = () => {
     const total = subtotal + deliveryFee;
     const remainingForFreeDelivery = 1500 - subtotal;
 
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setShippingDetails(prev => ({ ...prev, [name]: value }));
+    };
+
+    const handlePlaceOrder = async () => {
+        if (!shippingDetails.address.trim() || !shippingDetails.phoneNumber.trim()) {
+            alert("Please enter mandatory fields: Address and Phone Number!");
+            return;
+        }
+
+        //Exact Request Payload mapping 
+        const formattedAddress = shippingDetails.city.trim()
+            ? `${shippingDetails.address.trim()}, ${shippingDetails.city.trim()}`
+            : shippingDetails.address.trim();
+
+        const payload = {
+            address: formattedAddress,
+            phone_number: shippingDetails.phoneNumber.trim(),
+            payment_method: paymentMethod
+        };
+
+        try {
+            const res = await axios.post('http://localhost:5000/api/orders/place', payload, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            if (res.data && res.data.success) {
+                window.dispatchEvent(new Event('cartUpdated'));
+                setOrderSuccess(true);
+            }
+        } catch (err) {
+            console.error("Order payload dispatcher broken:", err);
+            if (err.response && err.response.data && err.response.data.message) {
+                alert(err.response.data.message);
+            } else {
+                alert("Failed to submit checkout configurations.");
+            }
+        }
+    };
+
+    if (loading) return <div className="p-20 text-center font-bold text-green-800">Processing Pipeline Summary...</div>;
+
 
 };
 
