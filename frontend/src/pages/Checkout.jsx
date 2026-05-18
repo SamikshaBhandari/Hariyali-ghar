@@ -107,6 +107,47 @@ const Checkout = () => {
 
     if (loading) return <div className="p-20 text-center font-bold text-green-800">Processing Pipeline Summary...</div>;
 
+    if (orderSuccess) {
+        return (
+            <div className="max-w-4xl mx-auto px-6 pt-32 pb-20 flex flex-col items-center justify-center font-sans bg-white min-h-screen text-center">
+                <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center text-green-500 mb-6 border border-green-100">
+                    <CheckCircle size={36} className="stroke-[1.5]" />
+                </div>
+
+                <h1 className="text-2xl font-extrabold text-slate-800 mb-3">Order Placed Successfully!</h1>
+                <p className="text-slate-500 text-xs max-w-md mx-auto leading-relaxed mb-8">
+                    Thank you! Your order has been confirmed. Your plants are on their way to you!
+                </p>
+
+                <div className="w-full max-w-md bg-green-50/40 border border-green-100 rounded-2xl p-5 text-left mb-8 space-y-3">
+                    <p className="text-xs font-bold text-green-800 flex items-center gap-2">
+                        <Truck size={14} /> What happens next?
+                    </p>
+                    <ul className="space-y-2 text-[11px] text-slate-600 font-medium pl-5 list-disc">
+                        <li>Order confirmation sent to your email</li>
+                        <li>We'll prepare your plants with care</li>
+                        <li>Delivery within 2-3 business days</li>
+                    </ul>
+                </div>
+
+                <div className="flex flex-col sm:flex-row items-center gap-3">
+                    <button
+                        onClick={() => navigate('/')}
+                        className="w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white font-bold text-xs px-8 py-2.5 rounded-full transition shadow-sm"
+                    >
+                        Go to Home
+                    </button>
+                    <button
+                        onClick={() => navigate('/plants')}
+                        className="w-full sm:w-auto border border-slate-200 text-slate-600 hover:bg-slate-50 font-bold text-xs px-8 py-2.5 rounded-full transition"
+                    >
+                        Shop More Plants
+                    </button>
+                </div>
+            </div>
+        );
+    }
+
 
 };
 
