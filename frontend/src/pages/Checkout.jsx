@@ -156,7 +156,7 @@ const Checkout = () => {
 
                 <div className="lg:col-span-2 space-y-6">
 
-                    {/* Shipping Segment */}
+                    {/* Shipping container */}
                     <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
                         <div className="flex items-center gap-2 mb-6">
                             <span className="w-5 h-5 rounded-full bg-green-600 text-white text-xs flex items-center justify-center font-bold">1</span>
@@ -187,7 +187,7 @@ const Checkout = () => {
                         </div>
                     </div>
 
-                    {/* Payment Segment */}
+                    {/* Payment container */}
                     <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
                         <div className="flex items-center gap-2 mb-6">
                             <span className="w-5 h-5 rounded-full bg-green-600 text-white text-xs flex items-center justify-center font-bold">2</span>
