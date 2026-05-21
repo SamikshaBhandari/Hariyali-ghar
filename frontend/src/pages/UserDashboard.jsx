@@ -64,7 +64,7 @@ const UserDashboard = () => {
                         <div>
                             <h3 className="font-extrabold text-slate-800 text-sm truncate max-w-[140px]">{user?.fullname}</h3>
                             <span className="text-[10px] bg-green-50 text-green-700 border border-green-100 font-bold px-2 py-0.5 rounded-full">
-                                Plant Lover
+                                User
                             </span>
                         </div>
                     </div>
@@ -73,7 +73,7 @@ const UserDashboard = () => {
                         {[
                             { name: 'Overview', icon: <LayoutDashboard size={16} /> },
                             { name: 'My Orders', icon: <ShoppingBag size={16} />, route: '/myorders' },
-                            { name: 'Activity', icon: <Activity size={16} /> }
+                            { name: 'Activity', icon: <Activity size={16} />, route: '/activity' }
                         ].map((tab) => (
                             <button
                                 key={tab.name}
