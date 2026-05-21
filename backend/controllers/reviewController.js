@@ -2,6 +2,14 @@ const db = require('../db/db');
 
 //Add review section
 exports.addReview = async (req, res) => {
+
+    if (!req.user || !req.user.id) {
+        return res.status(401).json({
+            success: false,
+            message: "Your session has expired. Please login again to post reviews."
+        });
+    }
+
     const user_id = req.user.id;
     const { product_id, rating, comment } = req.body;
 
