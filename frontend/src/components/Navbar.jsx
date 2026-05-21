@@ -148,7 +148,7 @@ const Navbar = () => {
                                         <Link to="/profile" className="flex items-center gap-2 px-6 py-2.5 text-sm hover:bg-green-50 text-slate-600 transition-colors">
                                             <User size={18} className="text-slate-500" /> My Profile
                                         </Link>
-                                        <Link to="/orders" className="flex items-center gap-2 px-6 py-2.5 text-sm hover:bg-green-50 text-slate-600 transition-colors">
+                                        <Link to="/myorders" className="flex items-center gap-2 px-6 py-2.5 text-sm hover:bg-green-50 text-slate-600 transition-colors">
                                             <ShoppingBag size={18} className="text-slate-500" /> My Orders
                                         </Link>
                                     </>
