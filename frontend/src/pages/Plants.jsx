@@ -150,9 +150,9 @@ const Plants = () => {
                                                 NPR {plant.price}
                                             </span>
 
-                                            <button className="p-2.5 bg-green-50 text-green-700 rounded-xl hover:bg-green-700 hover:text-white transition-all duration-300 active:scale-90 shadow-sm border border-green-100">
+                                            <Link to={`/plants/${plant.id}`} className="p-2.5 bg-green-50 text-green-700 rounded-xl hover:bg-green-700 hover:text-white transition-all duration-300 active:scale-90 shadow-sm border border-green-100">
                                                 <ShoppingCart size={18} />
-                                            </button>
+                                            </Link>
                                         </div>
                                     </div>
                                 </div>
