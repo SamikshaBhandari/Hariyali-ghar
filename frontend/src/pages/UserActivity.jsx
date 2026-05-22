@@ -21,7 +21,7 @@ const UserActivity = () => {
                     axios.get('http://localhost:5000/api/activity/reviews', { headers: { Authorization: `Bearer ${token}` } })
                 ]);
 
-                // Backend ko standard data schema sanga match gariyeko
+                // Backend ko standard data schema match
                 if (ordersRes.data.success) setOrders(ordersRes.data.data || []);
                 if (reviewsRes.data.success) setReviews(reviewsRes.data.reviews || []);
             } catch (err) {
@@ -37,7 +37,7 @@ const UserActivity = () => {
     if (!token) {
         return (
             <div className="p-20 text-center text-sm font-medium text-gray-500">
-                🔒 Please <Link to="/login" className="text-green-700 underline font-bold">Login</Link> to view your activity dashboard.
+                Please <Link to="/login" className="text-green-700 underline font-bold">Login</Link> to view your activity dashboard.
             </div>
         );
     }
@@ -112,10 +112,10 @@ const UserActivity = () => {
                                     <div className="text-right flex md:flex-col justify-between md:justify-start items-center md:items-end gap-2">
                                         <p className="text-sm font-extrabold text-green-700">NPR {order.total_amount}</p>
                                         <span className={`inline-block text-[9px] px-2.5 py-1 rounded-full font-bold uppercase tracking-wide ${order.status === 'Completed' || order.status === 'Delivered'
-                                                ? 'bg-green-100 text-green-800'
-                                                : order.status === 'Cancelled'
-                                                    ? 'bg-red-100 text-red-800'
-                                                    : 'bg-amber-100 text-amber-800'
+                                            ? 'bg-green-100 text-green-800'
+                                            : order.status === 'Cancelled'
+                                                ? 'bg-red-100 text-red-800'
+                                                : 'bg-amber-100 text-amber-800'
                                             }`}>
                                             {order.status || 'Pending'}
                                         </span>
