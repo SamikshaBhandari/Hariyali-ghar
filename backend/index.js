@@ -9,6 +9,8 @@ const orderRoute = require('./routes/orderRoute');
 const categoryRoute = require('./routes/categoryRoute')
 const reviewRoute = require('./routes/reviewRoute');
 const paymentRoute = require('./routes/paymentRoute');
+const activityRoute = require('./routes/activityRoute');
+const profileRoute = require('./routes/profileRoute');
 
 const app = express();
 app.use(cors());
@@ -21,6 +23,8 @@ app.use('/api/orders', orderRoute);
 app.use('/api/categories', categoryRoute);
 app.use('/api/reviews', reviewRoute);
 app.use('/api/payment', paymentRoute);
+app.use('/api/activity', activityRoute);
+app.use('/api/profile', profileRoute);
 
 const PORT = process.env.PORT || 5000;
 
