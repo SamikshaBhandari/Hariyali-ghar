@@ -13,6 +13,8 @@ import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import UserDashboard from './pages/UserDashboard';
 import MyOrders from './pages/MyOrders';
+import UserActivity from './pages/UserActivity';
+import UserProfile from './pages/UserProfile';
 
 function App() {
     return (
@@ -32,6 +34,8 @@ function App() {
                     <Route path="/checkout" element={<Checkout />} />
                     <Route path="/user/dashboard" element={<UserDashboard />} />
                     <Route path="/myorders" element={<MyOrders />} />
+                    <Route path="/activity" element={<UserActivity />} />
+                    <Route path="/profile" element={<UserProfile />} />
                 </Routes>
             </main>
 
