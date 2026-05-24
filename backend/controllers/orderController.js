@@ -54,15 +54,16 @@ exports.placeOrder = async (req, res) => {
             );
         }
 
-        //Empty the cart
-        await db.query("DELETE FROM cart WHERE user_id = ?", [user_id]);
+        if (payment_method !== 'eSewa') {
+            await db.query("DELETE FROM cart WHERE user_id = ?", [user_id]);
+        }
+
         res.status(201).json({
             success: true,
             message: "Order placed successfully " + (payment_method || 'COD'),
             orderId: orderId,
             totalBill: totalAmount
         });
-
     } catch (err) {
         console.error(err);
         res.status(500).json({ success: false, message: "Server Error: Could not place order." });
