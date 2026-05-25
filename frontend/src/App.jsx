@@ -36,6 +36,7 @@ function App() {
                     <Route path="/myorders" element={<MyOrders />} />
                     <Route path="/activity" element={<UserActivity />} />
                     <Route path="/profile" element={<UserProfile />} />
+                    <Route path="/payment-success" element={<MyOrders />} />
                 </Routes>
             </main>
 
