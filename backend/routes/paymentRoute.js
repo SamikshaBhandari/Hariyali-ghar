@@ -5,5 +5,7 @@ const { authMiddleware } = require('../middleware/authMiddleware');
 
 router.post('/esewa-initiate', authMiddleware, paymentController.initiateEsewaPayment);
 
-router.post('/esewa-verify', paymentController.verifyEsewaPayment);
+router.route('/esewa-verify')
+    .get(paymentController.verifyEsewaPayment)
+    .post(paymentController.verifyEsewaPayment);
 module.exports = router;
