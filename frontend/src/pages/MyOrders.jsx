@@ -54,6 +54,25 @@ const MyOrders = () => {
         }
     };
 
+    const handleDeleteOrder = async (orderId) => {
+        const confirmDelete = window.confirm("Are you sure you want to permanently delete this order from your history?");
+        if (!confirmDelete) return;
+
+        try {
+            const res = await axios.delete(`http://localhost:5000/api/orders/delete/${orderId}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            if (res.data && res.data.success) {
+                alert("Order removed successfully!");
+                fetchOrders();
+            }
+        } catch (err) {
+            console.error("Delete Error:", err);
+            alert(err.response?.data?.message || "Failed to delete order.");
+        }
+    };
+
     if (loading) {
         return (
             <div className="p-20 text-center font-bold text-green-800">
@@ -102,7 +121,7 @@ const MyOrders = () => {
                         <p className="text-[11px] text-slate-400 font-medium mt-0.5">Manage and track your plant purchases</p>
                     </div>
 
-                    {/*Empty State View when no orders are found */}
+                    {/* Empty State View when no orders are found */}
                     {orders.length === 0 ? (
                         <div className="bg-white border border-slate-100 rounded-3xl p-12 shadow-sm text-center flex flex-col items-center justify-center space-y-4">
                             <div className="p-4 bg-slate-50 text-slate-400 rounded-full">
@@ -124,7 +143,7 @@ const MyOrders = () => {
                             </div>
                         </div>
                     ) : (
-                        /*Live Table Layout View when orders exist */
+                        /* Live Table Layout View when orders exist */
                         <div className="bg-white border border-slate-100 rounded-3xl shadow-sm overflow-hidden">
                             <div className="overflow-x-auto">
                                 <table className="w-full text-left border-collapse">
@@ -176,15 +195,18 @@ const MyOrders = () => {
                                                         {order.payment_status || 'Pending'}
                                                     </span>
                                                 </td>
-                                                {/* Logistical Order Status Badge Column */}
+
+                                                {/*Order Status Badge Column */}
                                                 <td className="py-4 px-6">
                                                     <span className={`inline-block text-[10px] font-extrabold px-2.5 py-1 rounded-md ${order.status === 'Delivered' ? 'bg-green-100 text-green-800' :
-                                                        order.status === 'Confirmed' ? 'bg-blue-50 text-blue-600 border border-blue-100' :
+                                                        (order.status === 'Confirmed' || order.payment_status === 'Paid') ? 'bg-blue-50 text-blue-600 border border-blue-100' :
                                                             order.status === 'Shipped' ? 'bg-amber-100 text-amber-700' :
                                                                 order.status === 'Cancelled' ? 'bg-rose-50 text-rose-600 border border-rose-100' :
                                                                     'bg-slate-100 text-slate-600'
                                                         }`}>
-                                                        {order.status}
+                                                        {order.status === 'Confirmed' || order.payment_status === 'Paid'
+                                                            ? 'Confirmed'
+                                                            : (order.status && order.status !== '—' ? order.status : 'Pending')}
                                                     </span>
                                                 </td>
 
@@ -193,7 +215,7 @@ const MyOrders = () => {
                                                     {order.created_at ? new Date(order.created_at).toLocaleDateString() : 'N/A'}
                                                 </td>
 
-                                                {/* Cancel Button */}
+                                                {/*Dynamic Switch Based on Status */}
                                                 <td className="py-4 px-6 text-center">
                                                     {order.status === 'Pending' ? (
                                                         <button
@@ -203,7 +225,12 @@ const MyOrders = () => {
                                                             <Trash2 size={12} /> Cancel
                                                         </button>
                                                     ) : (
-                                                        <span className="text-slate-300 font-normal text-[11px] select-none">—</span>
+                                                        <button
+                                                            onClick={() => handleDeleteOrder(order.id)}
+                                                            className="inline-flex items-center gap-1 bg-slate-100 hover:bg-rose-600 hover:text-white border border-slate-200 text-slate-600 font-bold text-[11px] px-3 py-1 rounded-lg transition"
+                                                        >
+                                                            <Trash2 size={12} /> Delete
+                                                        </button>
                                                     )}
                                                 </td>
                                             </tr>
