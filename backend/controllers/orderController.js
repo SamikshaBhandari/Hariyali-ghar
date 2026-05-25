@@ -168,11 +168,52 @@ exports.updateOrderStatus = async (req, res) => {
     }
 };
 
+//delete order block
+const handleDeleteOrder = async (orderId) => {
+    // Double check parameter 
+    if (!orderId) {
+        alert("Invalid Order ID mapping sequence.");
+        return;
+    }
+
+    const confirmDelete = window.confirm("Are you sure you want to permanently delete this order?");
+    if (!confirmDelete) return;
+
+    try {
+        // Local storage token handling 
+        const token = localStorage.getItem('token');
+
+        const response = await axios.delete(`http://localhost:5000/api/orders/delete/${orderId}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        // Backend response match indicator query validator
+        if (response.data && response.data.success) {
+            alert("Order removed from your tracking panel successfully!");
+
+            if (typeof fetchOrders === 'function') {
+                fetchOrders();
+            } else {
+                window.location.reload();
+            }
+        }
+    } catch (err) {
+        console.error("Axios execution validation failed matrix: ", err);
+
+        // Error handling 
+        const errorMsg = err.response?.data?.message || "Connection network error or server parsing error.";
+        alert(`Failed to delete: ${errorMsg}`);
+    }
+};
+
 module.exports = {
     placeOrder: exports.placeOrder,
     getMyOrders: exports.getMyOrders,
     getOrderDetails: exports.getOrderDetails,
     cancelOrder: exports.cancelOrder,
     getAllOrdersForAdmin: exports.getAllOrdersForAdmin,
-    updateOrderStatus: exports.updateOrderStatus
+    updateOrderStatus: exports.updateOrderStatus,
+    deleteOrder: exports.deleteOrder
 };
