@@ -18,6 +18,7 @@ router.post('/place', authMiddleware, orderController.placeOrder);
 router.get('/myorders', authMiddleware, orderController.getMyOrders);
 router.get('/details/:id', authMiddleware, orderController.getOrderDetails);
 router.put('/cancel/:id', authMiddleware, orderController.cancelOrder);
+router.delete('/delete/:id', authMiddleware, orderController.deleteOrder);
 router.get('/admin/all', authMiddleware, isAdmin, orderController.getAllOrdersForAdmin);
 router.put('/update/:id', authMiddleware, isAdmin, orderController.updateOrderStatus);
 module.exports = router;
