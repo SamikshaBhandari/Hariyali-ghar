@@ -217,21 +217,26 @@ const MyOrders = () => {
 
                                                 {/*Dynamic Switch Based on Status */}
                                                 <td className="py-4 px-6 text-center">
-                                                    {order.status === 'Pending' ? (
+                                                    {order.status === 'Pending' && order.payment_status !== 'Paid' ? (
                                                         <button
                                                             onClick={() => handleCancelOrder(order.id)}
                                                             className="inline-flex items-center gap-1 bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-600 font-bold text-[11px] px-3 py-1 rounded-lg transition"
                                                         >
                                                             <Trash2 size={12} /> Cancel
                                                         </button>
-                                                    ) : (
-                                                        <button
-                                                            onClick={() => handleDeleteOrder(order.id)}
-                                                            className="inline-flex items-center gap-1 bg-slate-100 hover:bg-rose-600 hover:text-white border border-slate-200 text-slate-600 font-bold text-[11px] px-3 py-1 rounded-lg transition"
-                                                        >
-                                                            <Trash2 size={12} /> Delete
-                                                        </button>
-                                                    )}
+                                                    ) :
+                                                        (order.status === 'Confirmed' || order.payment_status === 'Paid') && order.status !== 'Delivered' ? (
+                                                            <span className="text-[11px] bg-slate-50 text-slate-400 font-semibold px-2.5 py-1 rounded-lg border border-slate-100 cursor-not-allowed inline-block">
+                                                                Processing
+                                                            </span>
+                                                        ) : (
+                                                            <button
+                                                                onClick={() => handleDeleteOrder(order.id)}
+                                                                className="inline-flex items-center gap-1 bg-slate-100 hover:bg-rose-600 hover:text-white border border-slate-200 text-slate-600 font-bold text-[11px] px-3 py-1 rounded-lg transition"
+                                                            >
+                                                                <Trash2 size={12} /> Delete
+                                                            </button>
+                                                        )}
                                                 </td>
                                             </tr>
                                         ))}
