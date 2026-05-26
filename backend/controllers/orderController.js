@@ -169,42 +169,23 @@ exports.updateOrderStatus = async (req, res) => {
 };
 
 //delete order block
-const handleDeleteOrder = async (orderId) => {
-    // Double check parameter 
-    if (!orderId) {
-        alert("Invalid Order ID mapping sequence.");
-        return;
-    }
-
-    const confirmDelete = window.confirm("Are you sure you want to permanently delete this order?");
-    if (!confirmDelete) return;
+exports.deleteOrder = async (req, res) => {
+    const { id } = req.params;
+    const user_id = req.user.id;
 
     try {
-        // Local storage token handling 
-        const token = localStorage.getItem('token');
+        const [order] = await db.query("SELECT * FROM orders WHERE id = ? AND user_id = ?", [id, user_id]);
 
-        const response = await axios.delete(`http://localhost:5000/api/orders/delete/${orderId}`, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
-
-        // Backend response match indicator query validator
-        if (response.data && response.data.success) {
-            alert("Order removed from your tracking panel successfully!");
-
-            if (typeof fetchOrders === 'function') {
-                fetchOrders();
-            } else {
-                window.location.reload();
-            }
+        if (order.length === 0) {
+            return res.status(404).json({ success: false, message: "Order not found or unauthorized." });
         }
-    } catch (err) {
-        console.error("Axios execution validation failed matrix: ", err);
 
-        // Error handling 
-        const errorMsg = err.response?.data?.message || "Connection network error or server parsing error.";
-        alert(`Failed to delete: ${errorMsg}`);
+        await db.query("DELETE FROM orders WHERE id = ?", [id]);
+
+        return res.status(200).json({ success: true, message: "Order deleted successfully from history." });
+    } catch (err) {
+        console.error("Delete Order Controller Error:", err);
+        return res.status(500).json({ success: false, message: "Server Error: Could not delete order." });
     }
 };
 
