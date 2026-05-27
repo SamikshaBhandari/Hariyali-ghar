@@ -21,4 +21,7 @@ router.put('/cancel/:id', authMiddleware, orderController.cancelOrder);
 router.delete('/delete/:id', authMiddleware, orderController.deleteOrder);
 router.get('/admin/all', authMiddleware, isAdmin, orderController.getAllOrdersForAdmin);
 router.put('/update/:id', authMiddleware, isAdmin, orderController.updateOrderStatus);
+router.get('/admin/stats', authMiddleware, isAdmin, (req, res, next) => {
+    orderController.getAdminDashboardStats(req, res, next);
+});
 module.exports = router;
