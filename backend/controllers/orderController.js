@@ -189,6 +189,73 @@ exports.deleteOrder = async (req, res) => {
     }
 };
 
+// Admin Dashboard fetch
+exports.getAdminDashboardStats = async (req, res) => {
+    try {
+        //Total Orders count
+        const [[{ totalOrders }]] = await db.query("SELECT COUNT(*) AS totalOrders FROM orders");
+        const [[{ pendingOrders }]] = await db.query("SELECT COUNT(*) AS pendingOrders FROM orders WHERE status = 'Pending'");
+
+        //Total Users count
+        const [[{ totalUsers }]] = await db.query("SELECT COUNT(*) AS totalUsers FROM users");
+
+        // Safe check for new users count
+        let newUsersThisWeek = 0;
+        try {
+            const [[{ count }]] = await db.query("SELECT COUNT(*) AS count FROM users WHERE created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)");
+            newUsersThisWeek = count;
+        } catch (e) { newUsersThisWeek = 0; }
+
+        //Stock counts
+        const [[{ lowStockCount }]] = await db.query("SELECT COUNT(*) AS lowStockCount FROM products WHERE stock_quantity > 0 AND stock_quantity <= 5");
+        const [[{ outOfStockCount }]] = await db.query("SELECT COUNT(*) AS outOfStockCount FROM products WHERE stock_quantity = 0");
+
+        //Total Revenue
+        const [[{ totalRevenue }]] = await db.query(
+            "SELECT IFNULL(SUM(total_amount), 0) AS totalRevenue FROM orders WHERE LOWER(payment_status) = 'paid'"
+        );
+        //Recent 5 orders list
+        let recentOrders = [];
+        try {
+            const [orders] = await db.query(
+                `SELECT o.id, u.fullname AS customer, o.total_amount AS total, o.status 
+                 FROM orders o
+                 JOIN users u ON o.user_id = u.id
+                 ORDER BY o.created_at DESC LIMIT 5`
+            );
+            recentOrders = orders;
+        } catch (e) { recentOrders = []; }
+
+        //Low stock alert list
+        const [stockAlerts] = await db.query(
+            `SELECT name, stock_quantity AS count, 
+             CASE WHEN stock_quantity = 0 THEN 'Out of Stock' ELSE 'Low Stock' END AS status
+             FROM products 
+             WHERE stock_quantity <= 5 
+             LIMIT 5`
+        );
+
+        res.status(200).json({
+            success: true,
+            stats: {
+                totalOrders,
+                pendingOrders,
+                totalUsers,
+                newUsersThisWeek,
+                lowStockCount,
+                outOfStockCount,
+                totalRevenue
+            },
+            recentOrders,
+            stockAlerts
+        });
+
+    } catch (err) {
+        console.error("Admin Dashboard Stats Controller Error:", err);
+        res.status(500).json({ success: false, message: "Backend error while fetching stats." });
+    }
+};
+
 module.exports = {
     placeOrder: exports.placeOrder,
     getMyOrders: exports.getMyOrders,
@@ -196,5 +263,6 @@ module.exports = {
     cancelOrder: exports.cancelOrder,
     getAllOrdersForAdmin: exports.getAllOrdersForAdmin,
     updateOrderStatus: exports.updateOrderStatus,
-    deleteOrder: exports.deleteOrder
+    deleteOrder: exports.deleteOrder,
+    getAdminDashboardStats: exports.getAdminDashboardStats
 };
