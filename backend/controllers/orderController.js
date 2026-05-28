@@ -4,6 +4,13 @@ exports.placeOrder = async (req, res) => {
     const user_id = req.user.id;
     const { address, phone_number, payment_method } = req.body;
 
+    if (req.user && (req.user.role === 'admin' || req.user.role === 'Admin')) {
+        return res.status(403).json({
+            success: false,
+            message: "Admin accounts are not allowed to place customer orders."
+        });
+    }
+
     if (!address || !phone_number) {
         return res.status(400).json({ success: false, message: "Address and Phone Number are required." });
     }
