@@ -21,6 +21,10 @@ const PlantDetail = () => {
     const token = localStorage.getItem('token');
     const isUser = user && user.role === 'user';
 
+    //Admin check role components ra Out of Stock status verification flags
+    const isAdmin = user && (user.role === 'admin' || user.role === 'Admin');
+    const isOutOfStock = plant && plant.stock_quantity === 0;
+
     // Fetch plant and review details
     const fetchPlantAndReviews = async () => {
         try {
@@ -89,6 +93,17 @@ const PlantDetail = () => {
     };
 
     const handleAddToCart = async () => {
+
+        if (isAdmin) {
+            alert("Admin accounts are not allowed to order plants!");
+            return;
+        }
+
+        if (isOutOfStock) {
+            alert("Sorry, this plant is currently out of stock!");
+            return;
+        }
+
         if (!isUser) {
             alert("Please login first!");
             return navigate('/login');
@@ -136,7 +151,17 @@ const PlantDetail = () => {
             <div className="flex flex-col lg:flex-row gap-10 items-start justify-center">
 
                 {/* Left Side Image Container */}
-                <div className="w-full lg:w-[420px] bg-gray-50 rounded-[28px] overflow-hidden shadow-sm border border-gray-100">
+                <div className="w-full lg:w-[420px] bg-gray-50 rounded-[28px] overflow-hidden shadow-sm border border-gray-100 relative">
+
+                    {/* Image Out of Stock Layer */}
+                    {isOutOfStock && (
+                        <div className="absolute inset-0 bg-black/25 flex items-center justify-center z-10 rounded-[28px]">
+                            <span className="bg-red-600 text-white font-black text-xs px-4 py-2 rounded-xl shadow-md tracking-wider">
+                                OUT OF STOCK
+                            </span>
+                        </div>
+                    )}
+
                     <div className="aspect-square flex items-center justify-center p-2">
                         <img
                             src={`http://localhost:5000/images/${plant.image_url}`}
@@ -160,10 +185,14 @@ const PlantDetail = () => {
                             </div>
                         </div>
 
-                        {/* Real Stock */}
-                        <div className="bg-green-50 border border-green-100 px-3 py-1 rounded-full">
-                            <span className="text-green-700 text-[10px] font-bold">
-                                In Stock ({plant.stock_quantity})
+                        {/* Real Stock badges */}
+                        <div className={`px-3 py-1 rounded-full border ${isOutOfStock
+                            ? 'bg-red-50 border-red-100'
+                            : 'bg-green-50 border-green-100'
+                            }`}>
+                            <span className={`text-[10px] font-bold ${isOutOfStock ? 'text-red-600' : 'text-green-700'
+                                }`}>
+                                {isOutOfStock ? "Out of Stock" : `In Stock (${plant.stock_quantity})`}
                             </span>
                         </div>
                     </div>
@@ -191,25 +220,65 @@ const PlantDetail = () => {
 
                     {/* Action Section */}
                     <div className="pt-2 space-y-3">
+
+                        {/*warning block*/}
+                        {isAdmin && (
+                            <div className="p-3 bg-amber-50 text-amber-700 text-[11px] font-bold rounded-lg border border-amber-100">
+                                Items cannot be added to cart or ordered in Admin.
+                            </div>
+                        )}
+
+                        {isOutOfStock && (
+                            <div className="p-3 bg-red-50 text-red-700 text-[11px] font-bold rounded-lg border border-red-100">
+                                This plant is currently out of stock and unavailable.
+                            </div>
+                        )}
+
+                        {/* Quantity controls and Cart triggers */}
                         <div className="flex items-center gap-3">
                             <div className="flex items-center border border-gray-200 rounded-lg h-9 px-3 bg-white">
-                                <button onClick={() => setQuantity(q => Math.max(1, q - 1))} className="p-1 text-gray-400 hover:text-green-700 transition"><Minus size={14} /></button>
-                                <span className="w-8 text-center font-bold text-md">{quantity}</span>
-                                <button onClick={() => setQuantity(q => q + 1)} className="p-1 text-gray-400 hover:text-green-700 transition"><Plus size={12} /></button>
+                                <button
+                                    onClick={() => setQuantity(q => Math.max(1, q - 1))}
+                                    disabled={isOutOfStock || isAdmin}
+                                    className="p-1 text-gray-400 hover:text-green-700 transition disabled:opacity-20 disabled:cursor-not-allowed"
+                                >
+                                    <Minus size={14} />
+                                </button>
+                                <span className="w-8 text-center font-bold text-md text-gray-700">
+                                    {isOutOfStock || isAdmin ? 0 : quantity}
+                                </span>
+                                <button
+                                    onClick={() => setQuantity(q => q + 1)}
+                                    disabled={isOutOfStock || isAdmin}
+                                    className="p-1 text-gray-400 hover:text-green-700 transition disabled:opacity-20 disabled:cursor-not-allowed"
+                                >
+                                    <Plus size={12} />
+                                </button>
                             </div>
+
                             <button
                                 onClick={handleAddToCart}
-                                className="flex-1 bg-green-700 text-white h-9 rounded-lg font-bold flex items-center justify-center gap-2 hover:bg-green-700 transition shadow-sm text-sm"
+                                disabled={isOutOfStock || isAdmin}
+                                className={`flex-1 text-white h-9 rounded-lg font-bold flex items-center justify-center gap-2 transition shadow-sm text-sm ${isOutOfStock
+                                    ? 'bg-gray-400 cursor-not-allowed opacity-60'
+                                    : isAdmin
+                                        ? 'bg-green-600 text-white-900 cursor-not-allowed opacity-75'
+                                        : 'bg-green-700 hover:bg-green-800'
+                                    }`}
                             >
-                                <ShoppingCart size={18} /> Add to Cart
+                                <ShoppingCart size={18} />
+                                {isOutOfStock ? "Unavailable" : isAdmin ? "Admin Mode" : "Add to Cart"}
                             </button>
                         </div>
-                        <button
-                            onClick={() => isUser ? navigate('/cart') : alert("Please login first!")}
-                            className="w-full border border-green-700 text-green-700 h-9 rounded-lg font-bold text-xs hover:bg-green-50 transition"
-                        >
-                            View Cart
-                        </button>
+
+                        {!isAdmin && (
+                            <button
+                                onClick={() => isUser ? navigate('/cart') : alert("Please login first!")}
+                                className="w-full border border-green-700 text-green-700 h-9 rounded-lg font-bold text-xs hover:bg-green-50 transition"
+                            >
+                                View Cart
+                            </button>
+                        )}
                     </div>
                 </div>
             </div>
