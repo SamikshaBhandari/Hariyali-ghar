@@ -22,13 +22,13 @@ exports.getAllProducts = async (req, res) => {
 //Product add logic
 exports.addProduct = async (req, res) => {
     const { name, price, description, category_id, image_url, stock_quantity, sunlight, watering, care_tips } = req.body;
+    const imageFilename = req.file ? req.file.filename : (image_url || null);
 
     try {
-        //care guide sahit ko sql
         const sql = `INSERT INTO products 
             (name, price, description, category_id, image_url, stock_quantity, sunlight, watering, care_tips) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-        await db.query(sql, [name, price, description, category_id, image_url, stock_quantity,
+        await db.query(sql, [name, price, description, category_id, imageFilename, stock_quantity,
             sunlight, watering, care_tips]);
         res.status(201).json({ message: "Product successfully added with care instructions." });
     } catch (err) {
@@ -39,10 +39,12 @@ exports.addProduct = async (req, res) => {
 exports.updateProduct = async (req, res) => {
     const { id } = req.params;
     const { name, price, description, category_id, image_url, stock_quantity, sunlight, watering, care_tips } = req.body;
+    const imageFilename = req.file ? req.file.filename : (image_url || null);
+
     try {
         const sql = `UPDATE products SET name=?, price=?,description=?,category_id=?,image_url=?,stock_quantity=?,sunlight=?,
         watering=?,care_tips=?WHERE id=?`;
-        const [result] = await db.query(sql, [name, price, description, category_id, image_url, stock_quantity, sunlight, watering, care_tips, id]);
+        const [result] = await db.query(sql, [name, price, description, category_id, imageFilename, stock_quantity, sunlight, watering, care_tips, id]);
 
         if (result.affectedRows === 0) {
             return res.status(404).json({ error: 'product not found.' });
