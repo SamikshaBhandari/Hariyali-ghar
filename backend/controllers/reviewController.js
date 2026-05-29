@@ -10,6 +10,13 @@ exports.addReview = async (req, res) => {
         });
     }
 
+    if (req.user.role === 'admin' || req.user.role === 'Admin') {
+        return res.status(403).json({
+            success: false,
+            message: "Admin users cannot write reviews."
+        });
+    }
+
     const user_id = req.user.id;
     const { product_id, rating, comment } = req.body;
 
