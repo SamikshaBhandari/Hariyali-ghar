@@ -96,21 +96,32 @@ const Plants = () => {
                     {plants.length > 0 ? (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                             {plants.map((plant) => (
-
-                                <div key={plant.id} className="bg-white rounded-[2rem] overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border border-gray-50 flex flex-col group">
-
+                                <div
+                                    key={plant.id}
+                                    className="bg-white rounded-[2rem] overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border border-gray-50 flex flex-col group"
+                                >
                                     <Link to={`/plants/${plant.id}`} className="relative aspect-[4/3] overflow-hidden cursor-pointer block">
                                         <img
                                             src={`http://localhost:5000/images/${plant.image_url}`}
                                             alt={plant.name}
                                             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                                         />
-                                        <div className="absolute top-1 right-4">
+
+                                        {plant.stock_quantity === 0 && (
+                                            <div className="absolute top-3 right-3 z-20">
+                                                <span className="bg-red-600 text-white text-[9px] font-black px-3 py-1 rounded-full shadow-md uppercase tracking-wider">
+                                                    Out of Stock
+                                                </span>
+                                            </div>
+                                        )}
+
+                                        <div className="absolute top-3 left-3">
                                             <span className="text-[9px] font-bold text-green-700 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full shadow-sm uppercase tracking-wider">
                                                 {plant.category_name}
                                             </span>
                                         </div>
                                     </Link>
+
                                     <div className="p-6 flex flex-col flex-1">
                                         <div className="flex justify-between items-start mb-2">
                                             <Link to={`/plants/${plant.id}`} className="hover:text-green-700 transition-colors">
@@ -118,6 +129,7 @@ const Plants = () => {
                                                     {plant.name}
                                                 </h3>
                                             </Link>
+
                                             <div className="flex items-center gap-1.5 bg-gray-50 px-2 py-0.5 rounded-md">
                                                 <Star
                                                     size={12}
@@ -151,7 +163,10 @@ const Plants = () => {
                                                 NPR {plant.price}
                                             </span>
 
-                                            <Link to={`/plants/${plant.id}`} className="p-2.5 bg-green-50 text-green-700 rounded-xl hover:bg-green-700 hover:text-white transition-all duration-300 active:scale-90 shadow-sm border border-green-100">
+                                            <Link
+                                                to={`/plants/${plant.id}`}
+                                                className="p-2.5 rounded-xl transition-all duration-300 active:scale-90 shadow-sm border bg-green-50 text-green-700 hover:bg-green-700 hover:text-white border-green-100"
+                                            >
                                                 <ShoppingCart size={18} />
                                             </Link>
                                         </div>
