@@ -96,6 +96,7 @@ const Plants = () => {
                     {plants.length > 0 ? (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                             {plants.map((plant) => (
+
                                 <div key={plant.id} className="bg-white rounded-[2rem] overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border border-gray-50 flex flex-col group">
 
                                     <Link to={`/plants/${plant.id}`} className="relative aspect-[4/3] overflow-hidden cursor-pointer block">
