@@ -267,7 +267,7 @@ const PlantDetail = () => {
                                     }`}
                             >
                                 <ShoppingCart size={18} />
-                                {isOutOfStock ? "Unavailable" : isAdmin ? "Admin Mode" : "Add to Cart"}
+                                {isOutOfStock ? "Unavailable" : isAdmin ? "Unavailable" : "Add to Cart"}
                             </button>
                         </div>
 
@@ -307,7 +307,7 @@ const PlantDetail = () => {
                         <div className="space-y-6">
 
                             {/* Review Submission Input Form */}
-                            {token ? (
+                            {token && !isAdmin ? (
                                 <form onSubmit={handleReviewSubmit} className="bg-gray-50 border border-gray-100 p-4 rounded-xl space-y-3 max-w-xl">
                                     <h3 className="text-[11px] font-extrabold text-gray-800 uppercase tracking-wide">Write a Product Review</h3>
 
@@ -345,6 +345,10 @@ const PlantDetail = () => {
                                         <Send size={10} /> {isSubmitting ? "Submitting..." : "Submit Review"}
                                     </button>
                                 </form>
+                            ) : token && isAdmin ? (
+                                <div className="p-3 bg-amber-50 text-amber-700 text-[10px] font-bold rounded-lg border border-amber-100 max-w-xl">
+                                    Admin users cannot post reviews.
+                                </div>
                             ) : (
                                 <div className="p-3 bg-amber-50 text-amber-700 text-[10px] font-bold rounded-lg border border-amber-100 max-w-xl">
                                     Please <Link to="/login" className="underline text-green-700">Login</Link> to write a review.
