@@ -15,6 +15,9 @@ import UserDashboard from './pages/UserDashboard';
 import MyOrders from './pages/MyOrders';
 import UserActivity from './pages/UserActivity';
 import UserProfile from './pages/UserProfile';
+import AdminRoute from './components/AdminRoute';
+import ManagePlants from './pages/ManagePlants';
+
 
 function App() {
     return (
@@ -37,6 +40,7 @@ function App() {
                     <Route path="/activity" element={<UserActivity />} />
                     <Route path="/profile" element={<UserProfile />} />
                     <Route path="/payment-success" element={<MyOrders />} />
+                    <Route path="/admin/manage-plants" element={<AdminRoute><ManagePlants /></AdminRoute>} />
                 </Routes>
             </main>
 
