@@ -21,15 +21,15 @@ exports.getAllProducts = async (req, res) => {
 };
 //Product add logic
 exports.addProduct = async (req, res) => {
-    const { name, price, description, category_id, image_url, stock_quantity, sunlight, watering, care_tips } = req.body;
-    const imageFilename = req.file ? req.file.filename : (image_url || null);
+    const { name, price, description, category_id, stock_quantity, sunlight, watering, care_tips } = req.body;
+
+    const imageFilename = req.file ? req.file.filename : null;
 
     try {
         const sql = `INSERT INTO products 
             (name, price, description, category_id, image_url, stock_quantity, sunlight, watering, care_tips) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-        await db.query(sql, [name, price, description, category_id, imageFilename, stock_quantity,
-            sunlight, watering, care_tips]);
+        await db.query(sql, [name, price, description, category_id || null, imageFilename, stock_quantity || 0, sunlight, watering, care_tips]);
         res.status(201).json({ message: "Product successfully added with care instructions." });
     } catch (err) {
         res.status(500).json({ error: "Failed to add product: " + err.message });
@@ -38,23 +38,26 @@ exports.addProduct = async (req, res) => {
 //product update
 exports.updateProduct = async (req, res) => {
     const { id } = req.params;
-    const { name, price, description, category_id, image_url, stock_quantity, sunlight, watering, care_tips } = req.body;
-    const imageFilename = req.file ? req.file.filename : (image_url || null);
+    const { name, price, description, category_id, stock_quantity, sunlight, watering, care_tips } = req.body;
 
     try {
-        const sql = `UPDATE products SET name=?, price=?,description=?,category_id=?,image_url=?,stock_quantity=?,sunlight=?,
-        watering=?,care_tips=?WHERE id=?`;
-        const [result] = await db.query(sql, [name, price, description, category_id, imageFilename, stock_quantity, sunlight, watering, care_tips, id]);
-
-        if (result.affectedRows === 0) {
+        const [oldProduct] = await db.query("SELECT image_url FROM products WHERE id = ?", [id]);
+        if (oldProduct.length === 0) {
             return res.status(404).json({ error: 'product not found.' });
         }
+
+        const imageFilename = req.file ? req.file.filename : oldProduct[0].image_url;
+
+        const sql = `UPDATE products SET name=?, price=?,description=?,category_id=?,image_url=?,stock_quantity=?,sunlight=?,
+        watering=?,care_tips=? WHERE id=?`;
+        const [result] = await db.query(sql, [name, price, description, category_id || null, imageFilename, stock_quantity, sunlight, watering, care_tips, id]);
+
         res.status(200).json({ message: 'Product successfully updated.' });
     }
     catch (err) {
         res.status(500).json({ error: 'Update failed:' + err.message });
     }
-}
+};
 
 //product delete 
 exports.deleteProduct = async (req, res) => {
