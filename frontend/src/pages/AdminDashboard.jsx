@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
+
 import {
     LayoutDashboard,
     Leaf,
@@ -91,9 +93,9 @@ const AdminDashboard = () => {
                             <button className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-black bg-green-50 text-green-700 text-left">
                                 <LayoutDashboard size={16} /> Overview
                             </button>
-                            <button className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold text-slate-500 hover:bg-slate-50 hover:text-slate-800 text-left transition">
+                            <Link to="/admin/manage-plants" className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold text-slate-500 hover:bg-slate-50 hover:text-slate-800 text-left transition">
                                 <Leaf size={16} /> Manage Plants
-                            </button>
+                            </Link>
                             <button className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold text-slate-500 hover:bg-slate-50 hover:text-slate-800 text-left transition">
                                 <ShoppingBag size={16} /> Orders
                             </button>
