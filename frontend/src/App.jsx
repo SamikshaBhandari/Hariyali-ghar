@@ -17,6 +17,7 @@ import UserActivity from './pages/UserActivity';
 import UserProfile from './pages/UserProfile';
 import AdminRoute from './components/AdminRoute';
 import ManagePlants from './pages/ManagePlants';
+import AddPlant from './pages/AddPlant';
 
 
 function App() {
@@ -41,6 +42,7 @@ function App() {
                     <Route path="/profile" element={<UserProfile />} />
                     <Route path="/payment-success" element={<MyOrders />} />
                     <Route path="/admin/manage-plants" element={<AdminRoute><ManagePlants /></AdminRoute>} />
+                    <Route path="/admin/add-plant" element={<AdminRoute><AddPlant /></AdminRoute>} />
                 </Routes>
             </main>
 
