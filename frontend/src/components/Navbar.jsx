@@ -67,10 +67,10 @@ const Navbar = () => {
 
             {/* Logo Area */}
             <Link to="/" className="flex items-center gap-2 cursor-pointer">
-                <div className="bg-[#10b981] p-1.5 rounded-lg">
+                <div className="bg-emerald-500 p-1.5 rounded-lg">
                     <Sprout className="text-white" size={20} />
                 </div>
-                <span className={`font-bold text-2xl tracking-tight transition-colors ${shouldShowBg ? "text-[#065f46]" : "text-white"
+                <span className={`font-bold text-2xl tracking-tight transition-colors ${shouldShowBg ? "text-green-800" : "text-white"
                     }`}>
                     Hariyali Ghar
                 </span>
@@ -113,13 +113,20 @@ const Navbar = () => {
 
                         {/* Dropdown Menu Layout */}
                         <div className="absolute right-0 mt-2 w-55 bg-white rounded-3xl shadow-3xl border border-slate-50 py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0 z-50">
-                            <div className="px-6 pb-2 border-b border-slate-50 mb-2 text-left">
-                                <p className="font-bold text-slate-800 text-sm">{user.fullname}</p>
-                                <p className="text-[12px] text-slate-400">{user.email}</p>
-                                <span className={`text-[12px] font-bold px-2 py-0.5 rounded-full mt-1.5 inline-block ${user.role === 'admin' ? "bg-green-100 text-green-700" : "bg-green-100 text-green-700"
-                                    }`}>
-                                    {user.role === 'admin' ? 'Administrator' : 'User'}
-                                </span>
+
+                            <div className="px-6 pb-2 border-b border-slate-50 mb-2 text-left flex items-center gap-3">
+                                <img
+                                    src={`https://ui-avatars.com/api/?name=${user.fullname}&background=random`}
+                                    className="w-8 h-8 rounded-full border border-slate-200" alt="profile dropdown"
+                                />
+                                <div>
+                                    <p className="font-bold text-slate-800 text-sm">{user.fullname}</p>
+                                    <p className="text-[12px] text-slate-400">{user.email}</p>
+                                    <span className={`text-[12px] font-bold px-2 py-0.5 rounded-full mt-1.5 inline-block ${user.role === 'admin' ? "bg-green-100 text-green-700" : "bg-green-100 text-green-700"
+                                        }`}>
+                                        {user.role === 'admin' ? 'Administrator' : 'User'}
+                                    </span>
+                                </div>
                             </div>
 
                             <div className="flex flex-col">
