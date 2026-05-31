@@ -99,9 +99,9 @@ const AdminDashboard = () => {
                             <button className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold text-slate-500 hover:bg-slate-50 hover:text-slate-800 text-left transition">
                                 <ShoppingBag size={16} /> Orders
                             </button>
-                            <button className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold text-slate-500 hover:bg-slate-50 hover:text-slate-800 text-left transition">
+                            <Link to="/admin/add-plant" className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold text-slate-500 hover:bg-slate-50 hover:text-slate-800 text-left transition">
                                 <PlusCircle size={16} /> Add Plant
-                            </button>
+                            </Link>
                         </nav>
                     </div>
                 </div>
