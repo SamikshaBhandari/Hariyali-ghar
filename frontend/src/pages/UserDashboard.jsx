@@ -49,7 +49,7 @@ const UserDashboard = () => {
     const totalSpent = orders.reduce((sum, order) => sum + (Number(order.total_amount) || 0), 0);
 
     return (
-        <div className="max-w-7xl mx-auto px-4 md:px-8 pt-28 pb-16 font-sans bg-[#f8fafc] min-h-screen">
+        <div className="max-w-7xl mx-auto px-4 md:px-8 pt-28 pb-16 font-sans bg-slate-50 min-h-screen">
             <div className="flex flex-col lg:flex-row gap-8 items-start">
 
                 {/* Left Side Navigation Sidebar panel */}
@@ -71,7 +71,7 @@ const UserDashboard = () => {
                     <div className="flex flex-col space-y-1">
                         {[
                             { name: 'Overview', icon: <LayoutDashboard size={16} />, route: '/dashboard' },
-                            { name: 'My Orders', icon: <ShoppingBag size={16} />, route: '/activity' },
+                            { name: 'My Orders', icon: <ShoppingBag size={16} />, route: '/myorders' },
                             { name: 'Activity', icon: <Activity size={16} />, route: '/activity' }
                         ].map((tab) => {
                             const isActive = location.pathname === tab.route || (tab.name === 'Overview' && location.pathname.includes('dashboard'));
