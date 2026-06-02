@@ -18,6 +18,7 @@ import UserProfile from './pages/UserProfile';
 import AdminRoute from './components/AdminRoute';
 import ManagePlants from './pages/ManagePlants';
 import AddPlant from './pages/AddPlant';
+import AdminOrder from './pages/AdminOrder';
 
 
 function App() {
@@ -43,6 +44,7 @@ function App() {
                     <Route path="/payment-success" element={<MyOrders />} />
                     <Route path="/admin/manage-plants" element={<AdminRoute><ManagePlants /></AdminRoute>} />
                     <Route path="/admin/add-plant" element={<AdminRoute><AddPlant /></AdminRoute>} />
+                    <Route path="/admin/orders" element={<AdminRoute><AdminOrder /></AdminRoute>} />
                 </Routes>
             </main>
 
