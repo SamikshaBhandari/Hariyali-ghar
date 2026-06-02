@@ -160,86 +160,85 @@ const MyOrders = () => {
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-slate-50 text-xs font-bold text-slate-700">
-                                        {orders.map((order) => (
-                                            <tr key={order.id} className="hover:bg-slate-50/40 transition">
+                                        {orders.map((order) => {
+                                            const currentId = order._id || order.id;
+                                            return (
+                                                <tr key={currentId} className="hover:bg-slate-50/40 transition">
 
-                                                {/* Order ID Column */}
-                                                <td className="py-4 px-6 text-green-700 font-black">
-                                                    ORD-00{order.id}
-                                                </td>
+                                                    {/* Order ID Column */}
+                                                    <td className="py-4 px-6 text-green-700 font-black">
+                                                        ORD-{String(currentId).slice(-6).toUpperCase()}
+                                                    </td>
 
-                                                {/* Shipping Address Column */}
-                                                <td className="py-4 px-6 max-w-[220px]">
-                                                    <div className="truncate text-slate-800">{order.address}</div>
-                                                    <div className="text-[10px] text-slate-400 font-medium truncate mt-0.5">
-                                                        {order.phone_number}
-                                                    </div>
-                                                </td>
+                                                    {/* Shipping Address Column */}
+                                                    <td className="py-4 px-6 max-w-[220px]">
+                                                        <div className="truncate text-slate-800">{order.address}</div>
+                                                        <div className="text-[10px] text-slate-400 font-medium truncate mt-0.5">
+                                                            {order.phone_number || order.phone}
+                                                        </div>
+                                                    </td>
 
-                                                {/* Price Total Amount Column */}
-                                                <td className="py-4 px-6 text-slate-900 font-black">
-                                                    NPR {Number(order.total_amount).toLocaleString()}
-                                                </td>
+                                                    {/* Price Total Amount Column */}
+                                                    <td className="py-4 px-6 text-slate-900 font-black">
+                                                        NPR {Number(order.total_amount || order.totalPrice).toLocaleString()}
+                                                    </td>
 
-                                                {/* Payment Method Option Column */}
-                                                <td className="py-4 px-6 text-slate-400 font-medium">
-                                                    {order.payment_method || 'COD'}
-                                                </td>
+                                                    {/* Payment Method Option Column */}
+                                                    <td className="py-4 px-6 text-slate-400 font-medium">
+                                                        {order.payment_method || 'COD'}
+                                                    </td>
 
-                                                {/* Payment Status Badge Column */}
-                                                <td className="py-4 px-6">
-                                                    <span className={`inline-block text-[10px] font-extrabold px-2.5 py-0.5 rounded-md ${order.payment_status === 'Paid'
-                                                        ? 'bg-green-50 text-green-600 border border-green-100'
-                                                        : 'bg-amber-50 text-amber-600 border border-amber-100'
-                                                        }`}>
-                                                        {order.payment_status || 'Pending'}
-                                                    </span>
-                                                </td>
+                                                    {/* Payment Status Badge Column */}
+                                                    <td className="py-4 px-6">
+                                                        <span className={`inline-block text-[10px] font-extrabold px-2.5 py-0.5 rounded-md ${order.payment_status === 'Paid'
+                                                                ? 'bg-green-50 text-green-600 border border-green-100'
+                                                                : 'bg-amber-50 text-amber-600 border border-amber-100'
+                                                            }`}>
+                                                            {order.payment_status || 'Pending'}
+                                                        </span>
+                                                    </td>
 
-                                                {/*Order Status Badge Column */}
-                                                <td className="py-4 px-6">
-                                                    <span className={`inline-block text-[10px] font-extrabold px-2.5 py-1 rounded-md ${order.status === 'Delivered' ? 'bg-green-100 text-green-800' :
-                                                        (order.status === 'Confirmed' || order.payment_status === 'Paid') ? 'bg-blue-50 text-blue-600 border border-blue-100' :
-                                                            order.status === 'Shipped' ? 'bg-amber-100 text-amber-700' :
-                                                                order.status === 'Cancelled' ? 'bg-rose-50 text-rose-600 border border-rose-100' :
-                                                                    'bg-slate-100 text-slate-600'
-                                                        }`}>
-                                                        {order.status === 'Confirmed' || order.payment_status === 'Paid'
-                                                            ? 'Confirmed'
-                                                            : (order.status && order.status !== '—' ? order.status : 'Pending')}
-                                                    </span>
-                                                </td>
+                                                    {/* Order Status Badge Column */}
+                                                    <td className="py-4 px-6">
+                                                        <span className={`inline-block text-[10px] font-extrabold px-2.5 py-1 rounded-md ${order.status === 'Delivered' ? 'bg-green-100 text-green-800' :
+                                                                order.status === 'Shipped' ? 'bg-blue-50 text-blue-600 border border-blue-100' :
+                                                                    order.status === 'Cancelled' ? 'bg-rose-50 text-rose-600 border border-rose-100' :
+                                                                        'bg-amber-50 text-amber-600 border border-amber-100'
+                                                            }`}>
+                                                            {order.status || 'Pending'}
+                                                        </span>
+                                                    </td>
 
-                                                {/* Order Timestamp Date Column */}
-                                                <td className="py-4 px-6 text-slate-400 font-medium">
-                                                    {order.created_at ? new Date(order.created_at).toLocaleDateString() : 'N/A'}
-                                                </td>
+                                                    {/* Order Timestamp Date Column */}
+                                                    <td className="py-4 px-6 text-slate-400 font-medium">
+                                                        {order.created_at || order.createdAt ? new Date(order.created_at || order.createdAt).toLocaleDateString() : 'N/A'}
+                                                    </td>
 
-                                                {/*Dynamic Switch Based on Status */}
-                                                <td className="py-4 px-6 text-center">
-                                                    {order.status === 'Pending' && order.payment_status !== 'Paid' ? (
-                                                        <button
-                                                            onClick={() => handleCancelOrder(order.id)}
-                                                            className="inline-flex items-center gap-1 bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-600 font-bold text-[11px] px-3 py-1 rounded-lg transition"
-                                                        >
-                                                            <Trash2 size={12} /> Cancel
-                                                        </button>
-                                                    ) :
-                                                        (order.status === 'Confirmed' || order.payment_status === 'Paid') && order.status !== 'Delivered' ? (
-                                                            <span className="text-[11px] bg-slate-50 text-slate-400 font-semibold px-2.5 py-1 rounded-lg border border-slate-100 cursor-not-allowed inline-block">
-                                                                Processing
-                                                            </span>
-                                                        ) : (
+                                                    {/* Dynamic Switch Based on Status */}
+                                                    <td className="py-4 px-6 text-center">
+                                                        {order.status === 'Pending' ? (
                                                             <button
-                                                                onClick={() => handleDeleteOrder(order.id)}
+                                                                onClick={() => handleCancelOrder(currentId)}
+                                                                className="inline-flex items-center gap-1 bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-600 font-bold text-[11px] px-3 py-1 rounded-lg transition"
+                                                            >
+                                                                <Trash2 size={12} /> Cancel
+                                                            </button>
+                                                        ) : order.status === 'Cancelled' ? (
+                                                            <button
+                                                                onClick={() => handleDeleteOrder(currentId)}
                                                                 className="inline-flex items-center gap-1 bg-slate-100 hover:bg-rose-600 hover:text-white border border-slate-200 text-slate-600 font-bold text-[11px] px-3 py-1 rounded-lg transition"
                                                             >
                                                                 <Trash2 size={12} /> Delete
                                                             </button>
+                                                        ) : (
+                                                            <span className="text-[11px] bg-slate-50 text-slate-400 font-semibold px-2.5 py-1 rounded-lg border border-slate-100 cursor-not-allowed inline-block">
+                                                                Processing
+                                                            </span>
                                                         )}
-                                                </td>
-                                            </tr>
-                                        ))}
+                                                    </td>
+                                                </tr>
+                                            );
+                                        })}
                                     </tbody>
                                 </table>
                             </div>
