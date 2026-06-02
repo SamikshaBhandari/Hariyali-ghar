@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import {
     LayoutDashboard, ShoppingBag, Activity,
@@ -9,9 +9,9 @@ import {
 
 const UserDashboard = () => {
     const navigate = useNavigate();
+    const location = useLocation();
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [activeTab, setActiveTab] = useState('Overview');
 
     const token = localStorage.getItem('token');
     const storedUser = localStorage.getItem('user');
@@ -25,7 +25,6 @@ const UserDashboard = () => {
 
         const fetchDashboardData = async () => {
             try {
-                // Real Orders Fetching from Database
                 const orderRes = await axios.get('http://localhost:5000/api/orders/myorders', {
                     headers: { Authorization: `Bearer ${token}` }
                 });
@@ -44,7 +43,7 @@ const UserDashboard = () => {
         fetchDashboardData();
     }, [token, navigate]);
 
-    if (loading) return <div className="p-20 text-center font-bold text-green-800">Loading Dashboard Pipeline...</div>;
+    if (loading) return <div className="p-20 text-center font-bold text-green-800 animate-pulse">Loading Dashboard Pipeline...</div>;
 
     const totalOrders = orders.length;
     const totalSpent = orders.reduce((sum, order) => sum + (Number(order.total_amount) || 0), 0);
@@ -71,25 +70,25 @@ const UserDashboard = () => {
 
                     <div className="flex flex-col space-y-1">
                         {[
-                            { name: 'Overview', icon: <LayoutDashboard size={16} /> },
-                            { name: 'My Orders', icon: <ShoppingBag size={16} />, route: '/myorders' },
+                            { name: 'Overview', icon: <LayoutDashboard size={16} />, route: '/dashboard' },
+                            { name: 'My Orders', icon: <ShoppingBag size={16} />, route: '/activity' },
                             { name: 'Activity', icon: <Activity size={16} />, route: '/activity' }
-                        ].map((tab) => (
-                            <button
-                                key={tab.name}
-                                onClick={() => {
-                                    setActiveTab(tab.name);
-                                    if (tab.route) navigate(tab.route);
-                                }}
-                                className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-bold transition-all text-left ${activeTab === tab.name
-                                    ? 'bg-green-50 text-green-700'
-                                    : 'text-slate-500 hover:bg-slate-50 hover:text-slate-700'
-                                    }`}
-                            >
-                                {tab.icon}
-                                {tab.name}
-                            </button>
-                        ))}
+                        ].map((tab) => {
+                            const isActive = location.pathname === tab.route || (tab.name === 'Overview' && location.pathname.includes('dashboard'));
+                            return (
+                                <button
+                                    key={tab.name}
+                                    onClick={() => navigate(tab.route)}
+                                    className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-bold transition-all text-left ${isActive
+                                        ? 'bg-green-50 text-green-700'
+                                        : 'text-slate-500 hover:bg-slate-50 hover:text-slate-700'
+                                        }`}
+                                >
+                                    {tab.icon}
+                                    {tab.name}
+                                </button>
+                            );
+                        })}
                     </div>
                 </div>
 
@@ -129,7 +128,7 @@ const UserDashboard = () => {
                             <div>
                                 <div className="flex justify-between items-center mb-4 border-b border-slate-50 pb-3">
                                     <h3 className="text-xs font-black text-slate-800">Recent Orders</h3>
-                                    <Link to="/myorders" className="text-[10px] text-slate-400 hover:text-green-600 font-bold flex items-center gap-0.5">
+                                    <Link to="/activity" className="text-[10px] text-slate-400 hover:text-green-600 font-bold flex items-center gap-0.5">
                                         View All <ArrowRight size={10} />
                                     </Link>
                                 </div>
@@ -146,12 +145,15 @@ const UserDashboard = () => {
                                                 </div>
                                                 <div className="text-right">
                                                     <p className="text-xs font-black text-slate-800">NPR {Number(order.total_amount).toLocaleString()}</p>
-                                                    <span className={`inline-block text-[9px] font-bold px-2 py-0.5 rounded-full mt-0.5 ${order.status === 'Pending' ? 'bg-orange-50 text-orange-600 border border-orange-100' :
-                                                        order.status === 'Confirmed' ? 'bg-blue-50 text-blue-600 border border-blue-100' :
-                                                            order.status === 'Cancelled' ? 'bg-rose-50 text-rose-600 border border-rose-100' :
-                                                                'bg-green-50 text-green-600'
+                                                    <span className={`inline-block text-[9px] font-bold px-2 py-0.5 rounded-full mt-0.5 uppercase tracking-wide ${order.status === 'Pending'
+                                                        ? 'bg-orange-50 text-orange-600 border border-orange-100'
+                                                        : order.status === 'Shipped'
+                                                            ? 'bg-blue-50 text-blue-600 border border-blue-100'
+                                                            : order.status === 'Cancelled'
+                                                                ? 'bg-rose-50 text-rose-600 border border-rose-100'
+                                                                : 'bg-green-50 text-green-600 border border-green-100'
                                                         }`}>
-                                                        {order.status}
+                                                        {order.status || 'Pending'}
                                                     </span>
                                                 </div>
                                             </div>
