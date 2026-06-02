@@ -117,9 +117,9 @@ const ManagePlants = () => {
                             <Link to="/admin/manage-plants" className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-black bg-green-50 text-green-700 text-left">
                                 <Leaf size={16} /> Manage Plants
                             </Link>
-                            <button className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold text-slate-500 hover:bg-slate-50 text-left transition">
+                            <Link to="/admin/orders" className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold text-slate-500 hover:bg-slate-50 hover:text-slate-800 text-left transition">
                                 <ShoppingBag size={16} /> Orders
-                            </button>
+                            </Link>
                             <Link to="/admin/add-plant" className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold text-slate-500 hover:bg-slate-50 text-left transition">
                                 <PlusCircle size={16} /> Add Plant
                             </Link>
