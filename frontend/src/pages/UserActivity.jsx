@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { ShoppingBag, Star, Calendar, Package, ArrowLeft, MapPin, Phone, CreditCard } from 'lucide-react';
+import { ShoppingBag, Star, Calendar, Package, ArrowLeft, MapPin, Phone, CreditCard, XCircle, PlusCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const UserActivity = () => {
@@ -11,26 +11,45 @@ const UserActivity = () => {
 
     const token = localStorage.getItem('token');
 
-    useEffect(() => {
-        const fetchActivityData = async () => {
-            if (!token) return;
-            try {
-                setLoading(true);
-                const [ordersRes, reviewsRes] = await Promise.all([
-                    axios.get('http://localhost:5000/api/activity/orders', { headers: { Authorization: `Bearer ${token}` } }),
-                    axios.get('http://localhost:5000/api/activity/reviews', { headers: { Authorization: `Bearer ${token}` } })
-                ]);
-
-                // Backend ko standard data schema match
-                if (ordersRes.data.success) setOrders(ordersRes.data.data || []);
-                if (reviewsRes.data.success) setReviews(reviewsRes.data.reviews || []);
-            } catch (err) {
-                console.error("Error fetching activity logs:", err);
-            } finally {
-                setLoading(false);
+    //Order Cancel garne handler function pipeline
+    const handleCancelOrder = async (orderId) => {
+        if (!window.confirm("Are you sure you want to cancel this order?")) return;
+        try {
+            const res = await axios.put(`http://localhost:5000/api/orders/cancel/${orderId}`, {}, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            if (res.data.success) {
+                alert("Order cancelled successfully!");
+                // State local reload sync array optimization
+                setOrders(orders.map(order => order.id === orderId ? { ...order, status: 'Cancelled' } : order));
+            } else {
+                alert(res.data.message || "Failed to cancel order.");
             }
-        };
+        } catch (err) {
+            console.error("Error cancelling order:", err);
+            alert("Something went wrong while cancelling the order.");
+        }
+    };
 
+    const fetchActivityData = async () => {
+        if (!token) return;
+        try {
+            setLoading(true);
+            const [ordersRes, reviewsRes] = await Promise.all([
+                axios.get('http://localhost:5000/api/activity/orders', { headers: { Authorization: `Bearer ${token}` } }),
+                axios.get('http://localhost:5000/api/activity/reviews', { headers: { Authorization: `Bearer ${token}` } })
+            ]);
+
+            if (ordersRes.data.success) setOrders(ordersRes.data.data || []);
+            if (reviewsRes.data.success) setReviews(reviewsRes.data.reviews || []);
+        } catch (err) {
+            console.error("Error fetching activity logs:", err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
         fetchActivityData();
     }, [token]);
 
@@ -82,44 +101,95 @@ const UserActivity = () => {
                     {activeTab === 'orders' && (
                         <div className="space-y-4">
                             {orders.length > 0 ? orders.map((order) => (
-                                <div key={order.id} className="border border-gray-100 p-5 rounded-2xl bg-gray-50/50 flex flex-col md:flex-row justify-between gap-4">
-                                    <div className="space-y-2 flex-1">
-                                        <div className="flex items-center gap-2">
-                                            <Package size={16} className="text-green-600" />
-                                            <span className="text-sm font-extrabold text-gray-800">Order #{order.id}</span>
-                                        </div>
-                                        <div className="flex items-center gap-1 text-[11px] text-gray-400">
-                                            <Calendar size={12} />
-                                            <span>Ordered on: {new Date(order.created_at).toLocaleDateString()}</span>
+                                <div key={order.id} className="border border-gray-100 p-5 rounded-2xl bg-gray-50/50 flex flex-col gap-4">
+
+                                    <div className="flex flex-col md:flex-row justify-between gap-4 pb-3 border-b border-gray-200/50">
+                                        <div className="space-y-2 flex-1">
+                                            <div className="flex items-center gap-2">
+                                                <Package size={16} className="text-green-600" />
+                                                <span className="text-sm font-extrabold text-gray-800">Order #{order.id}</span>
+                                            </div>
+                                            <div className="flex items-center gap-1 text-[11px] text-gray-400">
+                                                <Calendar size={12} />
+                                                <span>Ordered on: {new Date(order.created_at).toLocaleDateString()}</span>
+                                            </div>
+
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 pt-1 text-[11px] text-gray-600 mt-2">
+                                                <div className="flex items-center gap-1.5">
+                                                    <MapPin size={12} className="text-gray-400" />
+                                                    <span>{order.address || 'No Address'}</span>
+                                                </div>
+                                                <div className="flex items-center gap-1.5">
+                                                    <Phone size={12} className="text-gray-400" />
+                                                    <span>{order.phone_number || 'No Phone'}</span>
+                                                </div>
+                                                <div className="flex items-center gap-1.5 col-span-1 md:col-span-2">
+                                                    <CreditCard size={12} className="text-gray-400" />
+                                                    <span className="capitalize">{order.payment_method || 'COD'} ({order.payment_status || 'Pending'})</span>
+                                                </div>
+                                            </div>
                                         </div>
 
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 pt-1 text-[11px] text-gray-600 border-t border-gray-200/60 mt-2">
-                                            <div className="flex items-center gap-1.5">
-                                                <MapPin size={12} className="text-gray-400" />
-                                                <span>{order.address || 'No Address'}</span>
-                                            </div>
-                                            <div className="flex items-center gap-1.5">
-                                                <Phone size={12} className="text-gray-400" />
-                                                <span>{order.phone_number || 'No Phone'}</span>
-                                            </div>
-                                            <div className="flex items-center gap-1.5 col-span-1 md:col-span-2">
-                                                <CreditCard size={12} className="text-gray-400" />
-                                                <span className="capitalize">{order.payment_method || 'COD'} ({order.payment_status || 'Pending'})</span>
-                                            </div>
+                                        <div className="text-right flex md:flex-col justify-between md:justify-start items-center md:items-end gap-2">
+                                            <p className="text-sm font-extrabold text-green-700">NPR {order.total_amount}</p>
+                                            <span className={`inline-block text-[9px] px-2.5 py-1 rounded-full font-bold uppercase tracking-wide ${order.status === 'Completed' || order.status === 'Delivered'
+                                                ? 'bg-green-100 text-green-800'
+                                                : order.status === 'Cancelled'
+                                                    ? 'bg-red-100 text-red-800'
+                                                    : 'bg-amber-100 text-amber-800'
+                                                }`}>
+                                                {order.status || 'Pending'}
+                                            </span>
                                         </div>
                                     </div>
 
-                                    <div className="text-right flex md:flex-col justify-between md:justify-start items-center md:items-end gap-2">
-                                        <p className="text-sm font-extrabold text-green-700">NPR {order.total_amount}</p>
-                                        <span className={`inline-block text-[9px] px-2.5 py-1 rounded-full font-bold uppercase tracking-wide ${order.status === 'Completed' || order.status === 'Delivered'
-                                            ? 'bg-green-100 text-green-800'
-                                            : order.status === 'Cancelled'
-                                                ? 'bg-red-100 text-red-800'
-                                                : 'bg-amber-100 text-amber-800'
-                                            }`}>
-                                            {order.status || 'Pending'}
-                                        </span>
+                                    {/*Purchased Order Items mapping wrapper section */}
+                                    {order.items && order.items.length > 0 && (
+                                        <div className="space-y-2">
+                                            <p className="text-[10px] font-black uppercase text-gray-400 tracking-wider">Items Ordered</p>
+                                            <div className="grid grid-cols-1 gap-2">
+                                                {order.items.map((item, idx) => (
+                                                    <div key={idx} className="flex justify-between items-center bg-white p-2.5 rounded-xl border border-gray-100 shadow-sm">
+                                                        <div className="flex items-center gap-3">
+                                                            {item.product_image && (
+                                                                <img
+                                                                    src={`http://localhost:5000/images/${item.product_image}`}
+                                                                    alt={item.product_name}
+                                                                    className="w-10 h-10 object-cover rounded-lg border border-gray-100 bg-slate-50"
+                                                                />
+                                                            )}
+                                                            <div>
+                                                                <p className="text-xs font-bold text-gray-800">{item.product_name}</p>
+                                                                <p className="text-[10px] text-gray-400 font-medium">Qty: {item.quantity}</p>
+                                                            </div>
+                                                        </div>
+                                                        <p className="text-xs font-extrabold text-gray-700">NPR {item.price}</p>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {/* Action Panel */}
+                                    <div className="flex justify-end gap-2 pt-2 border-t border-gray-100/70">
+                                        {order.status === 'Pending' && (
+                                            <button
+                                                onClick={() => handleCancelOrder(order.id)}
+                                                className="flex items-center gap-1 px-3 py-1.5 rounded-xl border border-rose-200 bg-rose-50 text-rose-700 text-[10px] font-bold hover:bg-rose-100 transition duration-150"
+                                            >
+                                                <XCircle size={12} /> Cancel Order
+                                            </button>
+                                        )}
+                                        {(order.status === 'Delivered' || order.status === 'Completed') && (
+                                            <Link
+                                                to={`/plants`}
+                                                className="flex items-center gap-1 px-3 py-1.5 rounded-xl border border-green-200 bg-green-50 text-green-700 text-[10px] font-bold hover:bg-green-100 transition duration-150"
+                                            >
+                                                <PlusCircle size={12} /> Write a Review
+                                            </Link>
+                                        )}
                                     </div>
+
                                 </div>
                             )) : (
                                 <p className="text-gray-400 text-xs italic py-4">You haven't placed any orders yet. Start shopping! 🌱</p>
