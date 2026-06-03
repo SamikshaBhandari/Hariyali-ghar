@@ -1,5 +1,4 @@
 const express = require('express');
-const getRawBody = require('raw-body');
 const cors = require('cors');
 require('dotenv').config();
 const db = require('./db/db');
@@ -12,7 +11,6 @@ const reviewRoute = require('./routes/reviewRoute');
 const paymentRoute = require('./routes/paymentRoute');
 const activityRoute = require('./routes/activityRoute');
 const profileRoute = require('./routes/profileRoute');
-const webhookRoute = require('./routes/webhookRoute');
 
 const app = express();
 app.use(cors());
@@ -43,7 +41,6 @@ app.use('/api/reviews', reviewRoute);
 app.use('/api/payment', paymentRoute);
 app.use('/api/activity', activityRoute);
 app.use('/api/profile', profileRoute);
-app.use('/api/webhooks', webhookRoute);
 
 const PORT = process.env.PORT || 5000;
 
