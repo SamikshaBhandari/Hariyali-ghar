@@ -1,4 +1,5 @@
 const express = require('express');
+const getRawBody = require('raw-body');
 const cors = require('cors');
 require('dotenv').config();
 const db = require('./db/db');
@@ -11,9 +12,26 @@ const reviewRoute = require('./routes/reviewRoute');
 const paymentRoute = require('./routes/paymentRoute');
 const activityRoute = require('./routes/activityRoute');
 const profileRoute = require('./routes/profileRoute');
+const webhookRoute = require('./routes/webhookRoute');
 
 const app = express();
 app.use(cors());
+
+app.use((req, res, next) => {
+    if (req.originalUrl && req.originalUrl.startsWith('/api/webhooks')) {
+        getRawBody(req, {
+            length: req.headers['content-length'],
+            limit: '1mb'
+        }, (err, string) => {
+            if (err) return next(err);
+            req.rawBody = string;
+            next();
+        });
+    } else {
+        next();
+    }
+});
+
 app.use(express.json());
 app.use('/images', express.static('image'));
 app.use('/api/products', productRoute);
@@ -25,6 +43,7 @@ app.use('/api/reviews', reviewRoute);
 app.use('/api/payment', paymentRoute);
 app.use('/api/activity', activityRoute);
 app.use('/api/profile', profileRoute);
+app.use('/api/webhooks', webhookRoute);
 
 const PORT = process.env.PORT || 5000;
 
