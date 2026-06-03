@@ -15,6 +15,7 @@ const isAdmin = (req, res, next) => {
 };
 
 //all product
+router.get('/', productController.getAllProducts);
 router.get('/all', productController.getAllProducts);
 
 
