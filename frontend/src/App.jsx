@@ -19,6 +19,8 @@ import AdminRoute from './components/AdminRoute';
 import ManagePlants from './pages/ManagePlants';
 import AddPlant from './pages/AddPlant';
 import AdminOrder from './pages/AdminOrder';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 
 
 function App() {
@@ -45,6 +47,8 @@ function App() {
                     <Route path="/admin/manage-plants" element={<AdminRoute><ManagePlants /></AdminRoute>} />
                     <Route path="/admin/add-plant" element={<AdminRoute><AddPlant /></AdminRoute>} />
                     <Route path="/admin/orders" element={<AdminRoute><AdminOrder /></AdminRoute>} />
+                    <Route path="/forgot-password" element={<ForgotPassword />} />
+                    <Route path="/reset-password" element={<ResetPassword />} />
                 </Routes>
             </main>
 
