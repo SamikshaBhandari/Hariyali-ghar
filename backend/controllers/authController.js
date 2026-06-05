@@ -116,3 +116,80 @@ exports.login = async (req, res) => {
         res.status(500).json({ error: "Server Error" });
     }
 };
+
+//forgot password logic
+exports.forgotPassword = async (req, res) => {
+    const { email } = req.body;
+    try {
+        const [users] = await db.query("SELECT * FROM users WHERE email = ?", [email]);
+        if (!users || users.length === 0) {
+            return res.status(404).json({ error: "User with this email does not exist." });
+        }
+
+        const user = users[0];
+        const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+        const otpExpiresAt = new Date(Date.now() + 5 * 60000);
+        await db.query(
+            "UPDATE users SET reset_otp = ?, reset_otp_expires_at = ? WHERE email = ?",
+            [otp, otpExpiresAt, email]
+        );
+
+        const message = `Namaste ${user.fullname},\n\nWe received a request to reset your Hariyali-Ghar password.\nYour password reset OTP code is: ${otp}.\n\nThis code will expire in 5 minutes. If you did not request this, please ignore this email.`;
+
+        try {
+            await sendEmail({
+                email: email,
+                subject: 'Hariyali-Ghar: Password Reset Code',
+                message: message
+            });
+            return res.status(200).json({ success: true, message: "OTP code has been sent to your email. Please check." });
+        } catch (emailErr) {
+            await db.query("UPDATE users SET reset_otp = NULL, reset_otp_expires_at = NULL WHERE email = ?", [email]);
+            console.error("Email send error:", emailErr);
+            return res.status(500).json({ error: "Failed to send email. Please try again later." });
+        }
+    } catch (err) {
+        console.error("Forgot Password Error:", err);
+        return res.status(500).json({ error: "Internal Server Error." });
+    }
+};
+
+//Reset password logic
+exports.resetPassword = async (req, res) => {
+    const { email, otp, newPassword } = req.body;
+    try {
+        const [users] = await db.query("SELECT * FROM users WHERE email = ?", [email]);
+        if (!users || users.length === 0) {
+            return res.status(404).json({ error: "User not found." });
+        }
+
+        const user = users[0];
+
+        if (!user.reset_otp || user.reset_otp !== String(otp)) {
+            return res.status(400).json({ error: "Invalid OTP code." });
+        }
+
+        const dbExpireTime = new Date(user.reset_otp_expires_at);
+        const currentTime = new Date();
+
+        if (dbExpireTime < currentTime) {
+            return res.status(400).json({ error: "OTP code has expired. Please try again." });
+        }
+
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+        await db.query(
+            "UPDATE users SET password = ?, reset_otp = NULL, reset_otp_expires_at = NULL WHERE email = ?",
+            [hashedPassword, email]
+        );
+
+        return res.status(200).json({
+            success: true,
+            message: "Password changed successfully! You can now login with your new password."
+        });
+    } catch (err) {
+        console.error("Reset Password Error:", err);
+        return res.status(500).json({ error: "Failed to reset password." });
+    }
+};
