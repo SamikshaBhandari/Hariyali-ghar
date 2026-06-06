@@ -56,7 +56,7 @@ const ResetPassword = () => {
                 </p>
 
                 <form onSubmit={handleResetPassword} className="space-y-5">
-                    {/* Read-only email context setup */}
+                    {/* Read only email context setup */}
                     <div>
                         <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1 ml-1">Email Address</label>
                         <input
