@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "projects": [
+    {
+      "name": "hariyali-ghar-frontend",
+      "framework": "vite",
+      "rootDirectory": "frontend"
+    },
+    {
+      "name": "hariyali-ghar-backend",
+      "framework": "other",
+      "rootDirectory": "backend"
+    }
+  ]
+}
