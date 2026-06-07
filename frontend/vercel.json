@@ -1,15 +1,13 @@
 {
-  "version": 2,
-  "projects": [
-    {
-      "name": "hariyali-ghar-frontend",
-      "framework": "vite",
-      "rootDirectory": "frontend"
-    },
-    {
-      "name": "hariyali-ghar-backend",
-      "framework": "other",
-      "rootDirectory": "backend"
+    "experimentalServices": {
+        "frontend": {
+            "root": "frontend",
+            "routePrefix": "/",
+            "framework": "vite"
+        },
+        "backend": {
+            "root": "backend",
+            "routePrefix": "/_ /backend"
+        }
     }
-  ]
 }
