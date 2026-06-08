@@ -1,4 +1,5 @@
 const db = require('../db/db');
+const bcrypt = require('bcryptjs');
 
 // Get Login User Details
 exports.getProfile = async (req, res) => {
@@ -71,5 +72,47 @@ exports.updateProfile = async (req, res) => {
                 message: "Database structural mismatch"
             });
         }
+    }
+};
+
+// Delete Logged in User Account
+exports.deleteAccount = async (req, res) => {
+    const user_id = req.user.id;
+
+    try {
+        const [userRows] = await db.query("SELECT id, fullname, email, role FROM users WHERE id = ?", [user_id]);
+
+        if (userRows.length === 0) {
+            return res.status(404).json({ success: false, message: "User account not found." });
+        }
+
+        if (userRows[0].role === 'admin') {
+            return res.status(403).json({
+                success: false,
+                message: "Admin accounts cannot be deleted for security reasons."
+            });
+        }
+
+        const anonymizedEmail = `deleted_${user_id}_${Date.now()}@deleted.local`;
+        const unusablePasswordHash = await bcrypt.hash(`deleted_${user_id}_${Date.now()}`, 10);
+
+        await db.query(
+            "UPDATE users SET fullname = ?, email = ?, password = ?, mobile = NULL, address = NULL, otp = NULL, otp_expires_at = NULL, reset_otp = NULL, reset_otp_expires_at = NULL, is_verified = 0 WHERE id = ?",
+            ["Deleted User", anonymizedEmail, unusablePasswordHash, user_id]
+        );
+
+        await db.query("DELETE FROM cart WHERE user_id = ?", [user_id]);
+        await db.query("DELETE FROM reviews WHERE user_id = ?", [user_id]);
+
+        return res.status(200).json({
+            success: true,
+            message: "Your account has been deleted successfully."
+        });
+    } catch (err) {
+        console.error("Delete Account Error:", err);
+        return res.status(500).json({
+            success: false,
+            message: "Could not delete your account due to a server error."
+        });
     }
 };

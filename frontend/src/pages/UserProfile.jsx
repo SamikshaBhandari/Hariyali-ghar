@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { User, Mail, Phone, MapPin, LogOut, FileText } from 'lucide-react';
+import { User, Mail, Phone, MapPin, LogOut, FileText, Trash2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const UserProfile = () => {
@@ -12,6 +12,7 @@ const UserProfile = () => {
     const [role, setRole] = useState('user');
     const [loading, setLoading] = useState(true);
     const [updating, setUpdating] = useState(false);
+    const [deleting, setDeleting] = useState(false);
 
     const token = localStorage.getItem('token');
 
@@ -62,6 +63,38 @@ const UserProfile = () => {
             navigate('/login');
         } else {
             console.log("Logout cancelled by user.");
+        }
+    };
+
+    const handleDeleteAccount = async () => {
+        const confirmDelete = window.confirm(
+            "This will permanently delete your account, orders, cart, and reviews. This action cannot be undone. Continue?"
+        );
+
+        if (!confirmDelete) return;
+
+        try {
+            setDeleting(true);
+
+            const res = await axios.delete('http://localhost:5000/api/profile/delete-account', {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+
+            alert(res.data.message || "Account deleted successfully.");
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            navigate('/login', { replace: true });
+        } catch (err) {
+            console.error("Delete account error:", err);
+            if (err.response) {
+                alert(err.response.data?.message || "Could not delete account.");
+            } else {
+                alert("Network error while deleting account.");
+            }
+        } finally {
+            setDeleting(false);
         }
     };
 
@@ -137,12 +170,23 @@ const UserProfile = () => {
                         </div>
                     </div>
 
-                    <button
-                        onClick={handleLogout}
-                        className="inline-flex items-center gap-1 text-[11px] font-bold text-red-600 border border-red-100 bg-red-50/30 hover:bg-red-50 px-3 py-1.5 rounded-xl transition"
-                    >
-                        <LogOut size={12} /> Logout
-                    </button>
+                    <div className="flex items-center gap-2">
+                        {role !== 'admin' && (
+                            <button
+                                onClick={handleDeleteAccount}
+                                disabled={deleting}
+                                className="inline-flex items-center gap-1 text-[11px] font-bold text-red-700 border border-red-200 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-xl transition disabled:opacity-60"
+                            >
+                                <Trash2 size={12} /> {deleting ? 'Deleting...' : 'Delete Account'}
+                            </button>
+                        )}
+                        <button
+                            onClick={handleLogout}
+                            className="inline-flex items-center gap-1 text-[11px] font-bold text-red-600 border border-red-100 bg-red-50/30 hover:bg-red-50 px-3 py-1.5 rounded-xl transition"
+                        >
+                            <LogOut size={12} /> Logout
+                        </button>
+                    </div>
                 </div>
 
                 {/*Navigation Tabs */}
