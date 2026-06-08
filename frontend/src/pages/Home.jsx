@@ -70,7 +70,7 @@ const Home = () => {
                             Shop Plants
                         </button>
                         <button
-                            onClick={() => navigate('/plants', { state: { filterCategory: "Seed Plant" } })}
+                            onClick={() => navigate('/plants', { state: { filterCategory: "Seed Plants" } })}
                             className="bg-white/10 backdrop-blur-md border border-white/40 hover:bg-white/20 px-10 py-3.5 rounded-full font-bold transition-all min-w-[180px]"
                         >
                             Browse Seeds
