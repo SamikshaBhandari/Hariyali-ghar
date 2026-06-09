@@ -84,6 +84,10 @@ exports.login = async (req, res) => {
             return res.status(400).json({ error: "Email not found!" });
         }
         const user = users[0];
+        if (user.status === 'blocked') {
+            return res.status(403).json({ error: "Your account is blocked by Admin!" });
+        }
+
         if (user.is_verified === 0) {
             return res.status(401).json({ error: "Account not verified. Please check your email for OTP." });
         }
