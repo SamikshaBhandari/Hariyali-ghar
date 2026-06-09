@@ -11,6 +11,7 @@ const reviewRoute = require('./routes/reviewRoute');
 const paymentRoute = require('./routes/paymentRoute');
 const activityRoute = require('./routes/activityRoute');
 const profileRoute = require('./routes/profileRoute');
+const adminRoutes = require('./routes/adminRoute');
 
 const app = express();
 app.use(cors());
@@ -41,6 +42,7 @@ app.use('/api/reviews', reviewRoute);
 app.use('/api/payment', paymentRoute);
 app.use('/api/activity', activityRoute);
 app.use('/api/profile', profileRoute);
+app.use('/api/admin', adminRoutes);
 
 const PORT = process.env.PORT || 5000;
 
