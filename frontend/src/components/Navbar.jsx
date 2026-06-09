@@ -139,7 +139,7 @@ const Navbar = () => {
                                         <Link to="/profile" className="flex items-center gap-2 px-6 py-2.5 text-sm hover:bg-green-50 text-slate-600 transition-colors">
                                             <User size={18} className="text-slate-500" /> My Profile
                                         </Link>
-                                        <Link to="/admin/dashboard" className="flex items-center gap-2 px-6 py-2.5 text-sm hover:bg-green-50 text-slate-600 transition-colors">
+                                        <Link to="/admin-panel" className="flex items-center gap-2 px-6 py-2.5 text-sm hover:bg-green-50 text-slate-600 transition-colors">
                                             <div className="p-0.5 border border-slate-300 rounded-md">
                                                 <Settings size={14} className="text-slate-500" />
                                             </div>
