@@ -35,7 +35,7 @@ const ManageUser = () => {
             fetchUsers();
         } catch (err) {
             console.error("Error updating status:", err);
-            alert("Status update garna milena!");
+            alert("Failed to update status!");
         }
     };
 
