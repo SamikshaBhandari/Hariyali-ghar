@@ -21,7 +21,8 @@ import AddPlant from './pages/AddPlant';
 import AdminOrder from './pages/AdminOrder';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
-
+import AdminPanel from './pages/AdminPanel';
+import ManageUser from './pages/ManageUser';
 
 function App() {
     return (
@@ -49,6 +50,8 @@ function App() {
                     <Route path="/admin/orders" element={<AdminRoute><AdminOrder /></AdminRoute>} />
                     <Route path="/forgot-password" element={<ForgotPassword />} />
                     <Route path="/reset-password" element={<ResetPassword />} />
+                    <Route path="/admin-panel" element={<AdminPanel />} />
+                    <Route path="/admin/users" element={<AdminRoute><ManageUser /></AdminRoute>} />
                 </Routes>
             </main>
 
