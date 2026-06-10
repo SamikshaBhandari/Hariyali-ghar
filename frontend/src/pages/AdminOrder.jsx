@@ -60,6 +60,10 @@ const AdminOrder = () => {
     };
 
     const handleUpdateStatus = async (orderId, currentOrder, newStatus) => {
+        if (currentOrder.status === 'Cancelled') {
+            alert("This order has been cancelled by the user and cannot be changed.");
+            return;
+        }
         try {
             setUpdatingId(orderId);
             await axios.put(`${API}/orders/update/${orderId}`,
@@ -208,7 +212,21 @@ const AdminOrder = () => {
                                                     Rs. {order.total_amount}
                                                 </td>
                                                 <td className="p-4 text-slate-400 text-[11px] font-semibold">
-                                                    {order.created_at ? new Date(order.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Recent'}
+                                                    {order.created_at ? (
+                                                        <>
+                                                            {new Date(order.created_at).toLocaleDateString('en-US', {
+                                                                month: 'short', day: 'numeric', year: 'numeric'
+                                                            })}
+                                                            <br />
+                                                            <span className="text-[9px] font-bold text-slate-500">
+                                                                {new Date(order.created_at).toLocaleTimeString('en-US', {
+                                                                    hour: '2-digit',
+                                                                    minute: '2-digit',
+                                                                    hour12: true
+                                                                })}
+                                                            </span>
+                                                        </>
+                                                    ) : 'Recent'}
                                                 </td>
                                                 <td className="p-4">
                                                     <span className={`inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${getStatusStyle(order.status)}`}>
@@ -219,10 +237,11 @@ const AdminOrder = () => {
                                                     <div className="flex items-center justify-end gap-2">
 
                                                         <select
-                                                            disabled={updatingId === order.id}
+                                                            disabled={updatingId === order.id || order.status?.toLowerCase() === 'cancelled'}
                                                             value={order.status || 'Pending'}
                                                             onChange={(e) => handleUpdateStatus(order.id, order, e.target.value)}
-                                                            className="border border-slate-200 rounded-lg p-1 text-[11px] font-bold bg-white focus:outline-none focus:border-green-500 text-slate-700 cursor-pointer disabled:opacity-50"
+                                                            className={`border border-slate-200 rounded-lg p-1 text-[11px] font-bold bg-white focus:outline-none cursor-pointer 
+                                                                ${order.status?.toLowerCase() === 'cancelled' ? 'opacity-50 cursor-not-allowed' : ''}`}
                                                         >
                                                             <option value="Pending">Pending</option>
                                                             <option value="Shipped">Shipped</option>
