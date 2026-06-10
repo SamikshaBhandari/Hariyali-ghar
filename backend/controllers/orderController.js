@@ -28,7 +28,7 @@ exports.placeOrder = async (req, res) => {
             return res.status(400).json({ success: false, message: "Your cart is empty." });
         }
 
-        //Stock Check 
+        // Stock Check 
         for (const item of cartItems) {
             if (item.stock_quantity < item.quantity) {
                 return res.status(400).json({
@@ -37,8 +37,10 @@ exports.placeOrder = async (req, res) => {
                 });
             }
         }
+        const subTotal = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
+        const deliveryFee = subTotal >= 1500 ? 0 : 100;
+        const totalAmount = subTotal + deliveryFee;
 
-        const totalAmount = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
 
         const [orderResult] = await db.query(
             "INSERT INTO orders (user_id, total_amount, address, phone_number, payment_method, status) VALUES (?, ?, ?, ?, ?, 'Pending')",
@@ -48,13 +50,13 @@ exports.placeOrder = async (req, res) => {
         const orderId = orderResult.insertId;
 
         for (const item of cartItems) {
-            //Move to order_items
+            // Move to order items
             await db.query(
                 "INSERT INTO order_items (order_id, product_id, quantity, price_at_purchase) VALUES (?, ?, ?, ?)",
                 [orderId, item.product_id, item.quantity, item.price]
             );
 
-            //Update product stock
+            // Update product stock
             await db.query(
                 "UPDATE products SET stock_quantity = stock_quantity - ? WHERE id = ?",
                 [item.quantity, item.product_id]
@@ -153,7 +155,11 @@ exports.getAllOrdersForAdmin = async (req, res) => {
              JOIN users u ON o.user_id = u.id 
              ORDER BY o.created_at DESC`
         );
-        res.status(200).json({ success: true, data: allOrders });
+
+        res.status(200).json({
+            success: true,
+            data: allOrders
+        });
     } catch (err) {
         res.status(500).json({ success: false, message: "Error fetching admin orders." });
     }
