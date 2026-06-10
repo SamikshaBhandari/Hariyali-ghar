@@ -3,6 +3,7 @@ const db = require('../db/db');
 exports.placeOrder = async (req, res) => {
     const user_id = req.user.id;
     const { address, phone_number, payment_method } = req.body;
+    let orderId;
 
     if (req.user && (req.user.role === 'admin' || req.user.role === 'Admin')) {
         return res.status(403).json({
@@ -47,7 +48,7 @@ exports.placeOrder = async (req, res) => {
             [user_id, totalAmount, address, phone_number, payment_method || 'COD']
         );
 
-        const orderId = orderResult.insertId;
+        orderId = orderResult.insertId;
 
         for (const item of cartItems) {
             // Move to order items
@@ -74,7 +75,7 @@ exports.placeOrder = async (req, res) => {
             totalBill: totalAmount
         });
     } catch (err) {
-        console.error(err);
+        if (orderId) await db.query("UPDATE orders SET status = 'Cancelled' WHERE id = ?", [orderId]);
         res.status(500).json({ success: false, message: "Server Error: Could not place order." });
     }
 };
@@ -138,10 +139,17 @@ exports.cancelOrder = async (req, res) => {
             return res.status(400).json({ success: false, message: "Only pending orders can be cancelled." });
         }
 
-        await db.query("UPDATE orders SET status = 'Cancelled' WHERE id = ?", [id]);
+        const [items] = await db.query("SELECT product_id, quantity FROM order_items WHERE order_id = ?", [id]);
+        for (const item of items) {
+            await db.query("UPDATE products SET stock_quantity = stock_quantity + ? WHERE id = ?", [item.quantity, item.product_id]);
+        }
+
+        const result = await db.query("UPDATE orders SET status = 'Cancelled' WHERE id = ?", [id]);
+        console.log("Update Result:", result);
 
         res.status(200).json({ success: true, message: "Order cancelled successfully." });
     } catch (err) {
+        console.error("Error in cancelOrder:", err);
         res.status(500).json({ success: false, message: "Could not cancel order." });
     }
 };
@@ -171,12 +179,41 @@ exports.updateOrderStatus = async (req, res) => {
     const { status, payment_status } = req.body;
 
     try {
+        const [order] = await db.query("SELECT status FROM orders WHERE id = ?", [id]);
+
+        if (order.length === 0) {
+            return res.status(404).json({ success: false, message: "Order not found." });
+        }
+
+        const oldStatus = order[0].status;
+
+        if (status === 'Cancelled' && oldStatus !== 'Cancelled') {
+            const [items] = await db.query("SELECT product_id, quantity FROM order_items WHERE order_id = ?", [id]);
+            for (const item of items) {
+                await db.query(
+                    "UPDATE products SET stock_quantity = stock_quantity + ? WHERE id = ?",
+                    [item.quantity, item.product_id]
+                );
+            }
+        }
+        else if (oldStatus === 'Cancelled' && status !== 'Cancelled') {
+            const [items] = await db.query("SELECT product_id, quantity FROM order_items WHERE order_id = ?", [id]);
+            for (const item of items) {
+                await db.query(
+                    "UPDATE products SET stock_quantity = stock_quantity - ? WHERE id = ?",
+                    [item.quantity, item.product_id]
+                );
+            }
+        }
+
         await db.query(
             "UPDATE orders SET status = ?, payment_status = ? WHERE id = ?",
             [status, payment_status, id]
         );
+
         res.status(200).json({ success: true, message: "Order updated successfully." });
     } catch (err) {
+        console.error("Error updating order status:", err);
         res.status(500).json({ success: false, message: "Failed to update status." });
     }
 };
@@ -184,21 +221,21 @@ exports.updateOrderStatus = async (req, res) => {
 //delete order block
 exports.deleteOrder = async (req, res) => {
     const { id } = req.params;
-    const user_id = req.user.id;
-
+    const user = req.user;
     try {
-        const [order] = await db.query("SELECT * FROM orders WHERE id = ? AND user_id = ?", [id, user_id]);
-
-        if (order.length === 0) {
-            return res.status(404).json({ success: false, message: "Order not found or unauthorized." });
+        let query = "SELECT * FROM orders WHERE id = ?";
+        let params = [id];
+        if (user.role !== 'admin' && user.role !== 'Admin') {
+            query += " AND user_id = ?";
+            params.push(user.id);
         }
+        const [order] = await db.query(query, params);
+        if (order.length === 0) return res.status(404).json({ success: false, message: "Order not found or unauthorized." });
 
         await db.query("DELETE FROM orders WHERE id = ?", [id]);
-
-        return res.status(200).json({ success: true, message: "Order deleted successfully from history." });
+        return res.status(200).json({ success: true, message: "Order deleted successfully." });
     } catch (err) {
-        console.error("Delete Order Controller Error:", err);
-        return res.status(500).json({ success: false, message: "Server Error: Could not delete order." });
+        return res.status(500).json({ success: false, message: "Server Error." });
     }
 };
 
