@@ -217,13 +217,7 @@ const AdminOrder = () => {
                                                 </td>
                                                 <td className="p-4 text-right">
                                                     <div className="flex items-center justify-end gap-2">
-                                                        <button
-                                                            onClick={() => viewOrderDetails(order)}
-                                                            className="p-1.5 rounded-lg border border-slate-200 text-slate-500 hover:bg-slate-50 transition"
-                                                            title="View Plant Items"
-                                                        >
-                                                            <Eye size={13} />
-                                                        </button>
+
                                                         <select
                                                             disabled={updatingId === order.id}
                                                             value={order.status || 'Pending'}
@@ -253,10 +247,7 @@ const AdminOrder = () => {
                 <div className="fixed inset-0 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4 z-50">
                     <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl border border-slate-100 space-y-4">
                         <div className="flex items-center justify-between">
-                            <div>
-                                <h3 className="font-black text-slate-900 text-sm">Order Items Breakdown</h3>
-                                <p className="text-[10px] text-slate-400 font-bold mt-0.5">Order ID: #{selectedOrder.id}</p>
-                            </div>
+
                             <button
                                 onClick={() => { setSelectedOrder(null); setModalItems([]); }}
                                 className="p-1 rounded-lg hover:bg-slate-100 text-slate-400 transition"
