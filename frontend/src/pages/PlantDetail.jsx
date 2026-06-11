@@ -11,6 +11,8 @@ const PlantDetail = () => {
     const [activeTab, setActiveTab] = useState('Description');
     const [reviews, setReviews] = useState([]);
     const [showNotification, setShowNotification] = useState(false);
+    const [relatedPlants, setRelatedPlants] = useState([]);
+    const [expandedId, setExpandedId] = useState(null);
 
     // Review Form Input States
     const [rating, setRating] = useState(5);
@@ -46,9 +48,30 @@ const PlantDetail = () => {
     };
 
     useEffect(() => {
+        setQuantity(1);
+        setExpandedId(null);
         fetchPlantAndReviews();
-        window.scrollTo(0, 0);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }, [id]);
+
+    useEffect(() => {
+        if (plant && plant.category_id) {
+            const fetchRelatedProducts = async () => {
+                try {
+                    const res = await axios.get(`http://localhost:5000/api/products/related/data`, {
+                        params: { category_id: plant.category_id, current_id: plant.id }
+                    });
+                    if (res.data.success) {
+                        setRelatedPlants(res.data.data);
+                    }
+                } catch (err) {
+                    console.error("Error fetching related products:", err);
+                }
+            };
+            fetchRelatedProducts();
+            window.scrollTo(0, 0);
+        }
+    }, [plant]);
 
     const handleReviewSubmit = async (e) => {
         e.preventDefault();
@@ -371,11 +394,99 @@ const PlantDetail = () => {
                                     <p className="text-gray-400 text-xs italic py-2">No reviews found for this plant yet. Be the first one to review!</p>
                                 )}
                             </div>
-
                         </div>
                     )}
                 </div>
             </div>
+
+            {/*related product*/}
+            {relatedPlants.length > 0 && (
+                <div className="mt-16 border-t border-gray-100 pt-10">
+                    <h2 className="text-xl font-bold text-gray-800 mb-6 tracking-tight">
+                        Similar Plants
+                    </h2>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                        {relatedPlants.map((item) => (
+                            <div
+                                key={item.id}
+                                className="bg-white rounded-[2rem] overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border border-gray-50 flex flex-col group"
+                            >
+                                <Link to={`/plants/${item.id}`} className="relative aspect-[4/3] overflow-hidden cursor-pointer block">
+                                    <img
+                                        src={`http://localhost:5000/images/${item.image_url}`}
+                                        alt={item.name}
+                                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                    />
+                                    {item.stock_quantity === 0 && (
+                                        <div className="absolute top-3 right-3 z-20">
+                                            <span className="bg-red-600 text-white text-[9px] font-black px-3 py-1 rounded-full shadow-md uppercase tracking-wider">
+                                                Out of Stock
+                                            </span>
+                                        </div>
+                                    )}
+                                    <div className="absolute top-3 left-3">
+                                        <span className="text-[9px] font-bold text-green-700 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full shadow-sm uppercase tracking-wider">
+                                            {item.category_name || plant.category_name || "Plant"}
+                                        </span>
+                                    </div>
+                                </Link>
+
+                                <div className="p-6 flex flex-col flex-1">
+                                    <div className="flex justify-between items-start mb-2">
+                                        <Link to={`/plants/${item.id}`} className="hover:text-green-700 transition-colors">
+                                            <h3 className="text-lg font-bold text-gray-800 tracking-tight leading-tight cursor-pointer">
+                                                {item.name}
+                                            </h3>
+                                        </Link>
+
+                                        <div className="flex items-center gap-1.5 bg-gray-50 px-2 py-0.5 rounded-md">
+                                            <Star
+                                                size={12}
+                                                className={item.average_rating > 0 ? "fill-yellow-400 text-yellow-400" : "text-gray-300"}
+                                            />
+                                            <span className="text-gray-500 text-[11px] font-bold">
+                                                {item.average_rating > 0 ? Number(item.average_rating).toFixed(1) : "New"}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <p className="text-gray-400 text-[11px] leading-relaxed mb-4">
+                                        {item.description && item.description.length > 60 ? (
+                                            <>
+                                                {expandedId === item.id ? item.description : `${item.description.substring(0, 60)}...`}
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setExpandedId(expandedId === item.id ? null : item.id)}
+                                                    className="text-green-600 font-bold ml-1 hover:underline cursor-pointer"
+                                                >
+                                                    {expandedId === item.id ? "Show Less" : "Read More"}
+                                                </button>
+                                            </>
+                                        ) : (
+                                            item.description || "A beautiful addition to your space collection."
+                                        )}
+                                    </p>
+
+                                    {/* Bottom Pricing & Cart Icon box mapping */}
+                                    <div className="mt-auto flex items-center justify-between">
+                                        <span className="text-sm font-black text-green-700">
+                                            NPR {item.price}
+                                        </span>
+
+                                        <Link
+                                            to={`/plants/${item.id}`}
+                                            className="p-2.5 rounded-xl transition-all duration-300 active:scale-90 shadow-sm border bg-green-50 text-green-700 hover:bg-green-700 hover:text-white border-green-100"
+                                        >
+                                            <ShoppingCart size={18} />
+                                        </Link>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
