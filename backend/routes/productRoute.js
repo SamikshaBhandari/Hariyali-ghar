@@ -30,6 +30,9 @@ router.put('/update/:id', authMiddleware, isAdmin, upload.single('image'), produ
 //delete product
 router.delete('/delete/:id', authMiddleware, isAdmin, productController.deleteProduct);
 
+//related product
+router.get('/related/data', productController.getRelatedProducts);
+
 //product id
 router.get('/:id', productController.getProductById);
 
