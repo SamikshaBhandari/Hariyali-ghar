@@ -153,9 +153,9 @@ const Home = () => {
                             <span className="text-green-600 font-bold tracking-widest text-[10px] uppercase">Handpicked</span>
                             <h2 className="text-3xl font-serif font-bold text-slate-800 mt-1">Featured Plants</h2>
                         </div>
-                        <button className="flex items-center gap-1 text-green-700 font-bold text-sm hover:underline">
+                        <Link to="/plants" className="flex items-center gap-1 text-green-700 font-bold text-sm hover:underline">
                             View All <ArrowRight size={14} />
-                        </button>
+                        </Link>
                     </div>
 
                     {/* Plants Grid */}
