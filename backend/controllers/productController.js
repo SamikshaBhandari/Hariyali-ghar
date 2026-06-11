@@ -140,3 +140,20 @@ exports.getProductById = async (req, res) => {
         res.status(500).json({ success: false, error: "Server Error: " + err.message });
     }
 };
+
+// Related product logic
+exports.getRelatedProducts = async (req, res) => {
+    const { category_id, current_id } = req.query;
+    try {
+        const sql = `
+            SELECT id, name, price, image_url 
+            FROM products 
+            WHERE category_id = ? AND id != ? 
+            ORDER BY RAND() 
+            LIMIT 4`;
+        const [rows] = await db.query(sql, [category_id, current_id]);
+        res.status(200).json({ success: true, data: rows });
+    } catch (err) {
+        res.status(500).json({ success: false, error: err.message });
+    }
+};
