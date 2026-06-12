@@ -24,8 +24,8 @@ const PlantDetail = () => {
     const isUser = user && user.role === 'user';
 
     //Admin check role components ra Out of Stock status verification flags
-    const isAdmin = user && (user.role === 'admin' || user.role === 'Admin');
-    const isOutOfStock = plant && plant.stock_quantity === 0;
+    const isAdmin = user && (user.role?.toLowerCase() === 'admin');
+    const isOutOfStock = plant && Number(plant.stock_quantity || 0) === 0;
 
     // Fetch plant and review details
     const fetchPlantAndReviews = async () => {
@@ -69,9 +69,8 @@ const PlantDetail = () => {
                 }
             };
             fetchRelatedProducts();
-            window.scrollTo(0, 0);
         }
-    }, [plant]);
+    }, [plant?.category_id, plant?.id]);
 
     const handleReviewSubmit = async (e) => {
         e.preventDefault();
@@ -101,11 +100,7 @@ const PlantDetail = () => {
                 setComment("");
                 setRating(5);
 
-                //product here as well
-                const refreshRes = await axios.get(`http://localhost:5000/api/reviews/product/${id}`);
-                if (refreshRes.data && refreshRes.data.success) {
-                    setReviews(refreshRes.data.reviews || []);
-                }
+                await fetchPlantAndReviews();
             }
         } catch (err) {
             console.error("Error adding review:", err);
@@ -132,6 +127,11 @@ const PlantDetail = () => {
             return navigate('/login');
         }
         try {
+            const currentStock = Number(plant.stock_quantity || 0);
+            if (currentStock <= 5) {
+                alert(`Hurry up! Only ${currentStock} items left in stock for this plant!`);
+            }
+
             await axios.post('http://localhost:5000/api/cart/add',
                 { product_id: plant.id, quantity },
                 { headers: { Authorization: `Bearer ${token}` } }
@@ -271,12 +271,31 @@ const PlantDetail = () => {
                                     {isOutOfStock || isAdmin ? 0 : quantity}
                                 </span>
                                 <button
-                                    onClick={() => setQuantity(q => q + 1)}
+                                    onClick={() => {
+                                        const currentStock = Number(plant.stock_quantity || 0);
+                                        const nextQuantity = quantity + 1;
+
+                                        console.log("Database Stock:", currentStock);
+                                        console.log("Trying next quantity:", nextQuantity);
+
+                                        if (nextQuantity > currentStock) {
+                                            alert(`Sorry, only ${currentStock} items are available in stock!`);
+                                            return;
+                                        }
+
+                                        if (currentStock <= 5) {
+                                            alert(`Hurry up! Only ${currentStock} items left in stock for this plant!`);
+                                        }
+
+                                        setQuantity(nextQuantity);
+                                    }}
                                     disabled={isOutOfStock || isAdmin}
                                     className="p-1 text-gray-400 hover:text-green-700 transition disabled:opacity-20 disabled:cursor-not-allowed"
                                 >
                                     <Plus size={12} />
                                 </button>
+
+
                             </div>
 
                             <button
