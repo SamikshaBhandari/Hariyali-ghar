@@ -1,4 +1,5 @@
 const db = require('../db/db');
+const sendEmail = require('../utils/sendEmail');
 
 exports.placeOrder = async (req, res) => {
     const user_id = req.user.id;
@@ -210,6 +211,40 @@ exports.updateOrderStatus = async (req, res) => {
             "UPDATE orders SET status = ?, payment_status = ? WHERE id = ?",
             [status, payment_status, id]
         );
+
+        const selectUserSql = `
+            SELECT o.id as order_id, u.email, u.fullname 
+            FROM orders o 
+            JOIN users u ON o.user_id = u.id 
+            WHERE o.id = ?`;
+
+        const [userRows] = await db.query(selectUserSql, [id]);
+
+        if (userRows.length > 0) {
+            const { email, fullname } = userRows[0];
+
+            // Status wise user friendly dynamically messages prepare 
+            let statusMessage = '';
+            if (status.toLowerCase() === 'shipped') {
+                statusMessage = `Your order has been safely shipped and is on its way to your location! We will reach out soon.`;
+            } else if (status.toLowerCase() === 'delivered') {
+                statusMessage = `Your order has been successfully delivered! Thank you for purchasing plants and pots from Hariyali-Ghar. Have a green day!`;
+            } else if (status.toLowerCase() === 'cancelled') {
+                statusMessage = `We are sorry to inform you that your order has been cancelled by the administrator. Please contact our support team if you have queries.`;
+            } else if (status.toLowerCase() === 'pending') {
+                statusMessage = `Your order is currently kept in review by our system. We will verify your order soon.`;
+            } else {
+                statusMessage = `Your order status has been updated to: ${status}.`;
+            }
+
+            const emailOptions = {
+                email: email,
+                subject: `Hariyali-Ghar: Order #${id} Status Updated`,
+                message: `Hello ${fullname},\n\nThere is an update regarding your order at Hariyali-Ghar.\n\nOrder ID: #${id}\nNew Status: ${status.toUpperCase()}\nPayment Status: ${payment_status ? payment_status.toUpperCase() : 'N/A'}\n\nUpdate Detail:\n${statusMessage}\n\nThank you for choosing Hariyali-Ghar!\nBest Regards,\nTeam Hariyali-Ghar`
+            };
+
+            sendEmail(emailOptions).catch(err => console.error("Failed to trigger status notification email:", err));
+        }
 
         res.status(200).json({ success: true, message: "Order updated successfully." });
     } catch (err) {
