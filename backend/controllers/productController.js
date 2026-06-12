@@ -41,21 +41,23 @@ exports.updateProduct = async (req, res) => {
     const { name, price, description, category_id, stock_quantity, sunlight, watering, care_tips } = req.body;
 
     try {
-        const [oldProduct] = await db.query("SELECT image_url FROM products WHERE id = ?", [id]);
+        const [oldProduct] = await db.query("SELECT image_url, stock_quantity FROM products WHERE id = ?", [id]);
         if (oldProduct.length === 0) {
             return res.status(404).json({ error: 'product not found.' });
         }
 
         const imageFilename = req.file ? req.file.filename : oldProduct[0].image_url;
+        const finalStock = stock_quantity !== undefined ? stock_quantity : oldProduct[0].stock_quantity;
 
-        const sql = `UPDATE products SET name=?, price=?,description=?,category_id=?,image_url=?,stock_quantity=?,sunlight=?,
-        watering=?,care_tips=? WHERE id=?`;
-        const [result] = await db.query(sql, [name, price, description, category_id || null, imageFilename, stock_quantity, sunlight, watering, care_tips, id]);
+        const sql = `UPDATE products SET name=?, price=?, description=?, category_id=?, image_url=?, stock_quantity=?, sunlight=?,
+        watering=?, care_tips=? WHERE id=?`;
+
+        await db.query(sql, [name, price, description, category_id || null, imageFilename, finalStock, sunlight, watering, care_tips, id]);
 
         res.status(200).json({ message: 'Product successfully updated.' });
     }
     catch (err) {
-        res.status(500).json({ error: 'Update failed:' + err.message });
+        res.status(500).json({ error: 'Update failed: ' + err.message });
     }
 };
 
@@ -80,9 +82,13 @@ exports.deleteProduct = async (req, res) => {
 exports.getFilteredProduct = async (req, res) => {
     const { search, category } = req.query;
     let sql = `
-        SELECT products.*, categories.category_name 
+        SELECT 
+            products.*, 
+            categories.category_name,
+            IFNULL(AVG(reviews.rating), 0) as average_rating
         FROM products 
         LEFT JOIN categories ON products.category_id = categories.id 
+        LEFT JOIN reviews ON products.id = reviews.product_id
         WHERE 1=1`;
 
     let params = [];
@@ -98,7 +104,7 @@ exports.getFilteredProduct = async (req, res) => {
         sql += " AND categories.category_name = ?";
         params.push(category);
     }
-
+    sql += " GROUP BY products.id";
     try {
         const [rows] = await db.query(sql, params);
         res.status(200).json({
@@ -146,11 +152,22 @@ exports.getRelatedProducts = async (req, res) => {
     const { category_id, current_id } = req.query;
     try {
         const sql = `
-            SELECT id, name, price, image_url 
+            SELECT 
+                products.id, 
+                products.name, 
+                products.price, 
+                products.image_url, 
+                products.stock_quantity,
+                categories.category_name,
+                IFNULL(AVG(reviews.rating), 0) as average_rating
             FROM products 
-            WHERE category_id = ? AND id != ? 
+            LEFT JOIN categories ON products.category_id = categories.id
+            LEFT JOIN reviews ON products.id = reviews.product_id
+            WHERE products.category_id = ? AND products.id != ? 
+            GROUP BY products.id
             ORDER BY RAND() 
             LIMIT 4`;
+
         const [rows] = await db.query(sql, [category_id, current_id]);
         res.status(200).json({ success: true, data: rows });
     } catch (err) {
