@@ -22,7 +22,7 @@ router.get('/all', productController.getAllProducts);
 //filter product
 router.get('/filter', productController.getFilteredProduct);
 
-//admin ley matra product add garna milney banako.
+//only admin can add product item 
 router.post('/add', authMiddleware, isAdmin, upload.single('image'), productController.addProduct);
 
 //update product
