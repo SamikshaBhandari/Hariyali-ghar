@@ -127,7 +127,6 @@ exports.getOrderDetails = async (req, res) => {
 exports.cancelOrder = async (req, res) => {
     const { id } = req.params;
     const user_id = req.user.id;
-
     try {
         //cancel order(user)
         const [order] = await db.query("SELECT * FROM orders WHERE id = ? AND user_id = ?", [id, user_id]);
@@ -273,6 +272,7 @@ exports.deleteOrder = async (req, res) => {
         return res.status(500).json({ success: false, message: "Server Error." });
     }
 };
+
 
 // Admin Dashboard fetch
 exports.getAdminDashboardStats = async (req, res) => {
