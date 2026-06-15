@@ -33,7 +33,6 @@ exports.updateProfile = async (req, res) => {
     if (!fullname) {
         return res.status(400).json({ success: false, message: "Full Name field validation failed. Cannot be empty." });
     }
-
     try {
         if (finalPhone) {
             const [existingMobile] = await db.query(
