@@ -72,8 +72,8 @@ const Cart = () => {
     const totalItems = cartItems.reduce((sum, item) => sum + (Number(item.quantity) || 0), 0);
     const subtotal = cartItems.reduce((sum, item) => sum + ((Number(item.price) || 0) * (Number(item.quantity) || 0)), 0);
 
-    // Free delivery if subtotal is NPR 1000 or above, otherwise charge NPR 100
-    const deliveryFee = subtotal >= 1000 || subtotal === 0 ? 0 : 100;
+    // Free delivery if subtotal is NPR 1000 or above, otherwise charge NPR 50
+    const deliveryFee = subtotal >= 1000 || subtotal === 0 ? 0 : 50;
     const total = subtotal + deliveryFee;
     const remainingForFreeDelivery = 1000 - subtotal;
 
