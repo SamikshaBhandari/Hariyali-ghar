@@ -8,6 +8,7 @@ const db = mysql.createPool({
     database: process.env.DB_NAME || 'hariyalighar',
     ssl: {
         rejectUnauthorized: false
-    }
+    },
+    connectTimeout: 60000
 });
 module.exports = db.promise();
