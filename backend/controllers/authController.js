@@ -2,7 +2,7 @@ const db = require('../db/db');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
-const sendEmail = require('../utils/sendemail');
+const sendEmail = require('../utils/sendEmail');
 
 //Signup Logic
 exports.signup = async (req, res) => {
