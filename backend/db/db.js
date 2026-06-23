@@ -6,9 +6,6 @@ const db = mysql.createPool({
     user: process.env.DB_USER || 'root',
     password: process.env.DB_PASSWORD || '',
     database: process.env.DB_NAME || 'hariyalighar',
-    ssl: {
-        rejectUnauthorized: false
-    },
-    connectTimeout: 60000
+
 });
 module.exports = db.promise();
