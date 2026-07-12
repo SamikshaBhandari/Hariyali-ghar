@@ -190,7 +190,8 @@ const AddPlant = () => {
                                                 <p className="text-[11px] text-green-600 font-semibold mt-0.5">Click or drag again to change photo</p>
                                             </div>
                                         </div>
-                                    ) : (
+                                    ) :
+                                     (
                                         <div className="flex flex-col items-center gap-2 text-slate-400 pointer-events-none">
                                             <UploadCloud size={24} className="text-slate-400" />
                                             <p className="font-semibold text-[11px]">Click or drag a file to upload plant photo</p>
