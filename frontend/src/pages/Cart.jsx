@@ -10,7 +10,7 @@ const Cart = () => {
 
     const token = localStorage.getItem('token');
 
-    //Fetch real-time cart data 
+    //Fetch real time cart data 
     const fetchCartData = async () => {
         if (!token) {
             setLoading(false);

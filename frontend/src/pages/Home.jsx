@@ -186,7 +186,6 @@ const Home = () => {
                                             {plant.name}
                                         </h3>
                                     </Link>
-
                                     {/* Description */}
                                     <div className="mb-5 min-h-[40px]">
                                         <p className="text-gray-400 text-[11px] leading-relaxed">
