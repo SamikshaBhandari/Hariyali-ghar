@@ -39,6 +39,7 @@ const ResetPassword = () => {
 
     return (
         <div className="min-h-screen bg-emerald-50/40 pt-24 pb-10 flex flex-col items-center justify-center p-4 font-sans">
+
             {/* Logo Section */}
             <div className="flex flex-col items-center mb-8">
                 <div className="bg-green-600 p-3 rounded-2xl shadow-lg shadow-green-100 mb-3">
