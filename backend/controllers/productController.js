@@ -1,6 +1,6 @@
 const db = require('../db/db');
 
-// Read all product with Category Name and Average Rating
+// Read all product with category name and average rating
 exports.getAllProducts = async (req, res) => {
     try {
         const sql = `
