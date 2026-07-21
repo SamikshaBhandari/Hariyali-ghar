@@ -180,14 +180,7 @@ const UserActivity = () => {
                                                 <XCircle size={12} /> Cancel Order
                                             </button>
                                         )}
-                                        {(order.status === 'Delivered' || order.status === 'Completed') && (
-                                            <Link
-                                                to={`/plants`}
-                                                className="flex items-center gap-1 px-3 py-1.5 rounded-xl border border-green-200 bg-green-50 text-green-700 text-[10px] font-bold hover:bg-green-100 transition duration-150"
-                                            >
-                                                <PlusCircle size={12} /> Write a Review
-                                            </Link>
-                                        )}
+
                                     </div>
 
                                 </div>
