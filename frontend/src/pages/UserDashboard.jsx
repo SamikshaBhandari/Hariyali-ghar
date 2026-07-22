@@ -123,7 +123,6 @@ const UserDashboard = () => {
                     </div>
 
                     <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
-
                         <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm lg:col-span-3 flex flex-col justify-between">
                             <div>
                                 <div className="flex justify-between items-center mb-4 border-b border-slate-50 pb-3">
