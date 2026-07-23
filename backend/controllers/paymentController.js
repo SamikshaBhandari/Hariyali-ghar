@@ -100,7 +100,7 @@ exports.verifyEsewaPayment = async (req, res) => {
 
             if (req.method === 'GET') {
                 // Redirect browser directly to frontend success feedback page
-                return res.redirect('http://localhost:5173/payment-success');
+                return res.redirect(`http://localhost:5173/payment-success?order_id=${order_id}`);
             }
 
             return res.json({ success: true, message: "Payment Verified and Database Updated!" });
