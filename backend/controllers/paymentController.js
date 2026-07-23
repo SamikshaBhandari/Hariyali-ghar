@@ -21,8 +21,8 @@ exports.initiateEsewaPayment = async (req, res) => {
         const payment_db_id = result.insertId;
 
         //Official Test Sandbox Settings 
-        const product_code = "EPAYTEST";
-        const secretKey = "8gBm/:&EnhH.1/q";
+        const product_code = process.env.ESEWA_CODE;
+        const secretKey = process.env.ESEWA_SECRETKEY;
         const transaction_uuid = `${payment_db_id}-${orderId}-${Date.now()}`;
 
         const dataString = `total_amount=${formattedAmount},transaction_uuid=${transaction_uuid},product_code=${product_code}`;
