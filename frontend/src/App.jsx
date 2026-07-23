@@ -23,6 +23,7 @@ import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 import AdminPanel from './pages/AdminPanel';
 import ManageUser from './pages/ManageUser';
+import PaymentSuccess from './pages/PaymentSuccess';
 
 function App() {
     return (
@@ -44,7 +45,6 @@ function App() {
                     <Route path="/myorders" element={<MyOrders />} />
                     <Route path="/activity" element={<UserActivity />} />
                     <Route path="/profile" element={<UserProfile />} />
-                    <Route path="/payment-success" element={<MyOrders />} />
                     <Route path="/admin/manage-plants" element={<AdminRoute><ManagePlants /></AdminRoute>} />
                     <Route path="/admin/add-plant" element={<AdminRoute><AddPlant /></AdminRoute>} />
                     <Route path="/admin/orders" element={<AdminRoute><AdminOrder /></AdminRoute>} />
@@ -52,6 +52,7 @@ function App() {
                     <Route path="/reset-password" element={<ResetPassword />} />
                     <Route path="/admin-panel" element={<AdminPanel />} />
                     <Route path="/admin/users" element={<AdminRoute><ManageUser /></AdminRoute>} />
+                    <Route path="/payment-success" element={<PaymentSuccess />} />
                 </Routes>
             </main>
 
