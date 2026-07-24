@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Mail, Lock, Eye, EyeOff, LogIn, Sprout } from 'lucide-react';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import api from '../api/api';
 
 const Login = () => {
@@ -33,16 +35,28 @@ const Login = () => {
             localStorage.setItem('token', res.data.token);
             localStorage.setItem('user', JSON.stringify(res.data.user));
 
-            alert(`Login Successful as ${res.data.user.role}!`);
+            toast.success("Login Successful!", {
+                position: "top-right",
+                autoClose: 1500,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+            });
 
-            if (res.data.user.role === 'admin') {
-                navigate('/admin/dashboard');
-            } else {
-                navigate('/');
-            }
-            window.location.reload();
+            setTimeout(() => {
+                if (res.data.user.role === 'admin') {
+                    navigate('/admin/dashboard');
+                } else {
+                    navigate('/');
+                }
+                window.location.reload();
+            }, 1200);
+
         } catch (err) {
-            alert(err.response?.data?.error || "Login failed.");
+            toast.error(err.response?.data?.error || "Login failed.", {
+                position: "top-right",
+                autoClose: 2000,
+            });
         } finally {
             setLoading(false);
         }
@@ -50,6 +64,7 @@ const Login = () => {
 
     return (
         <div className="min-h-screen bg-emerald-50/40 pt-24 pb-10 flex flex-col items-center justify-center p-4 font-sans">
+            <ToastContainer />
             {/* Logo Section */}
             <div className="flex flex-col items-center mb-8">
                 <div className="bg-green-600 p-3 rounded-2xl shadow-lg shadow-green-100 mb-3">

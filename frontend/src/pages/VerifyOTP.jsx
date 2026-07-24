@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import API from '../api/axiosInstance';
 import { ShieldCheck } from 'lucide-react';
 
@@ -13,15 +15,33 @@ const VerifyOTP = () => {
 
     const handleVerify = async (e) => {
         e.preventDefault();
-        if (!email) return alert("Email not found. Please signup again.");
-
+        if (!email) {
+            toast.error("Email not found. Please signup again.", {
+                position: "top-right",
+                autoClose: 2000,
+            });
+            return;
+        }
+        if (loading) return;
         setLoading(true);
+
         try {
             const res = await API.post('/auth/emailverification', { email, otp });
-            alert(res.data.message);
-            navigate('/login');
+
+            toast.success(res.data.message || "Email verified successfully!", {
+                position: "top-right",
+                autoClose: 1500,
+            });
+
+            setTimeout(() => {
+                navigate('/login');
+            }, 1200);
+
         } catch (err) {
-            alert(err.response?.data?.error || "Invalid or Expired OTP");
+            toast.error(err.response?.data?.error || "Invalid or Expired OTP", {
+                position: "top-right",
+                autoClose: 2000,
+            });
         } finally {
             setLoading(false);
         }
@@ -29,6 +49,7 @@ const VerifyOTP = () => {
 
     return (
         <div className="min-h-screen bg-gray-50 flex items-center justify-center p-2">
+            <ToastContainer />
             <div className="max-w-[380px] py-10 w-full bg-white rounded-2xl shadow-2xl p-6 border border-gray-100">
                 <div className="text-center mb-6">
                     <div className="bg-green-100 w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4">

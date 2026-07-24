@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from 'react-router-dom';
 import { User, Mail, Phone, MapPin, Lock, Eye, EyeOff, UserPlus, Sprout } from 'lucide-react';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import api from '../api/api';
 
 const Register = () => {
@@ -25,7 +27,8 @@ const Register = () => {
         e.preventDefault();
 
         if (formData.password !== formData.confirmPassword) {
-            return alert("Passwords do not match!");
+            toast.error("Passwords do not match!", { autoClose: 2000 });
+            return;
         }
         if (loading) return;
         setLoading(true);
@@ -39,17 +42,19 @@ const Register = () => {
                 password: formData.password
             });
 
-            alert(res.data.message || "Signup successful! Please check your email.");
-            navigate('/verify-otp', { state: { email: formData.email } });
+            toast.success(res.data.message || "Signup successful! Please check your email.", { autoClose: 2000 });
+
+            setTimeout(() => {
+                navigate('/verify-otp', { state: { email: formData.email } });
+            }, 1500);
         } catch (err) {
-            alert(err.response?.data?.error || "Signup failed.Please try again.");
-        } finally {
-            setLoading(false);
+            toast.error(err.response?.data?.error || "Signup failed.Please try again.", { autoClose: 2000 });
         }
     };
 
     return (
         <div className="min-h-screen bg-emerald-50/40 flex flex-col items-center pt-24 pb-10 px-4 font-sans">
+            <ToastContainer />
             {/* Logo Section */}
             <div className="flex flex-col items-center mb-8">
                 <div className="bg-green-600 p-3 rounded-2xl shadow-lg shadow-green-100 mb-3 transition-transform hover:scale-105">
