@@ -8,7 +8,7 @@ import {
     ShoppingBag,
     Users,
     AlertTriangle,
-    DollarSign,
+    Banknote,
     PlusCircle
 } from 'lucide-react';
 
@@ -130,7 +130,10 @@ const AdminDashboard = () => {
                             </div>
                             <div className="mt-2">
                                 <p className="text-[10px] font-black text-slate-400 uppercase tracking-wider">Total Orders</p>
-                                <span className="text-[10px] text-amber-600 font-bold">{stats?.pendingOrders ?? 0} pending</span>
+                                <div className="flex items-center gap-14 text-[10px] font-bold mt-0.5">
+                                    <span className="text-amber-600">{stats?.pendingOrders ?? 0} pending</span>
+                                    <span className="text-green-600">{stats?.deliveredOrders ?? 0} delivered</span>
+                                </div>
                             </div>
                         </div>
 
@@ -169,12 +172,17 @@ const AdminDashboard = () => {
                                     NPR {stats?.totalRevenue ? Number(stats.totalRevenue).toLocaleString() : 0}
                                 </span>
                                 <div className="p-1.5 bg-blue-50 text-blue-600 rounded-lg">
-                                    <DollarSign size={16} />
+                                    <Banknote size={16} />
                                 </div>
                             </div>
                             <div className="mt-2">
-                                <p className="text-[10px] font-black text-slate-400 uppercase tracking-wider">Total Revenue</p>
-                                <span className="text-[10px] text-blue-500 font-bold">From paid orders</span>
+                                <p className="text-[10px] font-black text-slate-400 uppercase tracking-wider">TOTAL REVENUE</p>
+                                <div className="flex items-center justify-between mt-0.5">
+                                    <span className="text-[10px] text-blue-600 font-bold">{stats?.paidOrdersCount ?? 0} orders paid</span>
+                                    <Link to="/admin/orders" className="text-[10px] font-bold text-emerald-600 hover:underline">
+                                        View details &rarr;
+                                    </Link>
+                                </div>
                             </div>
                         </div>
 

@@ -280,7 +280,10 @@ exports.getAdminDashboardStats = async (req, res) => {
         //Total Orders count
         const [[{ totalOrders }]] = await db.query("SELECT COUNT(*) AS totalOrders FROM orders");
         const [[{ pendingOrders }]] = await db.query("SELECT COUNT(*) AS pendingOrders FROM orders WHERE status = 'Pending'");
-
+        const [[{ deliveredOrders }]] = await db.query("SELECT COUNT(*) AS deliveredOrders FROM orders WHERE LOWER(status) = 'delivered'");
+        const [[{ paidOrdersCount }]] = await db.query(
+            "SELECT COUNT(*) AS paidOrdersCount FROM orders WHERE LOWER(payment_status) = 'paid'"
+        );
         //Total Users count
         const [[{ totalUsers }]] = await db.query("SELECT COUNT(*) AS totalUsers FROM users");
 
@@ -325,6 +328,8 @@ exports.getAdminDashboardStats = async (req, res) => {
             stats: {
                 totalOrders,
                 pendingOrders,
+                deliveredOrders,
+                paidOrdersCount,
                 totalUsers,
                 newUsersThisWeek,
                 lowStockCount,
