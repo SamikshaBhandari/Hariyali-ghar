@@ -137,7 +137,7 @@ const Plants = () => {
                                                     className={plant.average_rating > 0 ? "fill-yellow-400 text-yellow-400" : "text-gray-300"}
                                                 />
                                                 <span className="text-gray-500 text-[11px] font-bold">
-                                                    {plant.average_rating > 0 ? Number(plant.average_rating).toFixed(1) : "New"}
+                                                    {Number(plant.average_rating).toFixed(1)}
                                                 </span>
                                             </div>
                                         </div>
