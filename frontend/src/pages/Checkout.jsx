@@ -60,9 +60,10 @@ const Checkout = () => {
     //Total amount calculate logic 
     const totalItems = cartItems.reduce((sum, item) => sum + (Number(item.quantity) || 0), 0);
     const subtotal = cartItems.reduce((sum, item) => sum + ((Number(item.price) || 0) * (Number(item.quantity) || 0)), 0);
-    const deliveryFee = subtotal >= 1500 || subtotal === 0 ? 0 : 100;
+
+    //free delivery
+    const deliveryFee = 0;
     const total = subtotal + deliveryFee;
-    const remainingForFreeDelivery = 1500 - subtotal;
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -311,9 +312,7 @@ const Checkout = () => {
                         </div>
                         <div className="flex justify-between text-slate-400 font-medium">
                             <span>Delivery</span>
-                            <span className={deliveryFee === 0 ? "text-green-600 font-bold" : "text-slate-700 font-bold"}>
-                                {deliveryFee === 0 ? "Free" : `NPR ${deliveryFee}`}
-                            </span>
+                            <span className="text-green-600 font-bold">FREE</span>
                         </div>
                     </div>
 
@@ -322,13 +321,7 @@ const Checkout = () => {
                         <span className="text-lg font-black text-green-700">NPR {total}</span>
                     </div>
 
-                    {remainingForFreeDelivery > 0 && (
-                        <div className="bg-orange-50 border border-orange-100 text-center py-2 px-3 rounded-xl">
-                            <p className="text-[10px] text-orange-700 font-bold">
-                                Add NPR {remainingForFreeDelivery} more for free delivery!
-                            </p>
-                        </div>
-                    )}
+
 
                     <button
                         onClick={handlePlaceOrder}

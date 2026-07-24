@@ -72,10 +72,9 @@ const Cart = () => {
     const totalItems = cartItems.reduce((sum, item) => sum + (Number(item.quantity) || 0), 0);
     const subtotal = cartItems.reduce((sum, item) => sum + ((Number(item.price) || 0) * (Number(item.quantity) || 0)), 0);
 
-    // Free delivery if subtotal is NPR 1000 or above, otherwise charge NPR 50
-    const deliveryFee = subtotal >= 1000 || subtotal === 0 ? 0 : 50;
+    // Free delivery 
+    const deliveryFee = 0;
     const total = subtotal + deliveryFee;
-    const remainingForFreeDelivery = 1000 - subtotal;
 
     if (loading) return <div className="p-20 text-center font-bold text-green-800">Loading Your Cart...</div>;
 
@@ -169,9 +168,7 @@ const Cart = () => {
                         </div>
                         <div className="flex justify-between text-gray-500 font-bold">
                             <span>Delivery</span>
-                            <span className={deliveryFee === 0 ? "text-green-600 font-black" : "text-gray-800 font-black"}>
-                                {deliveryFee === 0 ? "Free" : `NPR ${deliveryFee}`}
-                            </span>
+                            <span className="text-green-600 font-black">FREE</span>
                         </div>
                     </div>
 
@@ -180,14 +177,7 @@ const Cart = () => {
                         <span className="text-lg font-black text-green-700">NPR {total}</span>
                     </div>
 
-                    {/* Free delivery*/}
-                    {remainingForFreeDelivery > 0 && (
-                        <div className="bg-orange-50 border border-orange-100 text-center py-2 px-3 rounded-xl">
-                            <p className="text-[10px] text-orange-700 font-bold">
-                                Add NPR {remainingForFreeDelivery} more for free delivery!
-                            </p>
-                        </div>
-                    )}
+
 
                     <button
                         onClick={() => navigate('/checkout')}
