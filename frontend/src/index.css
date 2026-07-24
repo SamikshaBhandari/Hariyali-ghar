@@ -6,3 +6,21 @@
   --color-earth: #F9F7F2;
 }
 
+.Toastify__toast--success {
+    background-color: rgb(12, 102, 12) !important; 
+    color: white !important;
+    border-radius: 1rem !important;
+    font-family: inherit;
+    box-shadow: 0 10px 15px -3px rgba(6, 95, 70, 0.2) !important;
+}
+
+.Toastify__toast--error {
+    background-color:rgb(176, 33, 33) !important; 
+    color:white !important;
+    border-radius: 1rem !important;
+    font-family: inherit;
+}
+
+.Toastify__progress-bar {
+    background: rgb(89, 212, 89) !important; 
+}
