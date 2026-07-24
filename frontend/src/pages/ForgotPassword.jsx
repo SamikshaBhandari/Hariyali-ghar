@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Mail, ArrowLeft, Sprout } from 'lucide-react';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import API from '../api/api';
 
 const ForgotPassword = () => {
@@ -15,11 +17,17 @@ const ForgotPassword = () => {
         setLoading(true);
         try {
             const res = await API.post('/auth/forgot-password', { email });
-            alert(res.data.message || "OTP code sent to your email!");
+            toast.success(res.data.message || "OTP code sent to your email!");
+            autoClose: 1200,
 
-            navigate('/reset-password', { state: { email: email } });
+                setTimeout(() => {
+                    navigate('/reset-password', { state: { email: email } });
+                }, 1200);
+
         } catch (err) {
-            alert(err.response?.data?.error || "Failed to send OTP code.");
+            toast.error(err.response?.data?.error || "Failed to send OTP code.", {
+                autoClose: 2000,
+            });
         } finally {
             setLoading(false);
         }
@@ -27,6 +35,8 @@ const ForgotPassword = () => {
 
     return (
         <div className="min-h-screen bg-emerald-50/40 pt-24 pb-10 flex flex-col items-center justify-center p-4 font-sans">
+
+            <ToastContainer />
             {/* Logo Section */}
             <div className="flex flex-col items-center mb-8">
                 <div className="bg-green-600 p-3 rounded-2xl shadow-lg shadow-green-100 mb-3">

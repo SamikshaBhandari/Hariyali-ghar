@@ -11,6 +11,8 @@ import {
     Eye,
     X
 } from 'lucide-react';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const API = import.meta.env.VITE_APP_API_URL || 'http://localhost:5000/api';
 
@@ -54,6 +56,7 @@ const AdminOrder = () => {
             }
         } catch (err) {
             console.error("Error fetching orders from MySQL database:", err);
+            toast.error("Failed to load orders database.");
         } finally {
             setLoading(false);
         }
@@ -61,7 +64,7 @@ const AdminOrder = () => {
 
     const handleUpdateStatus = async (orderId, currentOrder, newStatus) => {
         if (currentOrder.status === 'Cancelled') {
-            alert("This order has been cancelled by the user and cannot be changed.");
+            toast.warn("This order has been cancelled by the user and cannot be changed.");
             return;
         }
         try {
@@ -73,10 +76,10 @@ const AdminOrder = () => {
                 },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
-            alert(`Order status updated to ${newStatus}!`);
+            toast.success(`Order status updated to ${newStatus}!`);
             fetchOrders();
         } catch (err) {
-            alert(err.response?.data?.message || 'Failed to update order status.');
+            toast.error(err.response?.data?.message || 'Failed to update order status.');
         } finally {
             setUpdatingId(null);
         }
@@ -97,6 +100,7 @@ const AdminOrder = () => {
         } catch (err) {
             console.error("Error fetching items payload:", err);
             setModalItems([]);
+            toast.error("Failed to fetch order details.");
         } finally {
             setModalLoading(false);
         }
@@ -114,6 +118,7 @@ const AdminOrder = () => {
 
     return (
         <div className="max-w-7xl mx-auto px-4 md:px-8 py-8 mt-16 font-sans bg-[#f8fafc] min-h-screen">
+            <ToastContainer position="top-right" autoClose={1200} />
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
 
                 {/* Sidebar Navigation */}

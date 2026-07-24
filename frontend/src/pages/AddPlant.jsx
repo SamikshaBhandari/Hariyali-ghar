@@ -10,6 +10,8 @@ import {
     ArrowLeft,
     Check
 } from 'lucide-react';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const API = import.meta.env.VITE_APP_API_URL || 'http://localhost:5000/api';
 
@@ -73,10 +75,10 @@ const AddPlant = () => {
                 }
             });
 
-            alert('Plant added successfully!');
+            toast.success('Plant added successfully!');
             navigate('/admin/manage-plants');
         } catch (err) {
-            alert(err.response?.data?.message || 'Failed to add plant');
+            toast.error(err.response?.data?.message || 'Failed to add plant');
         } finally {
             setLoading(false);
         }
@@ -84,6 +86,7 @@ const AddPlant = () => {
 
     return (
         <div className="max-w-7xl mx-auto px-4 md:px-8 py-8 mt-16 font-sans bg-slate-50 min-h-screen">
+            <ToastContainer position="top-right" autoClose={1200} />
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
 
                 {/* Sidebar Navigation */}
@@ -191,12 +194,12 @@ const AddPlant = () => {
                                             </div>
                                         </div>
                                     ) :
-                                     (
-                                        <div className="flex flex-col items-center gap-2 text-slate-400 pointer-events-none">
-                                            <UploadCloud size={24} className="text-slate-400" />
-                                            <p className="font-semibold text-[11px]">Click or drag a file to upload plant photo</p>
-                                        </div>
-                                    )}
+                                        (
+                                            <div className="flex flex-col items-center gap-2 text-slate-400 pointer-events-none">
+                                                <UploadCloud size={24} className="text-slate-400" />
+                                                <p className="font-semibold text-[11px]">Click or drag a file to upload plant photo</p>
+                                            </div>
+                                        )}
                                 </div>
                             </div>
 
