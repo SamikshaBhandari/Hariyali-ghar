@@ -13,7 +13,6 @@ const UserProfile = () => {
     const [loading, setLoading] = useState(true);
     const [updating, setUpdating] = useState(false);
     const [deleting, setDeleting] = useState(false);
-
     const token = localStorage.getItem('token');
 
     const getInitials = (name) => {
