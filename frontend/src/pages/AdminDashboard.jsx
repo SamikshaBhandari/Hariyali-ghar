@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-
 import {
     LayoutDashboard,
     Leaf,
@@ -17,7 +16,6 @@ const AdminDashboard = () => {
     const [recentOrders, setRecentOrders] = useState([]);
     const [stockAlerts, setStockAlerts] = useState([]);
     const [loading, setLoading] = useState(true);
-
     const [adminUser, setAdminUser] = useState({ fullname: 'Admin', email: '' });
 
     useEffect(() => {
