@@ -58,7 +58,6 @@ const Navbar = () => {
 
     const isHomePage = location.pathname === "/";
     const shouldShowBg = isScrolled || !isHomePage;
-
     return (
         <nav className={`fixed w-full z-50 px-8 py-4 flex items-center justify-between transition-all duration-300 ${shouldShowBg
             ? "bg-white shadow-md py-3 border-b border-gray-100"
@@ -113,7 +112,6 @@ const Navbar = () => {
 
                         {/* Dropdown Menu Layout */}
                         <div className="absolute right-0 mt-2 w-55 bg-white rounded-3xl shadow-3xl border border-slate-50 py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0 z-50">
-
                             <div className="px-6 pb-2 border-b border-slate-50 mb-2 text-left flex items-center gap-3">
                                 <img
                                     src={`https://ui-avatars.com/api/?name=${user.fullname}&background=random`}

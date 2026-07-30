@@ -14,13 +14,11 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const API = import.meta.env.VITE_APP_API_URL || 'http://localhost:5000/api';
-
 const AddPlant = () => {
     const navigate = useNavigate();
     const token = localStorage.getItem('token');
     const [adminUser, setAdminUser] = useState({ fullname: 'Admin' });
     const [loading, setLoading] = useState(false);
-
     // Form states
     const [formData, setFormData] = useState({
         name: '',
