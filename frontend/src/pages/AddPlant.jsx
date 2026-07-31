@@ -84,7 +84,6 @@ const AddPlant = () => {
 
     return (
         <div className="max-w-7xl mx-auto px-4 md:px-8 py-8 mt-16 font-sans bg-slate-50 min-h-screen">
-
             <ToastContainer position="top-right" autoClose={1300} />
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
 
