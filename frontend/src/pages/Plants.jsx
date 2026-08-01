@@ -11,8 +11,6 @@ const Plants = () => {
     const [activeCategory, setActiveCategory] = useState(location.state?.filterCategory || "All");
     const categories = ["All", "Indoor Plants", "Outdoor Plants", "Seed Plants", "Succulents Plants"];
     const [expandedId, setExpandedId] = useState(null);
-
-
     const fetchFilteredPlants = async () => {
         try {
             const response = await axios.get(`http://localhost:5000/api/products/filter`, {
