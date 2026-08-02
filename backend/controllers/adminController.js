@@ -9,7 +9,7 @@ exports.getAllUsers = async (req, res) => {
     }
 };
 
-// Status Block/Unblock 
+// Status Block or Unblock 
 exports.toggleUserStatus = async (req, res) => {
     const { id, status } = req.body;
     try {
