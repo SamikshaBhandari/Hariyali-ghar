@@ -1,6 +1,6 @@
 const db = require('../db/db');
 
-// Read all product with category name and average rating
+// Read all Product with Category Name and Average Rating
 exports.getAllProducts = async (req, res) => {
     try {
         const sql = `
@@ -22,7 +22,6 @@ exports.getAllProducts = async (req, res) => {
 //Product add logic
 exports.addProduct = async (req, res) => {
     const { name, price, description, category_id, stock_quantity, sunlight, watering, care_tips } = req.body;
-
     const imageFilename = req.file ? req.file.filename : null;
 
     try {
