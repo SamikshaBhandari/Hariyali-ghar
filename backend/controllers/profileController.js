@@ -84,14 +84,12 @@ exports.deleteAccount = async (req, res) => {
         if (userRows.length === 0) {
             return res.status(404).json({ success: false, message: "User account not found." });
         }
-
         if (userRows[0].role === 'admin') {
             return res.status(403).json({
                 success: false,
                 message: "Admin accounts cannot be deleted for security reasons."
             });
         }
-
         const anonymizedEmail = `deleted_${user_id}_${Date.now()}@deleted.local`;
         const unusablePasswordHash = await bcrypt.hash(`deleted_${user_id}_${Date.now()}`, 10);
 
@@ -102,7 +100,6 @@ exports.deleteAccount = async (req, res) => {
 
         await db.query("DELETE FROM cart WHERE user_id = ?", [user_id]);
         await db.query("DELETE FROM reviews WHERE user_id = ?", [user_id]);
-
         return res.status(200).json({
             success: true,
             message: "Your account has been deleted successfully."
