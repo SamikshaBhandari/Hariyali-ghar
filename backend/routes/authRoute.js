@@ -4,9 +4,7 @@ const authController = require('../controllers/authController');
 const { authMiddleware } = require('../middleware/authMiddleware');
 
 router.post('/signup', authController.signup);
-
 router.post('/login', authController.login);
-
 router.get('/tokenverification', authMiddleware, (req, res) => {
     res.status(200).json({
         success: true,
@@ -15,7 +13,6 @@ router.get('/tokenverification', authMiddleware, (req, res) => {
 });
 
 router.post('/emailverification', authController.verifyEmail);
-
 router.post('/forgot-password', authController.forgotPassword);
 router.post('/reset-password', authController.resetPassword);
 
