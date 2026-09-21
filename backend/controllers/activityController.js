@@ -22,7 +22,6 @@ exports.getUserOrders = async (req, res) => {
 //Get login user product reviews
 exports.getUserReviews = async (req, res) => {
     const user_id = req.user.id;
-
     try {
         const [reviews] = await db.query(
             `SELECT r.*, p.name AS product_name, p.image_url 
