@@ -11,7 +11,6 @@ exports.initiateEsewaPayment = async (req, res) => {
 
         //Mandatory conversion of inputs
         const formattedAmount = Number(amount).toFixed(2).toString();
-
         //Insert record strictly tracking payment processing pipeline
         const [result] = await db.query(
             "INSERT INTO payments (order_id, payment_method, amount, status) VALUES (?, ?, ?, ?)",
