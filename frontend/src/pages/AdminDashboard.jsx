@@ -31,11 +31,9 @@ const AdminDashboard = () => {
         const fetchDashboardData = async () => {
             try {
                 const token = localStorage.getItem('token');
-                // Backend endpoint hit
                 const res = await axios.get('http://localhost:5000/api/orders/admin/stats', {
                     headers: { Authorization: `Bearer ${token}` }
                 });
-
                 if (res.data && res.data.success) {
                     setStats(res.data.stats);
                     setRecentOrders(res.data.recentOrders || []);
@@ -47,7 +45,6 @@ const AdminDashboard = () => {
                 setLoading(false);
             }
         };
-
         fetchDashboardData();
     }, []);
 
@@ -66,7 +63,6 @@ const AdminDashboard = () => {
 
     return (
         <div className="max-w-7xl mx-auto px-4 md:px-8 py-8 mt-16 font-sans bg-[#f8fafc] min-h-screen">
-
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
 
                 {/* Sidebar Navigation */}
