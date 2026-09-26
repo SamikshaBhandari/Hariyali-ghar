@@ -19,6 +19,7 @@ const AddPlant = () => {
     const token = localStorage.getItem('token');
     const [adminUser, setAdminUser] = useState({ fullname: 'Admin' });
     const [loading, setLoading] = useState(false);
+
     // Form states
     const [formData, setFormData] = useState({
         name: '',
@@ -200,7 +201,6 @@ const AddPlant = () => {
                                         )}
                                 </div>
                             </div>
-
                             <hr className="border-slate-100" />
 
                             {/*Action Buttons*/}
